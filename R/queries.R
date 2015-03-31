@@ -1,4 +1,4 @@
-#' Возвращает строку запроса, созданную из переданных аргументов (плохо, криво, но кое-как работает ^_^)
+#' Возвращает строку запроса, созданную из переданных аргументов
 #'
 #' @param method_name Имя метода
 #' @... Список параметров
@@ -12,8 +12,7 @@ queryBuilder <- function(method_name, ...) {
         #arg_value <- gsub("\"", "", arguments[arg_pos])
         arg_value <- list(...)[arg_names[arg_pos]]
       } else {
-        # В этом моменте я перестал понимать, что пишу, видимо все условие проверки лишнее
-        # Короче говоря, ветки else быть вовсе не должно
+        # ???
         arg_value <- arguments[arg_pos]
       }
       query <- paste(query, ifelse(arg_value != "", paste("&", arg_names[arg_pos], "=", arg_value, sep=""), ""), sep="")
