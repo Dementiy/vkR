@@ -1,7 +1,6 @@
 #' Возвращает строку запроса, созданную из переданных аргументов
 #'
 #' @param method_name Имя метода
-#' @... Список параметров
 queryBuilder <- function(method_name, ...) {
   query <- paste("https://api.vk.com/method/", method_name, "?", sep="")
   arguments <- sapply(substitute(list(...))[-1], deparse)
