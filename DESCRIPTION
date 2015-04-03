@@ -9,5 +9,6 @@ Description: Provides an interface to the VK API
 Depends:
     R (>= 3.0.0),
     httr,
-    jsonlite
+    jsonlite,
+    XML
 License: GPL-3

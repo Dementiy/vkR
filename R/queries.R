@@ -17,7 +17,7 @@ queryBuilder <- function(method_name, ...) {
       query <- paste(query, ifelse(arg_value != "", paste("&", arg_names[arg_pos], "=", arg_value, sep=""), ""), sep="")
     }
   }
-  query <- paste(query, '&access_token=', access_token, sep="")
+  query <- paste(query, '&access_token=', getAccessToken(), sep="")
   query
 }
 
@@ -25,7 +25,7 @@ queryBuilder <- function(method_name, ...) {
 #' Execute для увеличения числа запросов
 #' @export
 execute <- function(code) {
-  query <- paste("https://api.vk.com/method/execute?code=", code, "&access_token=", access_token, sep="")
+  query <- paste("https://api.vk.com/method/execute?code=", code, "&access_token=", getAccessToken(), sep="")
   #response <- fromJSON(URLencode(query))
   response <- fromJSON(rawToChar(GET(URLencode(query))$content))
   response$response
