@@ -23,23 +23,35 @@
 #'   \item \strong{notifications} Доступ к оповещениям об ответах пользователю.
 #' }
 #' @export
-authorize <- function(client_id='', scope='', email='', password='') {
-  # browseURL(paste('https://oauth.vk.com/authorize?client_id=', client_id, 
-  #                 '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope, 
-  #                 '&response_type=token&display=page', sep=''))
-  response <- GET(paste('https://oauth.vk.com/authorize?client_id=', client_id, 
-                        '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope, 
-                        '&response_type=token&display=page', sep=''))
-  authorize_form <- htmlParse(rawToChar(response$content))
-  hidden_attrs <- xpathSApply(authorize_form, "//form/input", xmlGetAttr, "value")
-  token_page <-  POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
-                      body=list('_origin'=hidden_attrs[1], 
-                                'ip_h'=hidden_attrs[2],
-                                'to'=hidden_attrs[3],
-                                'email'=email, 
-                                'pass'=password))
-  access_token <- sub(".*?access_token=(.*?)&.*", "\\1", token_page$all_headers[[4]]$headers$location)
-  setAccessToken(access_token)
+authorize <- function(client_id, scope='friends', email, password) {
+  if (missing(client_id)) stop('argument "client_id" is missing, with no default')
+  if (!is.numeric(client_id) || floor(client_id) != client_id) stop('argument "client_id" must be an integer value')
+  if (!is.character(scope)) stop('argument "scope" must be a string')
+    
+  auth_url <- paste0('https://oauth.vk.com/authorize?client_id=', client_id,
+                     '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope,
+                     '&response_type=token&display=page')
+  
+  if (!requireNamespace('XML', quietly = TRUE)) {
+    browseURL(auth_url)
+  } else {
+    if (missing(email)) stop('argument "email" is missing, with no default')
+    if (!is.character(email)) stop('argument "email" must be a string')
+    if (missing(password)) stop('argument "password" is missing, with no default')
+    if (!is.character(password)) stop('argument "password" must be a string')
+    
+    response <- GET(auth_url)
+    authorize_form <- htmlParse(rawToChar(response$content))
+    hidden_attrs <- xpathSApply(authorize_form, "//form/input", xmlGetAttr, "value")
+    token_page <-  POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
+                        body=list('_origin'=hidden_attrs[1], 
+                                  'ip_h'=hidden_attrs[2],
+                                  'to'=hidden_attrs[3],
+                                  'email'=email, 
+                                  'pass'=password))
+    access_token <- sub(".*?access_token=(.*?)&.*", "\\1", token_page$all_headers[[4]]$headers$location)
+    setAccessToken(access_token)
+  }
 }
 
 

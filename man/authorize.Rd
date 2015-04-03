@@ -3,7 +3,7 @@
 \alias{authorize}
 \title{Авторизация и получение ключа доступа}
 \usage{
-authorize(client_id = "", scope = "", email = "", password = "")
+authorize(client_id, scope = "friends", email, password)
 }
 \arguments{
 \item{client_id}{Идентификатор приложения}
