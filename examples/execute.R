@@ -48,3 +48,23 @@ get_wall2500 <- function(owner_id='', domain=NULL, offset=0, max_count=100, filt
     execute(code)
   }
 }
+
+
+# Получить информацию об указанных пользователях. Может быть указано не более ~5-15 тысяч пользователей.
+get_users <- function(user_ids='', fields='', name_case='') {
+  code <- 'var users = [];'
+  num_requests <- ifelse(length(user_ids) %% 1000 == 0, (length(user_ids) %/% 1000), (length(user_ids) %/% 1000) + 1)
+  from <- 1
+  to <- ifelse(num_requests >= 2, 1000, length(user_ids))
+  for (i in 1:num_requests) {
+    code <- paste0(code, 'users = users + API.users.get({
+                   "user_ids":"', paste0(user_ids[from:to], collapse = ','), '", 
+                   "fields":"', fields, '", 
+                   "name_case":"', name_case, '", "v":5.29});')
+    from <- to + 1
+    to <- to + ifelse(length(user_ids) - (to + 1000) >= 0, 1000, length(user_ids) - to)
+  }
+  code <- paste0(code, 'return users;')
+  execute(code)
+}
+# users <- get_users(sample(x = seq(1:10000000), size=5000, replace = FALSE), fields='sex')
