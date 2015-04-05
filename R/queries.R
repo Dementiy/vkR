@@ -22,11 +22,12 @@ queryBuilder <- function(method_name, ...) {
 }
 
 
-#' Execute для увеличения числа запросов
+#' Универсальный метод, который позволяет запускать последовательность других методов, сохраняя и фильтруя промежуточные результаты
 #' @export
 execute <- function(code) {
-  query <- paste("https://api.vk.com/method/execute?code=", code, "&access_token=", getAccessToken(), sep="")
-  #response <- fromJSON(URLencode(query))
-  response <- fromJSON(rawToChar(GET(URLencode(query))$content))
+  query <- "https://api.vk.com/method/execute"
+  response <- fromJSON(rawToChar(POST(url = query, 
+                                      body = list('code' = code, 
+                                                  'access_token' = getAccessToken()))$content))
   response$response
 }
