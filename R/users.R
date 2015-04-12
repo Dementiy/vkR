@@ -6,14 +6,13 @@
 #' @examples
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
 #' @export
-getUsers <- function(user_ids='', fields='', name_case='') {
+getUsers <- function(user_ids='', fields='', name_case='', v='5.29') {
   if (length(user_ids) > 1) user_ids <- paste(user_ids, collapse=",")
-  query <- queryBuilder('users.get',
-                        user_ids=user_ids,
-                        fields=fields,
-                        name_case=name_case)
-  #response <- fromJSON(query)
-  response <- fromJSON(rawToChar(GET(URLencode(query))$content))
+  query <- queryBuilder('users.get', v=v)
+  response <- fromJSON(rawToChar(POST(URLencode(query),
+                                      body=list(user_ids=user_ids,
+                                                fields=fields,
+                                                name_case=name_case))$content))
   response$response
 }
 
@@ -91,7 +90,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         company=company,
                         position=position,
                         group_id=group_id,
-                        v='5.28'
+                        v='5.29'
   )
   response <- fromJSON(query)
   response$response
