@@ -38,13 +38,13 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' mutual_friends <- getMutual(target_uid='1')
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='') {
-  query <- queryBuilder('friends.getMutual',
-                        source_id=source_id,
-                        target_uid=target_uid,
-                        target_uids=target_uids,
-                        order=order,
-                        count=count,
-                        offset=offset)
-  response <- fromJSON(query)
+  query <- queryBuilder('friends.getMutual', v='5.29')
+  response <- fromJSON(rawToChar(POST(URLencode(query),
+                                      body=list(source_id=source_id,
+                                                target_uid=target_uid,
+                                                target_uids=target_uids,
+                                                order=order,
+                                                count=count,
+                                                offset=offset))$content))
   response$response
 }
