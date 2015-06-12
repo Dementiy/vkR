@@ -1,41 +1,38 @@
-`vkR` это пакет для взаимодействия с API ВКонтакте с помощью языка R. 
+`vkR` is an R package which provides access to the VKontakte (VK) API.
 
-## Установка
+## Installation
 
 ``` r
 install.packages("devtools")
 devtools::install_github("Dementiy/vkR")
-```
-
-После чего пакет можно будет загружать с помощью функции `library()`:
-
-``` r
 library("vkR")
 ```
 
-## Авторизация
+## Authorization
+
+Most API requests require the use of an access token. VK has several types of authorization mechanisms. Check out the [documentation](https://vk.com/dev/authentication) for more details.
 
 ``` r
 authorize(CLIENT_ID, 'SCOPE', 'EMAIL', 'PASSWORD')
 ```
 
-Где:
-* `CLIENT_ID` - идентификатор приложения в ВК. Для получения идентификатора требуется создать новое [Standalone-приложение](https://vk.com/dev/standalone) в ВК (либо воспользоваться уже существующим).
-* `SCOPE` - список возможных прав доступа, перечисленных через запятую, например `'friends,groups'` - предоставит доступ к друзьям и группам пользователя. Полный список прав можно найти [здесь](https://vk.com/dev/permissions).
-* `EMAIL` и `PASSWORD` - логин и пароль в ВК.
+where:
+* `CLIENT_ID` - is an application ID. You have to create new [Standalone-app](https://vk.com/dev/standalone) in VK to get ID (or use the already existing).
+* `SCOPE` - the list of comma separated access rights, e.g. `'friends,groups'`- provide the access to user friends and groups. List of all rights can be found [here](https://vk.com/dev/permissions).
+* `EMAIL` and `PASSWORD` - username and password.
 
-Если аргументы `EMAIL` и `PASSWORD` были опущены, то будет открыто окно браузера. В адресной строке будет показан токен доступа (access token). Его необходимо скопировать и передать в качестве аргумента в функцию `setAccessToken()`:
+If the `EMAIL` and `PASSWORD` have been omitted, a browser window will be opened. In the address bar an access token will be shown. Access token must be copied and passed as an argument into the following function:
 
 ``` r
 setAccessToken(access_token = 'YOUR ACCESS TOKEN')
 ```
 
-## Пример использования
+## Example of use
 
-Построение графа друзей:
+Building a Friend Graph:
 
 ``` r
-my_friends <- getFriends() # возвращает два значения: count (количество друзей) и items (сами записи)
+my_friends <- getFriends()
 my_friends <- my_friends$items
 network <- getNetwork(my_friends)
 
@@ -45,4 +42,4 @@ layout <- layout.fruchterman.reingold(g)
 plot(g, layout=layout)
 ```
 
-Различные примеры работы см. в папке `examples`.
+You can find more examples in `examples` directory.
