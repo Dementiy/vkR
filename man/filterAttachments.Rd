@@ -9,7 +9,7 @@ filterAttachments(attachments, type)
 \item{attachments}{List of attachments}
 
 \item{type}{type field may have the following values:
-\itemize {
+\itemize{
 \item \strong{photo} - photo from an album;
 \item \strong{posted_photo} - photo uploaded directly from user's computer;
 \item \strong{video} - video;
