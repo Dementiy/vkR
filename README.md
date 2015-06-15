@@ -34,7 +34,7 @@ Building a Friend Graph:
 ``` r
 my_friends <- getFriends()
 my_friends <- my_friends$items
-network <- getNetwork(my_friends)
+network <- getNetwork(my_friends$id)
 
 library("igraph")
 g <- graph.adjacency(as.matrix(network), weighted=T, mode = "undirected")
