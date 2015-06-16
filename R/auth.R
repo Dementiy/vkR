@@ -40,15 +40,33 @@ authorize <- function(client_id, scope='friends', email, password) {
     if (!is.character(password)) stop('argument "password" must be a string')
     
     response <- GET(auth_url)
-    authorize_form <- htmlParse(rawToChar(response$content))
-    hidden_attrs <- xpathSApply(authorize_form, "//form/input", xmlGetAttr, "value")
-    token_page <-  POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
-                        body=list('_origin'=hidden_attrs[1], 
-                                  'ip_h'=hidden_attrs[2],
-                                  'to'=hidden_attrs[3],
-                                  'email'=email, 
-                                  'pass'=password))
-    access_token <- sub(".*?access_token=(.*?)&.*", "\\1", token_page$all_headers[[4]]$headers$location)
+    
+    for (i in 1:2) { # Only God knows why
+      authorize_form <- htmlParse(rawToChar(response$content))
+      form_attrs <- xpathSApply(authorize_form, "//form/input", xmlGetAttr, "value")
+      response <- POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
+                       body=list('_origin'=form_attrs[1], 
+                                 'ip_h'=form_attrs[2],
+                                 'lg_h'=form_attrs[3],
+                                 'to'=form_attrs[4],
+                                 'email'=email, 
+                                 'pass'=password), 
+                       encode='form')
+    }
+    
+    if (response$url != "https://oauth.vk.com/blank.html") {
+      accept_perms_page <- htmlParse(rawToChar(response$content))
+      response <- POST(xmlGetAttr(getNodeSet(accept_perms_page, "//form")[[1]], "action"))
+    }
+    
+    for (i in 1:length(response$all_headers)) {
+      location <- response$all_headers[[i]]$headers$location
+      if (!is.null(location) & grepl("access_token", location)) {
+        access_token <- gsub(".*?access_token=(.*?)&.*", "\\1", location)
+        break
+      }
+    }
+    
     setAccessToken(access_token)
   }
 }
