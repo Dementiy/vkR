@@ -22,7 +22,7 @@
 #'   \item \strong{notifications} Access to notifications about answers to the user.
 #' }
 #' @export
-authorize <- function(client_id, scope='friends', email, password) {
+vkOAuth <- function(client_id, scope='friends', email, password) {
   if (missing(client_id)) stop('argument "client_id" is missing, with no default')
   if (!is.numeric(client_id) || floor(client_id) != client_id) stop('argument "client_id" must be an integer value')
   if (!is.character(scope)) stop('argument "scope" must be a string')
