@@ -1,26 +1,25 @@
-#' Авторизация и получение ключа доступа
+#' Clinet authorization
 #' 
-#' @param client_id Идентификатор приложения
-#' @param scope Битовая маска настроек доступа приложения, которые необходимо проверить при авторизации пользователя и запросить, в случае отсутствия необходимых.
-#' @param email Номер телефона или почтовый адрес
-#' @param password Пароль
+#' @param client_id Application ID
+#' @param scope Requested application access permissions (see below).
+#' @param email Email or phone number
+#' @param password Password
 #' 
 #' @details
-#' Ниже перечислен список некоторых из возможных прав доступа, полный список может быть найден на 
-#' странице документации \href{https://vk.com/pages?oid=-1&p=Права_доступа_приложений}{Права доступа приложений}:
+#' List of Available Settings of \href{https://vk.com/dev/permissions}{Access Permissions}:
 #' \itemize{
-#'   \item \strong{friends} Доступ к друзьям.
-#'   \item \strong{photos} Доступ к фотографиям.
-#'   \item \strong{audio} Доступ к аудиозаписям.
-#'   \item \strong{video} Доступ к видеозаписям.
-#'   \item \strong{docs} Доступ к документам.
-#'   \item \strong{notes} Доступ заметкам пользователя.
-#'   \item \strong{pages} Доступ к wiki-страницам.
-#'   \item \strong{status} Доступ к статусу пользователя.
-#'   \item \strong{wall} Доступ к обычным и расширенным методам работы со стеной.
-#'   \item \strong{groups} Доступ к группам пользователя.
-#'   \item \strong{messages} Доступ к расширенным методам работы с сообщениями.
-#'   \item \strong{notifications} Доступ к оповещениям об ответах пользователю.
+#'   \item \strong{friends} Access to friends.
+#'   \item \strong{photos} Access to photos.
+#'   \item \strong{audio} Access to audios.
+#'   \item \strong{video} Access to videos.
+#'   \item \strong{docs} Access to documents.
+#'   \item \strong{notes} Access to user notes.
+#'   \item \strong{pages} Access to wiki pages.
+#'   \item \strong{status} Access to user status.
+#'   \item \strong{wall} Access to standard and advanced methods for the wall.
+#'   \item \strong{groups} Access to user groups.
+#'   \item \strong{messages} Access to advanced methods for messaging.
+#'   \item \strong{notifications} Access to notifications about answers to the user.
 #' }
 #' @export
 authorize <- function(client_id, scope='friends', email, password) {
@@ -32,7 +31,7 @@ authorize <- function(client_id, scope='friends', email, password) {
                      '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope,
                      '&response_type=token&display=page')
   
-  if (!requireNamespace('XML', quietly = TRUE)) {
+  if ((missing(email) && missing(password)) || !requireNamespace('XML', quietly = TRUE)) {
     browseURL(auth_url)
   } else {
     if (missing(email)) stop('argument "email" is missing, with no default')
@@ -55,15 +54,15 @@ authorize <- function(client_id, scope='friends', email, password) {
 }
 
 
-#' Установить ключ доступа
-#' @param access_token Ключ доступа к API
+#' Set access token
+#' @param access_token Access token
 #' @export
 setAccessToken <- function(access_token = '') {
   .vkr$access_token <- access_token
 }
 
 
-#' Возвращает ключ доступа
+#' Get access token
 getAccessToken <- function() {
   if (!is.null(.vkr$access_token)) {
     .vkr$access_token
