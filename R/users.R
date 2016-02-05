@@ -97,6 +97,15 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 }
 
 
+#' Возвращает идентификатор пользователя по его тегу
+#' 
+#' @param tag Тег пользователя
+#' @export
+tag2Id <-function(tag) {
+  getUsers(tag)$id
+}
+
+
 # ????
 getAllUsers <- function(user_ids='', fields='', max_requests_per_second = 3, delay_seconds = 1.0) {
   counter <- 0
