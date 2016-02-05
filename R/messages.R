@@ -7,7 +7,7 @@
 #' @param start_message_id Если установлен в 1, то сообщения будут возвращены в хронологическом порядке
 #' @param rev
 #' @export
-messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='', v='5.33') {
+messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='', v=getAPIVersion()) {
   query <- queryBuilder('messages.getHistory',
                         offset=offset,
                         count=count,
@@ -68,7 +68,7 @@ messagesGetHistoryAll <- function(user_id) {
 #' @param preview_length Количество символов, по которому нужно обрезать сообщение. Укажите 0, если Вы не хотите обрезать сообщение
 #' @param last_message_id Идентификатор сообщения, полученного перед тем, которое нужно вернуть последним
 #' @export
-messagesGet <- function(out='', offset='', count='', time_offset='', filters='', preview_length='', last_message_id='') {
+messagesGet <- function(out='', offset='', count='', time_offset='', filters='', preview_length='', last_message_id='', v=getAPIVersion()) {
   query <- queryBuilder('messages.get',
                         out=out,
                         offset=offset,
@@ -76,7 +76,8 @@ messagesGet <- function(out='', offset='', count='', time_offset='', filters='',
                         time_offset=time_offset,
                         filters=filters,
                         preview_length=preview_length,
-                        last_message_id=last_message_id)
+                        last_message_id=last_message_id,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
