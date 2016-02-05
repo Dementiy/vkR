@@ -7,14 +7,15 @@
 #' @param start_message_id Если установлен в 1, то сообщения будут возвращены в хронологическом порядке
 #' @param rev
 #' @export
-messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='') {
+messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='', v='5.33') {
   query <- queryBuilder('messages.getHistory',
                         offset=offset,
                         count=count,
                         user_id=user_id,
                         chat_id=chat_id,
                         start_message_id=start_message_id,
-                        rev=rev)
+                        rev=rev,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
