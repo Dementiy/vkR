@@ -3,7 +3,8 @@
 \alias{wallGetById}
 \title{Returns a list of posts from user or community walls by their IDs}
 \usage{
-wallGetById(posts = "", extended = "", copy_history_depth = "")
+wallGetById(posts = "", extended = "", copy_history_depth = "",
+  fields = "", v = getAPIVersion())
 }
 \arguments{
 \item{posts}{User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.}
@@ -11,6 +12,8 @@ wallGetById(posts = "", extended = "", copy_history_depth = "")
 \item{extended}{1 — to return user and community objects needed to display posts, 0 — no additional fields are returned (default).}
 
 \item{copy_history_depth}{Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.}
+
+\item{fields}{}
 }
 \value{
 Returns a list of post objects.

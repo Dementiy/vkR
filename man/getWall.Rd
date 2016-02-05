@@ -4,7 +4,7 @@
 \title{Returns a list of posts on a user wall or community wall}
 \usage{
 getWall(owner_id = "", domain = "", offset = "", count = "",
-  filter = "owner", extended = "", v = "5.33")
+  filter = "owner", extended = "", fields = "", v = getAPIVersion())
 }
 \arguments{
 \item{owner_id}{ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.}
@@ -24,8 +24,9 @@ getWall(owner_id = "", domain = "", offset = "", count = "",
 \item \strong{suggests} — suggested posts on a community wall.
 }}
 
-\item{extended}{1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
-getWall()}
+\item{extended}{1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).}
+
+\item{fields}{getWall()}
 }
 \value{
 Returns a list of post objects.

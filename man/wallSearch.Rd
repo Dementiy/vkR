@@ -4,7 +4,8 @@
 \title{Allows to search posts on user or community walls}
 \usage{
 wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
-  count = "20", offset = "0", extended = "")
+  count = "20", offset = "0", extended = "", fields = "",
+  v = getAPIVersion())
 }
 \arguments{
 \item{owner_id}{User or community id. Remember that for a community owner_id must be negative.}
@@ -20,6 +21,8 @@ wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
 \item{offset}{Results offset.}
 
 \item{extended}{Show extended post info.}
+
+\item{fields}{}
 }
 \value{
 If executed successfully, returns a list of post objects.

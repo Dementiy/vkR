@@ -4,8 +4,8 @@
 \title{Returns a list of comments on a post on a user wall or community wall}
 \usage{
 wallGetComments(owner_id = "", post_id = "", need_likes = "",
-  offset = "", count = "10", sort = "", preview_length = "0",
-  extended = "")
+  start_comment_id = "", offset = "", count = "10", sort = "",
+  preview_length = "0", extended = "", v = getAPIVersion())
 }
 \arguments{
 \item{owner_id}{User ID or community ID. Use a negative value to designate a community ID.}
