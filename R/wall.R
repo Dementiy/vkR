@@ -13,6 +13,7 @@
 #' \item \strong{suggests} — suggested posts on a community wall.
 #' }
 #' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
+#' @param fields
 #' getWall()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
@@ -22,7 +23,7 @@
 #' \item \strong{groups} — Contains community objects.
 #' }
 #' @export
-getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', v='5.33') {
+getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.get',
                         owner_id=owner_id,
                         domain=domain,
@@ -30,6 +31,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
                         count=count,
                         filter=filter,
                         extended=extended,
+                        fields=fields,
                         v=v)
   response <- fromJSON(query)
   response$response
@@ -45,9 +47,10 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @param count Count of posts to return.
 #' @param offset Results offset.
 #' @param extended Show extended post info.
+#' @param fields
 #' @return If executed successfully, returns a list of post objects.
 #' @export
-wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='20', offset='0', extended='') {
+wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='20', offset='0', extended='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.search',
                         owner_id=owner_id,
                         domain=domain,
@@ -55,7 +58,9 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
                         owners_only=owners_only,
                         count=count,
                         offset=offset,
-                        extended=extended)
+                        extended=extended,
+                        fields=fields,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
@@ -66,6 +71,7 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
 #' @param posts User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.
 #' @param extended 1 — to return user and community objects needed to display posts, 0 — no additional fields are returned (default).
 #' @param copy_history_depth Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.
+#' @param fields
 #' @return Returns a list of post objects. 
 #' If extended is set to 1, returns the following:
 #' \itemize{
@@ -75,11 +81,13 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
 #' }
 #' If the post is a copy of another post, returns an additional array copy_history with information about original posts.
 #' @export
-wallGetById <- function(posts='', extended='', copy_history_depth='') {
+wallGetById <- function(posts='', extended='', copy_history_depth='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.getById',
                         posts=posts,
                         extended=extended,
-                        copy_history_depth=copy_history_depth)
+                        copy_history_depth=copy_history_depth,
+                        fields=fields,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
@@ -99,12 +107,13 @@ wallGetById <- function(posts='', extended='', copy_history_depth='') {
 #' \item \strong{groups} — Information about communities.
 #' }
 #' @export
-wallGetReposts <- function(owner_id='', post_id='', offset='', count='20') {
+wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=getAPIVersion()) {
   query <- queryBuilder('wall.getReposts',
                         owner_id=owner_id,
                         post_id=post_id,
                         offset=offset,
-                        count=count)
+                        count=count,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
@@ -121,15 +130,18 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20') {
 #' @param preview_length Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
 #' @export
-wallGetComments <- function(owner_id='', post_id='', need_likes='', offset='', count='10', sort='', preview_length='0', extended='') {
+wallGetComments <- function(owner_id='', post_id='', need_likes='', start_comment_id='', offset='', count='10', sort='', preview_length='0', extended='', v=getAPIVersion()) {
   query <- queryBuilder('wall.getComments',
                         owner_id=owner_id,
                         post_id=post_id,
+                        need_likes=need_likes,
+                        start_comment_id=start_comment_id,
                         offset=offset,
                         count=count,
                         sort=sort,
                         preview_length=preview_length,
-                        extended=extended)
+                        extended=extended,
+                        v=v)
   response <- fromJSON(query)
   response$response
 }
@@ -139,7 +151,7 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', offset='', c
 #' 
 #' @param attachments List of attachments
 #' @param type type field may have the following values:
-#' \itemize {
+#' \itemize{
 #' \item \strong{photo} - photo from an album;
 #' \item \strong{posted_photo} - photo uploaded directly from user's computer;
 #' \item \strong{video} - video;
