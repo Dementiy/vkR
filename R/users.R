@@ -6,7 +6,7 @@
 #' @examples
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
 #' @export
-getUsers <- function(user_ids='', fields='', name_case='', v='5.29') {
+getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
   if (length(user_ids) > 1) user_ids <- paste(user_ids, collapse=",")
   query <- queryBuilder('users.get', v=v)
   response <- fromJSON(rawToChar(POST(URLencode(query),
@@ -56,7 +56,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         university_country='', university='', university_year='', university_faculty='', university_chair='', 
                         sex='', status='', age_from='', age_to='', birth_day='', birth_month='', birth_year='',
                         online='', has_photo='', school_country='', school_city='', school_class='', school='', school_year='',
-                        religion='', interests='', company='', position='', group_id='') {
+                        religion='', interests='', company='', position='', group_id='', v=getAPIVersion()) {
   query <- queryBuilder('users.search',
                         q=q,
                         sort=sort,
@@ -90,7 +90,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         company=company,
                         position=position,
                         group_id=group_id,
-                        v='5.29'
+                        v=v
   )
   response <- fromJSON(query)
   response$response
