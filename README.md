@@ -13,7 +13,7 @@ library("vkR")
 Most API requests require the use of an access token. VK has several types of authorization mechanisms. Check out the [documentation](https://vk.com/dev/authentication) for more details.
 
 ``` r
-authorize(CLIENT_ID, 'SCOPE', 'EMAIL', 'PASSWORD')
+vkOAuth(CLIENT_ID, 'SCOPE', 'EMAIL', 'PASSWORD')
 ```
 
 where:
