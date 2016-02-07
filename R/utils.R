@@ -105,3 +105,15 @@ age_predict <- function(user_id='') {
   data.frame(uid = user_id, year_of_birth = median(friends$year_of_birth), 
              nfriends = length(friends$year_of_birth))
 }
+
+
+#' Разбить сообщения по дням, неделям, месецам
+#' 
+#' @param messages Сообщения, полученные с помощью функций messagesGet()
+#' @param format Формат даты, по которому будет происходить группировка сообщений
+#' @export
+messagesSplitByDate <- function(messages, format = "%y-%m-%d") {
+  days_list <- format(as.POSIXct(messages$date, origin="1970-01-01"), format = format)
+  messages_by_days <- split(messages, as.factor(days_list))
+  messages_by_days
+}
