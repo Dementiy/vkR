@@ -30,7 +30,7 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
 #' @param group_id Идентификатор или короткое имя сообщества
 #' @param sort Сортировка, с которой необходимо вернуть список участников
 #' @param offset Смещение, необходимое для выборки определенного подмножества участников
-#' @param count Количество участников сообщества, информацию о которых необходимо получить
+#' @param count Количество участников сообщества, информацию о которых необходимо получить (не более 1000)
 #' @param fields Список дополнительных полей, которые необходимо вернуть
 #' @param filter Доступны значения friends, unsure, managers
 #' @param v Версия API
@@ -50,4 +50,32 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
                         v=v)
   response <- fromJSON(query)
   response$response
+}
+
+
+#' Возвращает список всех участников сообщества
+#' 
+#' @param group_id Идентификатор или короткое имя сообщества
+#' @param fields Список дополнительных полей, которые необходимо вернуть
+#' @param filter Доступны значения friends, unsure, managers
+#' @param v Версия API
+#' @export
+getGroupsMembersExecute <- function(group_id = '', fields='', filter='', v=getAPIVersion()) {
+  code <- 'var groups_members = [];'
+  code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
+                 '", "fields":"', fields, 
+                 '", "filter":"', filter, 
+                 '", "v":"', v, '"}).items;')
+  code <- paste0(code, 'var offset = 1000;
+    while (groups_members.length >= offset) 
+    {
+      groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
+                 '", "fields":"', fields, 
+                 '", "filter":"', filter, 
+                 '", "v":"', v, 
+                 '", "offset": offset}).items;
+      offset = offset + 1000;
+    };
+    return groups_members;')
+  execute(code)
 }
