@@ -20,12 +20,16 @@ getFriends(user_id = "", order = "", list_id = "", count = "",
 \item{fields}{Список дополнительных полей, которые необходимо вернуть}
 
 \item{name_case}{Падеж для склонения имени и фамилии пользователя}
+
+\item{v}{Версия API}
 }
 \description{
 Возвращает список идентификаторов друзей пользователя или расшиернную информацию о друзьях пользователя
 }
 \examples{
+\dontrun{
 friends_list <- getFriends(user_id='1', order='name', fields='bdate')
 friends <- friends_list$items
+}
 }
 

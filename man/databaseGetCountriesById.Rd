@@ -12,6 +12,8 @@ databaseGetCountriesById(country_ids)
 Возвращает информацию о странах по их идентификаторам
 }
 \examples{
+\dontrun{
 databaseGetCountriesById('1,2,3,4')
+}
 }
 

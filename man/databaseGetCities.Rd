@@ -23,6 +23,8 @@ databaseGetCities(country_id = "", region_id = "", q = "",
 Возвращает список городов
 }
 \examples{
+\dontrun{
 databaseGetCities(country_id=1, need_all=0)
+}
 }
 

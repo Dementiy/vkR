@@ -23,6 +23,8 @@ wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
 \item{extended}{Show extended post info.}
 
 \item{fields}{}
+
+\item{v}{Версия API}
 }
 \value{
 If executed successfully, returns a list of post objects.

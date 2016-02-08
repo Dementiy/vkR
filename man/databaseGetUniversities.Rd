@@ -21,6 +21,8 @@ databaseGetUniversities(q = "", country_id = "", city_id = "",
 Возвращает список высших учебных заведений
 }
 \examples{
+\dontrun{
 databaseGetUniversities(city_id = '2')
+}
 }
 

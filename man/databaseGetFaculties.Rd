@@ -16,6 +16,8 @@ databaseGetFaculties(university_id = "", offset = "", count = "100")
 Возвращает список факультетов
 }
 \examples{
+\dontrun{
 databaseGetFaculties(53)
+}
 }
 

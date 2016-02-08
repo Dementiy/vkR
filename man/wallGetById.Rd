@@ -14,6 +14,8 @@ wallGetById(posts = "", extended = "", copy_history_depth = "",
 \item{copy_history_depth}{Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.}
 
 \item{fields}{}
+
+\item{v}{Версия API}
 }
 \value{
 Returns a list of post objects.

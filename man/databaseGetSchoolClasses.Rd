@@ -12,6 +12,8 @@ databaseGetSchoolClasses(country_id = "")
 Возвращает список классов, характерных для школ определенной страны (!!!Warning!!!)
 }
 \examples{
+\dontrun{
 databaseGetSchoolClasses(1)
+}
 }
 

@@ -12,6 +12,8 @@ databaseGetStreetsById(street_ids = "")
 Возвращает информацию об улицах по их идентификаторам
 }
 \examples{
+\dontrun{
 databaseGetStreetsById(1)
+}
 }
 

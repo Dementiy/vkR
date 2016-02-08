@@ -25,6 +25,8 @@ getGroupsMembers(group_id = "", sort = "", offset = "", count = "",
 Возвращает список участников сообщества
 }
 \examples{
+\dontrun{
 groups <- getGroupsMembers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+}
 }
 

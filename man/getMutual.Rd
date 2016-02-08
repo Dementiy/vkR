@@ -18,11 +18,15 @@ getMutual(source_id = "", target_uid = "", target_uids = "", order = "",
 \item{count}{Количество общих друзей, которое нужно вернуть}
 
 \item{offset}{Смещение, необходимое для выборки определенного подмножества общих друзей}
+
+\item{v}{Версия API}
 }
 \description{
 Возвращает список идентификаторов общих друзей между парой пользователей
 }
 \examples{
+\dontrun{
 mutual_friends <- getMutual(target_uid='1')
+}
 }
 

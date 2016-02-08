@@ -18,6 +18,8 @@ databaseGetSchools(q = "", city_id = "", offset = "", count = "100")
 Возвращает список школ
 }
 \examples{
+\dontrun{
 databaseGetSchools(city_id = 2)
+}
 }
 

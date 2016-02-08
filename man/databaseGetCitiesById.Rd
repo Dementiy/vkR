@@ -12,6 +12,8 @@ databaseGetCitiesById(city_ids = "")
 Возвращает информацию о городах по их идентификаторам
 }
 \examples{
+\dontrun{
 databaseGetCitiesById('1,2')
+}
 }
 

@@ -14,6 +14,8 @@ wallGetReposts(owner_id = "", post_id = "", offset = "", count = "20",
 \item{offset}{Offset needed to return a specific subset of reposts.}
 
 \item{count}{Number of reposts to return.}
+
+\item{v}{Версия API}
 }
 \value{
 Returns an object containing the following fields:

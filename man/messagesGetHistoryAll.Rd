@@ -13,11 +13,13 @@ messagesGetAll()}
 Возвращает историю всех сообщений для указанного пользователя
 }
 \examples{
+\dontrun{
 friends <- getFriends(fields = 'sex')$items
 friends_ids <- friends$id
 messages_for_friend <- data.frame()
 for (friend_id in friends_ids) {
    messages_for_friend <- rbind(messages_for_friend, messagesGetHistoryAll(friend_id))
+}
 }
 }
 

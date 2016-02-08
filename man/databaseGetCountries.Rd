@@ -19,6 +19,8 @@ databaseGetCountries(need_all = "1", code = "", offset = "",
 Возвращает список стран
 }
 \examples{
+\dontrun{
 databaseGetCountries(count=234)
+}
 }
 

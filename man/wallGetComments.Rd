@@ -23,6 +23,8 @@ wallGetComments(owner_id = "", post_id = "", need_likes = "",
 \item{preview_length}{Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.}
 
 \item{extended}{Flag, either 1 or 0.}
+
+\item{v}{Версия API}
 }
 \description{
 Returns a list of comments on a post on a user wall or community wall

@@ -16,6 +16,8 @@ databaseGetChairs(faculty_id = "", offset = "", count = "100")
 Возвращает список кафедр университета по указанному факультету
 }
 \examples{
+\dontrun{
 databaseGetChairs(206)
+}
 }
 

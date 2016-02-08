@@ -12,11 +12,15 @@ getUsers(user_ids = "", fields = "", name_case = "",
 \item{fields}{Список дополнительных полей профилей, которые необходимо вернуть}
 
 \item{name_case}{Падеж для склонения имени и фамилии пользователя}
+
+\item{v}{Версия API}
 }
 \description{
 Возвращает расширенную информацию о пользователях
 }
 \examples{
+\dontrun{
 user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+}
 }
 

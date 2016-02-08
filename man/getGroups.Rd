@@ -25,6 +25,8 @@ getGroups(user_id = "", extended = "", filter = "", fields = "",
 Возвращает список сообществ указанного пользователя
 }
 \examples{
+\dontrun{
 groups <- getGroups('1', fields='city,country,place,description,wiki_page,members_count,counters,start_date,finish_date,can_post,can_see_all_posts,activity,status,contacts,links,fixed_post,verified,site,can_create_topic')
+}
 }
 

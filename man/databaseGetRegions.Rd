@@ -18,6 +18,8 @@ databaseGetRegions(country_id = "", q = "", offset = "", count = "100")
 Возвращает список регионов
 }
 \examples{
+\dontrun{
 databaseGetRegions(229)
+}
 }
 
