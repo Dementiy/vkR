@@ -5,7 +5,8 @@
 #' @param user_id Идентификатор пользователя, историю переписки с которым необходимо вернуть
 #' @param chat_id Идентификатор диалога, историю сообщений которого необходимо получить
 #' @param start_message_id Если установлен в 1, то сообщения будут возвращены в хронологическом порядке
-#' @param rev
+#' @param rev 1 – возвращать сообщения в хронологическом порядке
+#' @param v Версия API
 #' @export
 messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='', v=getAPIVersion()) {
   query <- queryBuilder('messages.getHistory',
@@ -26,11 +27,13 @@ messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', star
 #' @param user_id Идентификатор пользователя, историю переписки с которым необходимо вернуть
 #' messagesGetAll()
 #' @examples
+#' \dontrun{
 #' friends <- getFriends(fields = 'sex')$items
 #' friends_ids <- friends$id
 #' messages_for_friend <- data.frame()
 #' for (friend_id in friends_ids) {
 #'    messages_for_friend <- rbind(messages_for_friend, messagesGetHistoryAll(friend_id))
+#' }
 #' }
 #' @export
 messagesGetHistoryAll <- function(user_id) {
@@ -67,6 +70,7 @@ messagesGetHistoryAll <- function(user_id) {
 #' @param filters Фильтр возвращаемых сообщений: 8 — важные сообщения
 #' @param preview_length Количество символов, по которому нужно обрезать сообщение. Укажите 0, если Вы не хотите обрезать сообщение
 #' @param last_message_id Идентификатор сообщения, полученного перед тем, которое нужно вернуть последним
+#' @param v Версия API
 #' @export
 messagesGet <- function(out='', offset='', count='', time_offset='', filters='', preview_length='', last_message_id='', v=getAPIVersion()) {
   query <- queryBuilder('messages.get',
