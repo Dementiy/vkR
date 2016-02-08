@@ -8,7 +8,9 @@
 #' @param count Количество сообществ, информацию о которых нужно вернуть
 #' @param v Версия API
 #' @examples
+#' \dontrun{
 #' groups <- getGroups('1', fields='city,country,place,description,wiki_page,members_count,counters,start_date,finish_date,can_post,can_see_all_posts,activity,status,contacts,links,fixed_post,verified,site,can_create_topic')
+#' }
 #' @export
 getGroups <- function(user_id='', extended='', filter='', fields='', offset='', count='', v=getAPIVersion()) {
   query <- queryBuilder('groups.get',
@@ -33,7 +35,9 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
 #' @param filter Список фильтров сообществ, которые необходимо вернуть, перечисленные через запятую. Доступны значения admin, editor, moder, groups, publics, events
 #' @param v Версия API
 #' @examples
+#' \dontrun{
 #' groups <- getGroupsMembers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+#' }
 #' @export
 getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='', filter='', v=getAPIVersion()) {
   query <- queryBuilder('groups.getMembers',

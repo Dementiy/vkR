@@ -3,6 +3,7 @@
 #' @param limit Ограничение на количество возвращаемых результатов
 #' @param filters Перечисленные через запятую типы данных, которые необходимо вернуть
 #' @param search_global По умолчанию к результатам поиска добавляются результаты глобального поиска по всем пользователям и группам, это можно отключить передав 0
+#' @param v Версия API
 #' @export
 search.getHints <- function(q='', limit='', filters='', search_global='', v=getAPIVersion()) {
   query <- queryBuilder('search.getHints',

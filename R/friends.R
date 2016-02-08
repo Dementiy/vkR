@@ -7,9 +7,12 @@
 #' @param offset Смещение, необходимое для выборки определенного подмножества друзей
 #' @param fields Список дополнительных полей, которые необходимо вернуть
 #' @param name_case Падеж для склонения имени и фамилии пользователя
+#' @param v Версия API
 #' @examples
+#' \dontrun{
 #' friends_list <- getFriends(user_id='1', order='name', fields='bdate')
 #' friends <- friends_list$items
+#' }
 #' @export
 getFriends <- function(user_id='', order='', list_id='', count='', offset='', fields='', name_case='', v=getAPIVersion()) {
   query <- queryBuilder('friends.get', 
@@ -34,8 +37,11 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' @param order Порядок, в котором нужно вернуть список общих друзей
 #' @param count Количество общих друзей, которое нужно вернуть
 #' @param offset Смещение, необходимое для выборки определенного подмножества общих друзей
+#' @param v Версия API
 #' @examples
+#' \dontrun{
 #' mutual_friends <- getMutual(target_uid='1')
+#' }
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {
   query <- queryBuilder('friends.getMutual', v=v)

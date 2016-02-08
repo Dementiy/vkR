@@ -14,6 +14,7 @@
 #' }
 #' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
 #' @param fields
+#' @param v Версия API
 #' getWall()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
@@ -48,6 +49,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @param offset Results offset.
 #' @param extended Show extended post info.
 #' @param fields
+#' @param v Версия API
 #' @return If executed successfully, returns a list of post objects.
 #' @export
 wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='20', offset='0', extended='', fields='', v=getAPIVersion()) {
@@ -72,6 +74,7 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
 #' @param extended 1 — to return user and community objects needed to display posts, 0 — no additional fields are returned (default).
 #' @param copy_history_depth Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.
 #' @param fields
+#' @param v Версия API
 #' @return Returns a list of post objects. 
 #' If extended is set to 1, returns the following:
 #' \itemize{
@@ -99,6 +102,7 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
 #' @param post_id Post ID.
 #' @param offset Offset needed to return a specific subset of reposts.
 #' @param count Number of reposts to return.
+#' @param v Версия API
 #' @return
 #' Returns an object containing the following fields:
 #' \itemize{
@@ -129,6 +133,7 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
 #' @param sort Sort order: asc — chronological, desc — reverse chronological. 
 #' @param preview_length Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
+#' @param v Версия API
 #' @export
 wallGetComments <- function(owner_id='', post_id='', need_likes='', start_comment_id='', offset='', count='10', sort='', preview_length='0', extended='', v=getAPIVersion()) {
   query <- queryBuilder('wall.getComments',

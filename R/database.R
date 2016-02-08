@@ -5,7 +5,9 @@
 #' @param offset Отступ, необходимый для выбора определенного подмножества стран
 #' @param count Количество стран, которое необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetCountries(count=234)
+#' }
 #' @export
 databaseGetCountries <- function(need_all='1', code='', offset='', count='100') {
   query <- queryBuilder('database.getCountries',
@@ -25,7 +27,9 @@ databaseGetCountries <- function(need_all='1', code='', offset='', count='100') 
 #' @param offset Отступ, необходимый для выбора определенного подмножества регионов
 #' @param count Количество регионов, которое необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetRegions(229)
+#' }
 #' @export
 databaseGetRegions <- function(country_id='', q='', offset='', count='100') {
   query <- queryBuilder('database.getRegions',
@@ -42,7 +46,9 @@ databaseGetRegions <- function(country_id='', q='', offset='', count='100') {
 #' 
 #' @param street_ids Идентификаторы улиц
 #' @examples
+#' \dontrun{
 #' databaseGetStreetsById(1)
+#' }
 #' @export
 databaseGetStreetsById <- function(street_ids='') {
   query <- queryBuilder('database.getStreetsById', street_ids=street_ids)
@@ -55,7 +61,9 @@ databaseGetStreetsById <- function(street_ids='') {
 #' 
 #' @param country_ids Идентификаторы стран
 #' @examples
+#' \dontrun{
 #' databaseGetCountriesById('1,2,3,4')
+#' }
 #' @export
 databaseGetCountriesById <- function(country_ids) {
   query <- queryBuilder('database.getCountriesById', country_ids=country_ids)
@@ -73,7 +81,9 @@ databaseGetCountriesById <- function(country_ids) {
 #' @param offset Отступ, необходимый для получения определенного подмножества городов
 #' @param count Количество городов, которые необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetCities(country_id=1, need_all=0)
+#' }
 #' @export
 databaseGetCities <- function(country_id='', region_id='', q='', need_all='1', offset='', count='100') {
   query <- queryBuilder('database.getCities',
@@ -92,7 +102,9 @@ databaseGetCities <- function(country_id='', region_id='', q='', need_all='1', o
 #' 
 #' @param city_ids Идентификаторы городов
 #' @examples
+#' \dontrun{
 #' databaseGetCitiesById('1,2')
+#' }
 #' @export
 databaseGetCitiesById <- function(city_ids='') {
   query <- queryBuilder('database.getCitiesById', city_ids=city_ids)
@@ -109,7 +121,9 @@ databaseGetCitiesById <- function(city_ids='') {
 #' @param offset Отступ, необходимый для получения определенного подмножества учебных заведений
 #' @param count Количество учебных заведений, которое необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetUniversities(city_id = '2')
+#' }
 #' @export
 databaseGetUniversities <- function(q='', country_id='', city_id='', offset='', count='100') {
   query <- queryBuilder('database.getUniversities',
@@ -130,7 +144,9 @@ databaseGetUniversities <- function(q='', country_id='', city_id='', offset='', 
 #' @param offset Отступ, необходимый для получения определенного подмножества школ
 #' @param count Количество школ, которое необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetSchools(city_id = 2)
+#' }
 #' @export
 databaseGetSchools <- function(q='', city_id='', offset='', count='100') {
   query <- queryBuilder('database.getSchools',
@@ -147,7 +163,9 @@ databaseGetSchools <- function(q='', city_id='', offset='', count='100') {
 #' 
 #' @param country_id Идентификатор страны, доступные классы в которой необходимо вернуть
 #' @examples
+#' \dontrun{
 #' databaseGetSchoolClasses(1)
+#' }
 #' @export
 databaseGetSchoolClasses <- function(country_id='') {
   query <- queryBuilder('database.getSchoolClasses', country_id=country_id)
@@ -162,7 +180,9 @@ databaseGetSchoolClasses <- function(country_id='') {
 #' @param offset Отступ, необходимый для получения определенного подмножества факультетов
 #' @param count Количество факультетов которое необходимо получить
 #' @examples
+#' \dontrun{
 #' databaseGetFaculties(53)
+#' }
 #' @export
 databaseGetFaculties <- function(university_id='', offset='', count='100') {
   query <- queryBuilder('database.getFaculties',
@@ -180,7 +200,9 @@ databaseGetFaculties <- function(university_id='', offset='', count='100') {
 #' @param offset Отступ, необходимый для получения определенного подмножества кафедр
 #' @param count Количество кафедр которое необходимо получить
 #' @examples
+#' \dontrun{
 #' databaseGetChairs(206)
+#' }
 #' @export
 databaseGetChairs <- function(faculty_id='', offset='', count='100') {
   query <- queryBuilder('database.getChairs',

@@ -3,8 +3,11 @@
 #' @param user_ids Перечисленные через запятую идентификаторы пользователей или их короткие имена
 #' @param fields Список дополнительных полей профилей, которые необходимо вернуть
 #' @param name_case Падеж для склонения имени и фамилии пользователя
+#' @param v Версия API
 #' @examples
+#' \dontrun{
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+#' }
 #' @export
 getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
   if (length(user_ids) > 1) user_ids <- paste(user_ids, collapse=",")
@@ -50,7 +53,8 @@ getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
 #' @param company название компании, в которой работают пользователи
 #' @param position название должности
 #' @param group_id идентификатор группы, среди пользователей которой необходимо проводить поиск
-#' @param from_list Разделы среди которых нужно осуществить поиск, перечисленные через запятую: friends – искать среди друзей, subscribes – искать среди друзей и подписок пользователя 
+#' @param from_list Разделы среди которых нужно осуществить поиск, перечисленные через запятую: friends – искать среди друзей, subscribes – искать среди друзей и подписок пользователя
+#' @param v Версия API 
 #' @export
 usersSearch <- function(q='', sort='', offset='', count='20', fields='', city='', country='', hometown='', 
                         university_country='', university='', university_year='', university_faculty='', university_chair='', 
