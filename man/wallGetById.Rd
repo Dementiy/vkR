@@ -15,7 +15,7 @@ wallGetById(posts = "", extended = "", copy_history_depth = "",
 
 \item{fields}{}
 
-\item{v}{Версия API}
+\item{v}{Version of API}
 }
 \value{
 Returns a list of post objects.

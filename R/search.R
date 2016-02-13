@@ -1,9 +1,9 @@
-#' Позволяет получить результаты быстрого поиска по произвольной подстроке
-#' @param q Текст запроса, результаты которого нужно получить
-#' @param limit Ограничение на количество возвращаемых результатов
-#' @param filters Перечисленные через запятую типы данных, которые необходимо вернуть
-#' @param search_global По умолчанию к результатам поиска добавляются результаты глобального поиска по всем пользователям и группам, это можно отключить передав 0
-#' @param v Версия API
+#' Allows the programmer to do a quick search for any substring
+#' @param q Search query string
+#' @param limit Maximum number of results to return
+#' @param filters
+#' @param search_global
+#' @param v Version of API
 #' @export
 search.getHints <- function(q='', limit='', filters='', search_global='', v=getAPIVersion()) {
   query <- queryBuilder('search.getHints',

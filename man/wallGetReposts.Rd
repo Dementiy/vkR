@@ -15,7 +15,7 @@ wallGetReposts(owner_id = "", post_id = "", offset = "", count = "20",
 
 \item{count}{Number of reposts to return.}
 
-\item{v}{Версия API}
+\item{v}{Version of API}
 }
 \value{
 Returns an object containing the following fields:

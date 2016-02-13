@@ -1,6 +1,6 @@
-#' Создание графа друзей
+#' Building a friend graph
 #' 
-#' @param users_ids Список пользователей, по которым требуется построить граф друзей
+#' @param users_ids User IDs
 #' @export
 getNetwork <- function(users_ids='') {
   n <- length(users_ids)

@@ -1,13 +1,13 @@
-#' Возвращает список идентификаторов друзей пользователя или расшиернную информацию о друзьях пользователя
+#' Returns a list of user IDs or detailed information about a user's friends
 #'
-#' @param user_id Идентификатор пользователя, для которого необходимо получить список друзей
-#' @param order Порядок, в котором нужно вернуть список друзей
-#' @param list_id Идентификатор списка друзей
-#' @param count Количество друзей, которое необходимо вернуть
-#' @param offset Смещение, необходимое для выборки определенного подмножества друзей
-#' @param fields Список дополнительных полей, которые необходимо вернуть
-#' @param name_case Падеж для склонения имени и фамилии пользователя
-#' @param v Версия API
+#' @param user_id User ID. By default, the current user ID
+#' @param order Sort order (name — by name, hints — by rating)
+#' @param list_id ID of the friend list returned by the friends.getLists method to be used as the source. This parameter is taken into account only when the uid parameter is set to the current user ID
+#' @param count Number of friends to return
+#' @param offset Offset needed to return a specific subset of friends
+#' @param fields Profile fields to return
+#' @param name_case Case for declension of user name and surname
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' friends_list <- getFriends(user_id='1', order='name', fields='bdate')
@@ -29,15 +29,15 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 }
 
 
-#' Возвращает список идентификаторов общих друзей между парой пользователей
+#' Returns a list of user IDs of the mutual friends of two users
 #' 
-#' @param source_id Идентификатор пользователя, чьи друзья пересекаются с друзьями пользователя с идентификатором target_uid
-#' @param target_uid Идентификатор пользователя, с которым необходимо искать общих друзей
-#' @param target_uids Список идентификаторов пользователей, с которыми необходимо искать общих друзей
-#' @param order Порядок, в котором нужно вернуть список общих друзей
-#' @param count Количество общих друзей, которое нужно вернуть
-#' @param offset Смещение, необходимое для выборки определенного подмножества общих друзей
-#' @param v Версия API
+#' @param source_id ID of the user whose friends will be checked against the friends of the user specified in target_uid
+#' @param target_uid ID of the user whose friends will be checked against the friends of the user specified in source_uid
+#' @param target_uids List of target uids
+#' @param order Sort order
+#' @param count Number of mutual friends to return
+#' @param offset Offset needed to return a specific subset of mutual friends
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' mutual_friends <- getMutual(target_uid='1')

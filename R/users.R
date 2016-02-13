@@ -1,9 +1,9 @@
-#' Возвращает расширенную информацию о пользователях
+#' Returns detailed information on users
 #'
-#' @param user_ids Перечисленные через запятую идентификаторы пользователей или их короткие имена
-#' @param fields Список дополнительных полей профилей, которые необходимо вернуть
-#' @param name_case Падеж для склонения имени и фамилии пользователя
-#' @param v Версия API
+#' @param user_ids User IDs or screen names (screen_name). By default, current user ID
+#' @param fields Profile fields to return
+#' @param name_case Case for declension of user name and surname
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
@@ -20,41 +20,42 @@ getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
 }
 
 
-#' Возвращает список пользователей в соответствии с заданным критерием поиска
+#' Returns a list of users matching the search criteria
 #' 
-#' @param q строка поискового запроса. Например, Вася Бабич
-#' @param sort сортировка результатов: 1 - по дате регистрации, 0 - по популярности
-#' @param count количество возвращаемых пользователей
-#' @param fields список дополнительных полей, которые необходимо вернуть
-#' @param city идентификатор города
-#' @param country идентификатор страны
-#' @param hometown название города строкой
-#' @param university_country идентификатор страны, в которой пользователи закончили ВУЗ
-#' @param university идентификатор ВУЗа
-#' @param university_year год окончания ВУЗа
-#' @param university_faculty идентификатор факультета
-#' @param university_chair идентификатор кафедры
-#' @param sex пол, 1 — женщина, 2 — мужчина, 0 (по умолчанию) — любой
-#' @param status семейное положение: 1 — Не женат, 2 — Встречается, 3 — Помолвлен, 4 — Женат, 7 — Влюблён, 5 — Всё сложно, 6 — В активном поиске
-#' @param age_from начиная с какого возраста
-#' @param age_to до какого возраста
-#' @param birth_day день рождения
-#' @param birth_month месяц рождения
-#' @param birth_year год рождения
-#' @param online 1 — только в сети, 0 — все пользователи
-#' @param has_photo 1 — только с фотографией, 0 — все пользователи
-#' @param school_country идентификатор страны, в которой пользователи закончили школу
-#' @param school_city идентификатор города, в котором пользователи закончили школу
-#' @param school_class положительное число
-#' @param school идентификатор школы, которую закончили пользователи
-#' @param school_year год окончания школы
-#' @param religion религиозные взгляды
-#' @param interests интересы
-#' @param company название компании, в которой работают пользователи
-#' @param position название должности
-#' @param group_id идентификатор группы, среди пользователей которой необходимо проводить поиск
-#' @param from_list Разделы среди которых нужно осуществить поиск, перечисленные через запятую: friends – искать среди друзей, subscribes – искать среди друзей и подписок пользователя
-#' @param v Версия API 
+#' @param q Search query string (e.g., Vasya Babich)
+#' @param sort Sort order: 1 — by date registered; 0 — by rating 
+#' @param offset Offset needed to return a specific subset of users
+#' @param count Number of users to return
+#' @param fields Profile fields to return
+#' @param city City ID
+#' @param country Country ID
+#' @param hometown City name in a string
+#' @param university_country ID of the country where the user graduated
+#' @param university ID of the institution of higher education
+#' @param university_year Year of graduation from an institution of higher education
+#' @param university_faculty Faculty ID
+#' @param university_chair Chair ID
+#' @param sex 1 — female; 2 — male; 0 — any (default) 
+#' @param status Relationship status: 1 — Not married; 2 — In a relationship; 3 — Engaged; 4 — Married; 5 — It's complicated; 6 — Actively searching; 7 — In love 
+#' @param age_from Minimum age
+#' @param age_to Maximum age
+#' @param birth_day Day of birth
+#' @param birth_month Month of birth
+#' @param birth_year Year of birth
+#' @param online 1 — online only; 0 — all users
+#' @param has_photo 1 — with photo only; 0 — all users
+#' @param school_country ID of the country where users finished school
+#' @param school_city ID of the city where users finished school
+#' @param school_class
+#' @param school ID of the school
+#' @param school_year School graduation year
+#' @param religion Users' religious affiliation
+#' @param interests Users' interests
+#' @param company Name of the company where users work
+#' @param position Job position
+#' @param group_id ID of a community to search in communities
+#' @param from_list 
+#' @param v Version of API 
 #' @export
 usersSearch <- function(q='', sort='', offset='', count='20', fields='', city='', country='', hometown='', 
                         university_country='', university='', university_year='', university_faculty='', university_chair='', 
@@ -101,9 +102,9 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 }
 
 
-#' Возвращает идентификатор пользователя по его тегу
+#' Returns user id by tag
 #' 
-#' @param tag Тег пользователя
+#' @param tag Tag
 #' @export
 tag2Id <-function(tag) {
   getUsers(tag)$id

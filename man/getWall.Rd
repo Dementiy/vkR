@@ -28,7 +28,7 @@ getWall(owner_id = "", domain = "", offset = "", count = "",
 
 \item{fields}{}
 
-\item{v}{Версия API
+\item{v}{Version of API
 getWall()}
 }
 \value{

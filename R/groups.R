@@ -1,12 +1,12 @@
-#' Возвращает список сообществ указанного пользователя
+#' Returns a list of the communities to which a user belongs
 #'
-#' @param user_id Идентификатор пользователя, информацию о сообществах которого требуется получить
-#' @param extended Если указать в качестве этого параметра 1, то будет возвращена полная информация о группах пользователя. По умолчанию 0
-#' @param filter Список фильтров сообществ, которые необходимо вернуть, перечисленные через запятую. Доступны значения admin, editor, moder, groups, publics, events
-#' @param fields Список дополнительных полей, которые необходимо вернуть
-#' @param offset Смещение, необходимое для выборки определённого подмножества сообществ
-#' @param count Количество сообществ, информацию о которых нужно вернуть
-#' @param v Версия API
+#' @param user_id User ID
+#' @param extended 1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default) 
+#' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
+#' @param fields Profile fields to return
+#' @param offset Offset needed to return a specific subset of communities
+#' @param count Number of communities to return (maximum value 1000)
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' groups <- getGroups('1', fields='city,country,place,description,wiki_page,members_count,counters,start_date,finish_date,can_post,can_see_all_posts,activity,status,contacts,links,fixed_post,verified,site,can_create_topic')
@@ -25,15 +25,15 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
   response$response
 }
 
-#' Возвращает список участников сообщества
+#' Returns a list of community members
 #'
-#' @param group_id Идентификатор или короткое имя сообщества
-#' @param sort Сортировка, с которой необходимо вернуть список участников
-#' @param offset Смещение, необходимое для выборки определенного подмножества участников
-#' @param count Количество участников сообщества, информацию о которых необходимо получить (не более 1000)
-#' @param fields Список дополнительных полей, которые необходимо вернуть
-#' @param filter Доступны значения friends, unsure, managers
-#' @param v Версия API
+#' @param group_id ID or screen name of the community
+#' @param sort Sort order
+#' @param offset Offset needed to return a specific subset of community members
+#' @param count Number of community members to return (maximum value 1000)
+#' @param fields List of additional fields to be returned
+#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' groups <- getGroupsMembers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
@@ -53,12 +53,12 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 }
 
 
-#' Возвращает список всех участников сообщества
+#' Returns a list of community members
 #' 
-#' @param group_id Идентификатор или короткое имя сообщества
-#' @param fields Список дополнительных полей, которые необходимо вернуть
-#' @param filter Доступны значения friends, unsure, managers
-#' @param v Версия API
+#' @param group_id ID or screen name of the community
+#' @param fields List of additional fields to be returned
+#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
+#' @param v Version of API
 #' @export
 getGroupsMembersExecute <- function(group_id = '', fields='', filter='', v=getAPIVersion()) {
   code <- 'var groups_members = [];'

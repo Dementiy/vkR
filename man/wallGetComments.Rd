@@ -24,7 +24,7 @@ wallGetComments(owner_id = "", post_id = "", need_likes = "",
 
 \item{extended}{Flag, either 1 or 0.}
 
-\item{v}{Версия API}
+\item{v}{Version of API}
 }
 \description{
 Returns a list of comments on a post on a user wall or community wall

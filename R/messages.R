@@ -1,19 +1,19 @@
-#' Возвращает историю сообщений для указанного пользователя
+#' Returns message history for the specified user or group chat
 #' 
-#' @param offset Смещение, необходимое для выборки определенного подмножества сообщений
-#' @param count Количество сообщений, которое необходимо получить (но не более 200)
-#' @param user_id Идентификатор пользователя, историю переписки с которым необходимо вернуть
-#' @param chat_id Идентификатор диалога, историю сообщений которого необходимо получить
-#' @param start_message_id Если установлен в 1, то сообщения будут возвращены в хронологическом порядке
-#' @param rev 1 – возвращать сообщения в хронологическом порядке
-#' @param v Версия API
+#' @param offset Offset needed to return a specific subset of messages
+#' @param count Number of messages to return (maximum value 200)
+#' @param user_id ID of the user whose message history you want to return
+#' @param peer_id 
+#' @param start_message_id Starting message ID from which to return history
+#' @param rev Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order
+#' @param v Version of API
 #' @export
-messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', start_message_id='', rev='', v=getAPIVersion()) {
+messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', start_message_id='', rev='', v=getAPIVersion()) {
   query <- queryBuilder('messages.getHistory',
                         offset=offset,
                         count=count,
                         user_id=user_id,
-                        chat_id=chat_id,
+                        peer_id=peer_id,
                         start_message_id=start_message_id,
                         rev=rev,
                         v=v)
@@ -22,9 +22,9 @@ messagesGetHistory <- function(offset='', count='', user_id='', chat_id='', star
 }
 
 
-#' Возвращает историю всех сообщений для указанного пользователя
+#' Returns all message history for the specified user or group chat
 #' 
-#' @param user_id Идентификатор пользователя, историю переписки с которым необходимо вернуть
+#' @param user_id ID of the user whose message history you want to return
 #' messagesGetAll()
 #' @examples
 #' \dontrun{
@@ -61,16 +61,16 @@ messagesGetHistoryAll <- function(user_id) {
 }
 
 
-#' Возвращает список входящих либо исходящих личных сообщений текущего пользователя
+#' Returns a list of the current user's incoming or outgoing private messages
 #' 
-#' @param out Если этот параметр равен 1, сервер вернет исходящие сообщения
-#' @param offset Смещение, необходимое для выборки определенного подмножества сообщений
-#' @param count Количество сообщений, которое необходимо получить
-#' @param time_offset Максимальное время, прошедшее с момента отправки сообщения до текущего момента в секундах. 0, если Вы хотите получить сообщения любой давности
-#' @param filters Фильтр возвращаемых сообщений: 8 — важные сообщения
-#' @param preview_length Количество символов, по которому нужно обрезать сообщение. Укажите 0, если Вы не хотите обрезать сообщение
-#' @param last_message_id Идентификатор сообщения, полученного перед тем, которое нужно вернуть последним
-#' @param v Версия API
+#' @param out 1 — to return outgoing messages; 0 — to return incoming messages (default)
+#' @param offset Offset needed to return a specific subset of messages
+#' @param count Number of messages to return
+#' @param time_offset Maximum time since a message was sent, in seconds. To return messages without a time limitation, set as 0
+#' @param filters Filter to apply:  1 — unread only; 2 — not from the chat; 4 — messages from friends 
+#' @param preview_length Number of characters after which to truncate a previewed message. To preview the full message, specify 0
+#' @param last_message_id ID of the message received before the message that will be returned last
+#' @param v Version of API
 #' @export
 messagesGet <- function(out='', offset='', count='', time_offset='', filters='', preview_length='', last_message_id='', v=getAPIVersion()) {
   query <- queryBuilder('messages.get',

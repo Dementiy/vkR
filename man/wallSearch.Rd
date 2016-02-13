@@ -24,7 +24,7 @@ wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
 
 \item{fields}{}
 
-\item{v}{Версия API}
+\item{v}{Version of API}
 }
 \value{
 If executed successfully, returns a list of post objects.
