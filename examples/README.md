@@ -73,7 +73,6 @@ get_messages <- function(users_ids) {
 
 messages <- get_messages(c(
     # PUT USER IDs HERE
-  19550563, 334777001
   ));
 
 
