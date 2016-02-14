@@ -88,10 +88,11 @@ messages <- tolower(messages)
 messages <- str_trim(messages, side = "both")
 
 
-# Нормализация (стемминг) с помощью python и библиотеки pymorphy2
+# Нормализация (стемминг)
 write(msg_docs, file='messages')
 ```
 
+Нормализация текста происходит с помощью морфологического анализатора [`pymorphy2`](https://pymorphy2.readthedocs.org/en/latest/). Пример скрипта:
 ```python
 import pymorphy2
 
@@ -108,6 +109,7 @@ messages.close()
 normailized_messages.close()
 ```
 
+Дальше текст обрабатываем в R:
 ```r
 messages_norm <- readLines("messages_norm.txt", encoding="UTF-8")
 
