@@ -88,7 +88,7 @@ messages <- str_trim(messages, side = "both")
 
 
 # Нормализация (стемминг)
-write(msg_docs, file='messages')
+write(messages, file='messages')
 ```
 
 Нормализация текста происходит с помощью морфологического анализатора [`pymorphy2`](https://pymorphy2.readthedocs.org/en/latest/). Пример скрипта:
