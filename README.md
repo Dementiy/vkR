@@ -1,4 +1,4 @@
-`vkR` is an R package which provides access to the VKontakte (VK) API.
+`vkR` is an R package which provides access to the [VKontakte](https://vk.com/) (VK) API.
 
 ## Installation
 
