@@ -107,13 +107,29 @@ age_predict <- function(user_id='') {
 }
 
 
-#' Разбить сообщения по дням, неделям, месецам
+#' Split messages by days, weeks, months
 #' 
-#' @param messages Сообщения, полученные с помощью функций messagesGet()
-#' @param format Формат даты, по которому будет происходить группировка сообщений
+#' @param messages List of messages from messagesGet()
+#' @param format Character string giving a date-time format as used by strptime
 #' @export
 messagesSplitByDate <- function(messages, format = "%y-%m-%d") {
   days_list <- format(as.POSIXct(messages$date, origin="1970-01-01"), format = format)
   messages_by_days <- split(messages, as.factor(days_list))
   messages_by_days
+}
+
+
+#' Extract URLs from messages
+#' 
+#' @param messages Array of messages
+#' @export
+getURLs <- function(messages, message_body=FALSE) {
+  # http://stackoverflow.com/questions/26496538/extract-urls-with-regex-into-a-new-data-frame-column
+  url_pattern <- "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+  match <- regexpr(url_pattern, messages)
+  
+  if (message_body)
+    as.character(messages[match != -1])
+  else
+    regmatches(messages, match)
 }
