@@ -8,7 +8,8 @@ Maintainer: Dmitriy Sorokin <dementiy@yandex.ru>
 Description: Provides an interface to the VK API
 Depends:
     R (>= 3.0.0),
-    httr,
+    httr (<= 0.6.1),
     jsonlite,
     XML
 License: GPL-3
+RoxygenNote: 5.0.1
