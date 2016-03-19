@@ -50,6 +50,44 @@ get_wall2500 <- function(owner_id='', domain=NULL, offset=0, max_count=100, filt
 }
 
 
+# Получить список всех постов со стены
+get_all_posts <- function(owner_id='', domain=NULL, filter='all', extended='0', v='5.29') {
+  offset <- 0
+  delay_counter <- 0
+  count_per_request <- 2500
+  all_posts <- list()
+  
+  repeat
+  {
+    messages <- get_wall2500(owner_id = owner_id, 
+                             domain = domain, 
+                             offset = offset, 
+                             max_count = count_per_request,
+                             filter = filter,
+                             extended = extended,
+                             v = v)
+    
+    if (length(messages) <= 0) break
+    
+    if (!is.null(messages)) {
+      for (i in 1:nrow(messages))
+      {
+        post <- vkPost(messages[i, ])
+        all_posts <- append(all_posts, list(post))
+      }
+    }
+    
+    offset <- offset + count_per_request
+    delay_counter <- delay_counter + 1
+    if (delay_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  all_posts
+}
+# texts <- sapply(all_posts, function(post) post$text)
+
+
 # Получить информацию об указанных пользователях. Может быть указано не более ~5-15 тысяч пользователей.
 get_users <- function(user_ids='', fields='', name_case='') {
   code <- 'var users = [];'
