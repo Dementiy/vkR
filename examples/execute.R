@@ -29,8 +29,8 @@ get_wall2500 <- function(owner_id='', domain=NULL, offset=0, max_count=100, filt
                      "v":', v, '}).items;')
     
     code <- paste0(code, 'var offset = 100 + ', offset, ';
-      var count = 100;
-      while (offset < 2500 && wall_records.length <= offset && offset-', offset, '<', max_count, ') {
+      var count = 100; var max_offset = offset + ', max_count, ';
+      while (offset < max_offset && wall_records.length <= offset && offset-', offset, '<', max_count, ') {
         if (', max_count, ' - wall_records.length < 100) {
           count = ', max_count, ' - wall_records.length;
         };
