@@ -133,3 +133,28 @@ getURLs <- function(messages, message_body=FALSE) {
   else
     regmatches(messages, match)
 }
+
+
+#' Create post object
+#' 
+#' @param ... List of attributes
+#' @export
+vkPost <- function(...)
+{
+  args <- list(...)[[1]]
+  post <- list(id           = args[["id"]],
+               from_id      = args[["from_id"]],
+               owner_id     = args[["owner_id"]],
+               date         = args[["date"]],
+               post_type    = args[["post_type"]],
+               text         = args[["text"]],
+               copy_history = args[["copy_history"]],
+               post_source  = args[["post_source"]],
+               comments     = args[["comments"]],
+               likes        = args[["likes"]],
+               reposts      = args[["reposts"]],
+               attachments  = args[["attachments"]],
+               geo          = args[["geo"]])
+  class(post) <- "vkPost"
+  return (post)
+}
