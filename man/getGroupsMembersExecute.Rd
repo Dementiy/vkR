@@ -4,15 +4,10 @@
 \alias{getGroupsMembersExecute}
 \title{Returns a list of community members}
 \usage{
-getGroupsMembersExecute(group_id = "", fields = "", filter = "",
-  v = getAPIVersion())
+getGroupsMembersExecute(group_id = "", v = getAPIVersion())
 }
 \arguments{
 \item{group_id}{ID or screen name of the community}
-
-\item{fields}{List of additional fields to be returned}
-
-\item{filter}{friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)}
 
 \item{v}{Version of API}
 }
