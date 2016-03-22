@@ -56,26 +56,41 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' Returns a list of community members
 #' 
 #' @param group_id ID or screen name of the community
-#' @param fields List of additional fields to be returned
-#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param v Version of API
 #' @export
-getGroupsMembersExecute <- function(group_id = '', fields='', filter='', v=getAPIVersion()) {
-  code <- 'var groups_members = [];'
-  code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
-                 '", "fields":"', fields, 
-                 '", "filter":"', filter, 
-                 '", "v":"', v, '"}).items;')
-  code <- paste0(code, 'var offset = 1000;
-    while (groups_members.length >= offset) 
-    {
-      groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
-                 '", "fields":"', fields, 
-                 '", "filter":"', filter, 
-                 '", "v":"', v, 
-                 '", "offset": offset}).items;
-      offset = offset + 1000;
-    };
-    return groups_members;')
-  execute(code)
+getGroupsMembersExecute <- function(group_id = '', v=getAPIVersion())
+{
+  getGroupsMembers20 <- function(group_id = '', offset = 0, v=getAPIVersion())
+  {
+    code <- 'var groups_members = [];'
+    code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
+                   '", "offset":"', offset, 
+                   '", "v":"', v, '"}).items;')
+    code <- paste0(code, 'var offset = 1000;
+                   while (offset < 25000 && groups_members.length >= offset) 
+                   {
+                   groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
+                   '", "v":"', v, 
+                   '", "offset":(offset+',offset,')}).items;
+                   offset = offset + 1000;
+                   };
+                   return groups_members;')
+    execute(code)
+  }
+  
+  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "v":"', v, '"});')
+  response <- execute(code)
+  users_ids <- response$items
+  count <- response$count
+  
+  delay_counter <- 0
+  while (length(users_ids) < count)
+  {
+    users_ids <- append(users_ids, getGroupsMembers20(group_id, length(users_ids)))
+    delay_counter <- delay_counter + 1
+    if (delay_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  users_ids
 }
