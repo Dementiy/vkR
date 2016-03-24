@@ -91,16 +91,16 @@ get_all_posts <- function(owner_id='', domain=NULL, filter='all', extended='0', 
 # Получить информацию об указанных пользователях. Может быть указано не более ~5-15 тысяч пользователей.
 get_users <- function(user_ids='', fields='', name_case='') {
   code <- 'var users = [];'
-  num_requests <- ifelse(length(user_ids) %% 1000 == 0, (length(user_ids) %/% 1000), (length(user_ids) %/% 1000) + 1)
+  num_requests <- ifelse(length(user_ids) %% 500 == 0, (length(user_ids) %/% 500), (length(user_ids) %/% 500) + 1)
   from <- 1
-  to <- ifelse(num_requests >= 2, 1000, length(user_ids))
+  to <- ifelse(num_requests >= 2, 500, length(user_ids))
   for (i in 1:num_requests) {
     code <- paste0(code, 'users = users + API.users.get({
                    "user_ids":"', paste0(user_ids[from:to], collapse = ','), '", 
                    "fields":"', fields, '", 
-                   "name_case":"', name_case, '", "v":5.29});')
+                   "name_case":"', name_case, '", "v":5.50});')
     from <- to + 1
-    to <- to + ifelse(length(user_ids) - (to + 1000) >= 0, 1000, length(user_ids) - to)
+    to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
   }
   code <- paste0(code, 'return users;')
   execute(code)
