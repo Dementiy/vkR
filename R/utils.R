@@ -44,6 +44,33 @@ getFriendsBy25 <- function(user_ids) {
 }
 
 
+#' Returns a list of friends IDs for the specified users
+#' 
+#' @param users_ids User IDs
+#' @export
+getFriendsFor <- function(users_ids) {
+  users_friends <- list()
+  counter <- 0
+  from <- 1
+  to <- 25
+  repeat {
+    users_friends_25 <- getFriendsBy25(users_ids[from:to])
+    users_friends <- append(users_friends, users_friends_25)
+    
+    if (to >= length(users_ids))
+      break
+    
+    from <- to + 1
+    to <- to + 25
+    
+    counter <- counter + 1
+    if (counter %% 3)
+      Sys.sleep(1.0)
+  }
+  users_friends
+}
+
+
 # For more details see \url{http://stackoverflow.com/questions/6451152/how-to-catch-integer0}
 # @param x Integer value
 # @author Richie Cotton
