@@ -54,3 +54,16 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
                                                 offset=offset))$content))
   response$response
 }
+
+
+#' Checks the friendship status between two users
+#' 
+#' @param source_id Source user ID
+#' @param target_id Target user ID
+#' @export
+areFriends <- function(source_id, target_id)
+{
+  if (!is.numeric(source_id)) stop('source_id must be positive integer')
+  if (!is.numeric(target_id)) stop('target_id must be positive integer')
+  source_id %in% getFriends(target_id)$items | target_id %in% getFriends(source_id)$items
+}
