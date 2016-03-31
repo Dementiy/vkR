@@ -98,7 +98,7 @@ get_users <- function(user_ids='', fields='', name_case='') {
     code <- paste0(code, 'users = users + API.users.get({
                    "user_ids":"', paste0(user_ids[from:to], collapse = ','), '", 
                    "fields":"', fields, '", 
-                   "name_case":"', name_case, '", "v":5.50});')
+                   "name_case":"', name_case, '", "v":"5.50"});')
     from <- to + 1
     to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
   }
