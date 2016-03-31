@@ -26,16 +26,20 @@ getNetwork <- function(users_ids='') {
 }
 
 
-#' Получить список друзей для пользователей, указанных в векторе ids
-#' @param ids Вектор со списком пользователей, для которых требуется получить список друзей 
-getFriendsBy25 <- function(ids) {
+#' Returns a list of friends IDs for the specified users
+#' 
+#' @param user_ids User IDs
+#' @export
+getFriendsBy25 <- function(user_ids) {
+  user_ids <- na.omit(user_ids)
+  user_ids <- unique(user_ids)
   code <- "var all_friends = {}; var request;"
-  for (idx in 1:length(ids)) {
-    code <- paste(code, "request=API.friends.get({\"user_id\":", ids[idx], "}); all_friends.user", ids[idx], "=request;", sep="")
+  for (idx in 1:length(user_ids)) {
+    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], "}); all_friends.user", user_ids[idx], "=request;", sep="")
   }
   code <- paste(code, "return all_friends;")
   response <- execute(code)
-  names(response) <- ids
+  if (!is.null(response)) names(response) <- user_ids
   response
 }
 

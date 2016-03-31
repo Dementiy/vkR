@@ -2,14 +2,14 @@
 % Please edit documentation in R/utils.R
 \name{getFriendsBy25}
 \alias{getFriendsBy25}
-\title{Получить список друзей для пользователей, указанных в векторе ids}
+\title{Returns a list of friends IDs for the specified users}
 \usage{
-getFriendsBy25(ids)
+getFriendsBy25(user_ids)
 }
 \arguments{
-\item{ids}{Вектор со списком пользователей, для которых требуется получить список друзей}
+\item{user_ids}{User IDs}
 }
 \description{
-Получить список друзей для пользователей, указанных в векторе ids
+Returns a list of friends IDs for the specified users
 }
 
