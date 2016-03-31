@@ -85,3 +85,15 @@ messagesGet <- function(out='', offset='', count='', time_offset='', filters='',
   response <- fromJSON(query)
   response$response
 }
+
+
+#' Split messages by days, weeks, months
+#' 
+#' @param messages List of messages from messagesGet()
+#' @param format Character string giving a date-time format as used by strptime
+#' @export
+messagesSplitByDate <- function(messages, format = "%y-%m-%d") {
+  days_list <- format(as.POSIXct(messages$date, origin="1970-01-01"), format = format)
+  messages_by_days <- split(messages, as.factor(days_list))
+  messages_by_days
+}
