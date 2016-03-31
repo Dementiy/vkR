@@ -109,27 +109,3 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 tag2Id <-function(tag) {
   getUsers(tag)$id
 }
-
-
-# ????
-getAllUsers <- function(user_ids='', fields='', max_requests_per_second = 3, delay_seconds = 1.0) {
-  counter <- 0
-  from <- 1
-  to <- 50
-  users <- data.frame()
-  
-  repeat {
-    getted <- getUsers(paste(user_ids[from:to], collapse = ','), fields)
-    users <- rbind(users, getted)
-    if (nrow(getted) < 50) break
-    
-    from <- to + 1
-    to <- to + 51
-    
-    counter <- counter + 1
-    if (counter %% max_requests_per_second)
-      Sys.sleep(delay_seconds)
-  }
-  
-  users
-}
