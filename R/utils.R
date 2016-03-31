@@ -1,76 +1,3 @@
-#' Building a friend graph
-#' 
-#' @param users_ids User IDs
-#' @export
-getNetwork <- function(users_ids='') {
-  n <- length(users_ids)
-  adjacency_matrix <- data.frame(matrix(data = rep(0, n*n), nrow = n, ncol = n), row.names = users_ids)
-  colnames(adjacency_matrix) <- users_ids
-  
-  mutual_friends <- getMutual(target_uids = paste(users_ids, collapse=","))
-  for (friend_id in 1:length(users_ids)) {
-    friends <- mutual_friends$common_friends[[friend_id]]
-    if (length(friends) > 0) {
-      share_friends <- intersect(users_ids, friends)
-      if (length(share_friends) > 0) {
-        for (shared_user_id in 1:length(share_friends)) {
-          #if (is.na(share_friends[shared_user_id])) break
-          #if (is.null(share_friends[shared_user_id])) break
-          adjacency_matrix[as.character(share_friends[shared_user_id]), as.character(users_ids[friend_id])] <- 1
-        }
-      }
-    }
-  }
-  
-  adjacency_matrix
-}
-
-
-#' Returns a list of friends IDs for the specified users
-#' 
-#' @param user_ids User IDs
-#' @export
-getFriendsBy25 <- function(user_ids) {
-  user_ids <- na.omit(user_ids)
-  user_ids <- unique(user_ids)
-  code <- "var all_friends = {}; var request;"
-  for (idx in 1:length(user_ids)) {
-    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], "}); all_friends.user", user_ids[idx], "=request;", sep="")
-  }
-  code <- paste(code, "return all_friends;")
-  response <- execute(code)
-  if (!is.null(response)) names(response) <- user_ids
-  response
-}
-
-
-#' Returns a list of friends IDs for the specified users
-#' 
-#' @param users_ids User IDs
-#' @export
-getFriendsFor <- function(users_ids) {
-  users_friends <- list()
-  counter <- 0
-  from <- 1
-  to <- 25
-  repeat {
-    users_friends_25 <- getFriendsBy25(users_ids[from:to])
-    users_friends <- append(users_friends, users_friends_25)
-    
-    if (to >= length(users_ids))
-      break
-    
-    from <- to + 1
-    to <- to + 25
-    
-    counter <- counter + 1
-    if (counter %% 3)
-      Sys.sleep(1.0)
-  }
-  users_friends
-}
-
-
 # For more details see \url{http://stackoverflow.com/questions/6451152/how-to-catch-integer0}
 # @param x Integer value
 # @author Richie Cotton
@@ -79,54 +6,9 @@ getFriendsFor <- function(users_ids) {
 # }
 
 
-#' Создание графа друзей для произвольного списка пользователей
+#' Predict age for the specified user
 #' 
-#' @param users_ids Произвольный список пользователей, по которым требуется построить граф друзей
-#' @export
-getArbitraryNetwork <- function(users_ids) {
-  counter <- 0
-  from <- 1
-  to <- 25
-  users_lists <- list()
-  
-  repeat {
-    # Для пользователей из списка users_ids получаем список друзей
-    # Обрабатываем по 25 человек за запрос
-    ids <- na.omit(users_ids[from:to])
-    users_lists <- append(users_lists, getFriendsBy25(ids))
-    
-    if (to >= length(users_ids)) break
-    
-    from <- to + 1
-    to <- to + 25
-    
-    counter <- counter + 1
-    if (counter %% 3)
-      Sys.sleep(1.0)
-  }
-  
-  # Создаем матрицу смежности
-  n <- length(users_lists)
-  adjacency_matrix <- data.frame(matrix(data = rep(0, n*n), nrow = n, ncol = n), row.names = users_ids)
-  colnames(adjacency_matrix) <- users_ids
-  
-  # Расставляем связи
-  for (user_id in 1:(length(users_ids)-1)) {
-    for (current_user_id in (user_id + 1):length(users_ids)) {
-      if (users_ids[user_id] %in% users_lists[[current_user_id]]) {
-        adjacency_matrix[as.character(users_ids[user_id]), as.character(users_ids[current_user_id])] <- 1
-        adjacency_matrix[as.character(users_ids[current_user_id]), as.character(users_ids[user_id])] <- 1
-      }
-    }
-  }
-  
-  adjacency_matrix
-}
-
-
-#' Прогнозирование возраста указанного пользователя
-#' 
-#' @param user_id Идентификатор пользователя, для которого необходимо определить возраст
+#' @param user_id User ID
 #' @export
 age_predict <- function(user_id='') {
   friends <- getFriends(user_id=user_id, fields='bdate')$items
@@ -135,18 +17,6 @@ age_predict <- function(user_id='') {
   friends$year_of_birth <- as.numeric(format(friends$bdate, "%Y"))
   data.frame(uid = user_id, year_of_birth = median(friends$year_of_birth), 
              nfriends = length(friends$year_of_birth))
-}
-
-
-#' Split messages by days, weeks, months
-#' 
-#' @param messages List of messages from messagesGet()
-#' @param format Character string giving a date-time format as used by strptime
-#' @export
-messagesSplitByDate <- function(messages, format = "%y-%m-%d") {
-  days_list <- format(as.POSIXct(messages$date, origin="1970-01-01"), format = format)
-  messages_by_days <- split(messages, as.factor(days_list))
-  messages_by_days
 }
 
 

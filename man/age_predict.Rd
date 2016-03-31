@@ -2,14 +2,14 @@
 % Please edit documentation in R/utils.R
 \name{age_predict}
 \alias{age_predict}
-\title{Прогнозирование возраста указанного пользователя}
+\title{Predict age for the specified user}
 \usage{
 age_predict(user_id = "")
 }
 \arguments{
-\item{user_id}{Идентификатор пользователя, для которого необходимо определить возраст}
+\item{user_id}{User ID}
 }
 \description{
-Прогнозирование возраста указанного пользователя
+Predict age for the specified user
 }
 
