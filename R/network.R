@@ -29,43 +29,24 @@ getNetwork <- function(users_ids='') {
 #' Building a friend graph for an arbitrary list of users
 #' 
 #' @param users_ids User IDs
+#' @param format Either "edgelist" for a list of edges or "adjmatrix" for an adjacency matrix
 #' @export
-getArbitraryNetwork <- function(users_ids) {
-  counter <- 0
-  from <- 1
-  to <- 25
-  users_lists <- list()
+getArbitraryNetwork <- function(users_ids, format='edgelist') {
+  if (!require("reshape2")) stop("The package reshape2 was not installed")
+  if (!require("dplyr")) stop("The package dplyr was not installed")
   
-  repeat {
-    # Для пользователей из списка users_ids получаем список друзей
-    # Обрабатываем по 25 человек за запрос
-    ids <- na.omit(users_ids[from:to])
-    users_lists <- append(users_lists, getFriendsBy25(ids))
-    
-    if (to >= length(users_ids)) break
-    
-    from <- to + 1
-    to <- to + 25
-    
-    counter <- counter + 1
-    if (counter %% 3)
-      Sys.sleep(1.0)
-  }
+  users_lists <- getFriendsFor(users_ids)
+  edge_list <- melt(users_lists)
+  colnames(edge_list) <- c("from", "to")
+  edge_list <- edge_list %>% filter(from %in% users_ids & to %in% users_ids)
+  edge_list$from <- as.character(edge_list$from)
+  edge_list$to <- as.character(edge_list$to)
   
-  # Создаем матрицу смежности
-  n <- length(users_lists)
-  adjacency_matrix <- data.frame(matrix(data = rep(0, n*n), nrow = n, ncol = n), row.names = users_ids)
-  colnames(adjacency_matrix) <- users_ids
+  if (format == 'edgelist') return(edge_list)
   
-  # Расставляем связи
-  for (user_id in 1:(length(users_ids)-1)) {
-    for (current_user_id in (user_id + 1):length(users_ids)) {
-      if (users_ids[user_id] %in% users_lists[[current_user_id]]) {
-        adjacency_matrix[as.character(users_ids[user_id]), as.character(users_ids[current_user_id])] <- 1
-        adjacency_matrix[as.character(users_ids[current_user_id]), as.character(users_ids[user_id])] <- 1
-      }
-    }
-  }
-  
+  n <- length(users_ids)
+  adjacency_matrix <- matrix(0, nrow = n, ncol = n)
+  rownames(adjacency_matrix) <- colnames(adjacency_matrix) <- users_ids
+  adjacency_matrix[as.matrix(edge_list)[,1:2]] <- 1
   adjacency_matrix
 }
