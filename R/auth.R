@@ -85,6 +85,6 @@ getAccessToken <- function() {
   if (!is.null(.vkr$access_token)) {
     .vkr$access_token
   } else {
-    stop("Could not find access token. For more details see ?authorize or ?setAccessToken")
+    stop("Could not find access token. For more details see ?vkOAuth or ?setAccessToken")
   }
 }
