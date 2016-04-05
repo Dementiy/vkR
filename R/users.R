@@ -1,6 +1,6 @@
 #' Returns detailed information on users
 #'
-#' @param user_ids User IDs or screen names (screen_name). By default, current user ID
+#' @param user_ids User IDs or screen names (screen_name). By default, current user ID (the maximum number of elements allowed is 1000)
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
 #' @param v Version of API

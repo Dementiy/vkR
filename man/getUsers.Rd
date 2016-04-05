@@ -8,7 +8,7 @@ getUsers(user_ids = "", fields = "", name_case = "",
   v = getAPIVersion())
 }
 \arguments{
-\item{user_ids}{User IDs or screen names (screen_name). By default, current user ID}
+\item{user_ids}{User IDs or screen names (screen_name). By default, current user ID (the maximum number of elements allowed is 1000)}
 
 \item{fields}{Profile fields to return}
 
