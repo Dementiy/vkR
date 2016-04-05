@@ -10,12 +10,16 @@
 #' }
 #' @export
 getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
-  if (length(user_ids) > 1) user_ids <- paste(user_ids, collapse=",")
-  query <- queryBuilder('users.get', v=v)
+  body <- list(fields=fields, name_case=name_case)
+  if (length(user_ids) > 1) {
+    user_ids <- paste(user_ids, collapse=",")
+    body <- append(body, list(user_ids=user_ids))
+    query <- queryBuilder('users.get', v=v)
+  } else {
+    query <- queryBuilder('users.get', user_ids=user_ids, v=v)
+  }
   response <- fromJSON(rawToChar(POST(URLencode(query),
-                                      body=list(user_ids=user_ids,
-                                                fields=fields,
-                                                name_case=name_case))$content))
+                                      body=body)$content))
   response$response
 }
 
