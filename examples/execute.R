@@ -103,6 +103,7 @@ get_users <- function(user_ids='', fields='', name_case='') {
     to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
   }
   code <- paste0(code, 'return users;')
+  if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
   execute(code)
 }
 # users <- get_users(sample(x = seq(1:10000000), size=5000, replace = FALSE), fields='sex')
