@@ -24,6 +24,67 @@ getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
 }
 
 
+#' Returns detailed information on arbitrary number of users
+#'
+#' @param user_ids User IDs or screen names (screen_name). By default, current user ID
+#' @param fields Profile fields to return
+#' @param name_case Case for declension of user name and surname
+#' @param v Version of API
+#' @examples
+#' \dontrun{
+#' users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
+#' }
+#' @export
+getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersion())
+{
+  get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
+    code <- 'var users = [];'
+    num_requests <- ifelse(length(user_ids) %% 500 == 0, (length(user_ids) %/% 500), (length(user_ids) %/% 500) + 1)
+    from <- 1
+    to <- ifelse(num_requests >= 2, 500, length(user_ids))
+    for (i in 1:num_requests) {
+      code <- paste0(code, 'users = users + API.users.get({
+                     "user_ids":"', paste0(user_ids[from:to], collapse = ','), '", 
+                     "fields":"', fields, '", 
+                     "name_case":"', name_case, '", "v":"', v, '"});')
+      from <- to + 1
+      to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
+    }
+    code <- paste0(code, 'return users;')
+    if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
+    execute(code)
+  }
+  
+  if (is.character(users_ids) && nchar(users_ids) == 0)
+    return(getUsers(fields = fields, name_case = name_case, v=v))
+  
+  all_users <- data.frame()
+  counter <- 0
+  from <- 1
+  to <- 5000
+  
+  repeat
+  {
+    if (to >= length(users_ids)) to <- length(users_ids)
+    
+    users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
+    all_users <- rbind.pages(list(all_users, users))
+    
+    if (to >= length(users_ids))
+      break
+    
+    from <- to + 1
+    to <- to + 5000
+    
+    counter <- counter + 1
+    if (counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  all_users
+}
+
+
 #' Returns a list of users matching the search criteria
 #' 
 #' @param q Search query string (e.g., Vasya Babich)
