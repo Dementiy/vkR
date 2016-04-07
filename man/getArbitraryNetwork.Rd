@@ -4,10 +4,12 @@
 \alias{getArbitraryNetwork}
 \title{Building a friend graph for an arbitrary list of users}
 \usage{
-getArbitraryNetwork(users_ids)
+getArbitraryNetwork(users_ids, format = "edgelist")
 }
 \arguments{
 \item{users_ids}{User IDs}
+
+\item{format}{Either "edgelist" for a list of edges or "adjmatrix" for an adjacency matrix}
 }
 \description{
 Building a friend graph for an arbitrary list of users
