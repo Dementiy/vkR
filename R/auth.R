@@ -31,7 +31,9 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
                      '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope,
                      '&response_type=token&display=page')
   
-  if ((missing(email) && missing(password)) || !requireNamespace('XML', quietly = TRUE)) {
+  if ((missing(email) && missing(password)) || 
+      !requireNamespace('XML', quietly = TRUE) || 
+      packageVersion("httr") >= "1.0.0") {
     browseURL(auth_url)
   } else {
     if (missing(email)) stop('argument "email" is missing, with no default')
