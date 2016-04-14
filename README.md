@@ -37,9 +37,24 @@ my_friends <- my_friends$items
 network <- getNetwork(my_friends)
 
 library("igraph")
-g <- graph.adjacency(as.matrix(network), weighted=T, mode = "undirected")
+g <- graph.adjacency(as.matrix(network), weighted = T, mode = "undirected")
 layout <- layout.fruchterman.reingold(g)
-plot(g, layout=layout)
+plot(g, layout = layout)
+```
+
+Find paths between two users (aka small-world problem):
+
+```r
+source_id <- sample(seq(1:10000000), 1)
+target_id <- sample(seq(1:10000000), 1)
+paths <- getPaths(source_id, target_id)
+
+library("igraph")
+rows <- sample(nrow(paths), 5)
+edges <- getArbitraryNetwork(unique(c(source_id, target_id, unlist(as.list(t(paths[rows, ]))))), format = "edgelist")
+g <- graph_from_edgelist(as.matrix(edges), directed = FALSE)
+layout <- layout.fruchterman.reingold(g)
+plot(g, layout = layout)
 ```
 
 You can find more examples in `examples` directory.
