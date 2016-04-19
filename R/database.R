@@ -230,3 +230,19 @@ databaseGetChairs <- function(faculty_id='', offset='', count='100', v=getAPIVer
   response <- fromJSON(query)
   response$response
 }
+
+
+#' Get country ID and title by given city ID
+#'  
+#' @param city_id City ID
+#' @export
+getCountryByCityId <- function(city_id)
+{
+  res <- usersSearch(q= "", fields = "country", city = city_id, count = 1)
+  if (res$count == 0)
+    stop("No users from this city") # Из этого города нет ни одного человека
+  res <- res$items
+  if (length(res) == 0) # Бывает, что возвращается пустой ответ при count=1, что странно
+    res <- usersSearch(q= "", fields = "country", city = city_id, count = 2)$items
+  res$country
+}
