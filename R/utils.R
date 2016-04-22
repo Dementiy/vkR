@@ -36,6 +36,33 @@ getURLs <- function(messages, message_body=FALSE) {
 }
 
 
+#' Apply a method over a vector of objects
+#' 
+#' Returns a data frame of the same number of rows as length of `objs`, each element of which is the 
+#' result of applying `method` to the corresponding element of `objs` 
+#' @param objs A vector of objects
+#' @param method The function to be applied to each element of `objs`
+#' @examples
+#' \dontrun{
+#'  users <- vkApply(c("",1234567), function(user) getUsers(user, fields="sex"))
+#'  countries <- vkApply(c(2,5122182,1906578), getCountryByCityId)
+#' }
+#' @export
+vkApply <- function(objs, method)
+{
+  res <- data.frame()
+  delay_counter <- 1
+  for (obj in objs)
+  {
+    delay_counter <<- delay_counter + 1
+    if (delay_counter %% 3 == 0)
+      Sys.sleep(1.0)
+    res <- rbind.pages(list(res, method(obj)))
+  }
+  res
+}
+
+
 #' Create post object
 #' 
 #' @param ... List of attributes
