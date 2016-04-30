@@ -1,13 +1,19 @@
 if (!exists(".vkr")) {
   .vkr <- new.env()
   .vkr$aceess_token <- NULL
-  .vkr$api_version <- '5.44'
+  .vkr$api_version <- '5.52'
 }
+
 
 getAPIVersion <- function() {
   .vkr$api_version
 }
 
-setAPIVersion <- function(new_version) {
-  .vkr$api_version <- new_version
+
+#' Set API version
+#' 
+#' @param v API version
+#' @export
+setAPIVersion <- function(v) {
+  .vkr$api_version <- v
 }
