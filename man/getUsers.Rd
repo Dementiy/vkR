@@ -4,7 +4,7 @@
 \alias{getUsers}
 \title{Returns detailed information on users}
 \usage{
-getUsers(user_ids = "", fields = "", name_case = "",
+getUsers(user_ids = "", fields = "", name_case = "", flatten = FALSE,
   v = getAPIVersion())
 }
 \arguments{
@@ -13,6 +13,8 @@ getUsers(user_ids = "", fields = "", name_case = "",
 \item{fields}{Profile fields to return}
 
 \item{name_case}{Case for declension of user name and surname}
+
+\item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
 
 \item{v}{Version of API}
 }

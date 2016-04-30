@@ -12,7 +12,7 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
   online = "", has_photo = "", school_country = "", school_city = "",
   school_class = "", school = "", school_year = "", religion = "",
   interests = "", company = "", position = "", group_id = "",
-  v = getAPIVersion())
+  from_list = "", flatten = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{q}{Search query string (e.g., Vasya Babich)}
@@ -77,9 +77,11 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
 
 \item{group_id}{ID of a community to search in communities}
 
-\item{v}{Version of API}
+\item{from_list}{List of comma-separated words}
 
-\item{from_list}{}
+\item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
+\item{v}{Version of API}
 }
 \description{
 Returns a list of users matching the search criteria

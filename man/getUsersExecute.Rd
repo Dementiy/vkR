@@ -5,12 +5,14 @@
 \title{Returns detailed information on arbitrary number of users}
 \usage{
 getUsersExecute(users_ids = "", fields = "", name_case = "",
-  v = getAPIVersion())
+  flatten = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{fields}{Profile fields to return}
 
 \item{name_case}{Case for declension of user name and surname}
+
+\item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
 
 \item{v}{Version of API}
 
