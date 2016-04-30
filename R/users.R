@@ -3,24 +3,30 @@
 #' @param user_ids User IDs or screen names (screen_name). By default, current user ID (the maximum number of elements allowed is 1000)
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
 #' @examples
 #' \dontrun{
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
 #' }
 #' @export
-getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
-  body <- list(fields=fields, name_case=name_case)
+getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
+  body <- list(fields = fields, name_case = name_case)
   if (length(user_ids) > 1) {
-    user_ids <- paste(user_ids, collapse=",")
-    body <- append(body, list(user_ids=user_ids))
-    query <- queryBuilder('users.get', v=v)
+    user_ids <- paste(user_ids, collapse = ",")
+    body <- append(body, list(user_ids = user_ids))
+    query <- queryBuilder('users.get', v = v)
   } else {
-    query <- queryBuilder('users.get', user_ids=user_ids, v=v)
+    query <- queryBuilder('users.get', user_ids = user_ids, v = v)
   }
-  response <- fromJSON(rawToChar(POST(URLencode(query),
-                                      body=body)$content))
-  response$response
+  response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
+                                                      body = body)$content))
+  response <- response$response
+  
+  if (isTRUE(flatten))
+    response <- jsonlite::flatten(response)
+  
+  response
 }
 
 
@@ -29,13 +35,14 @@ getUsers <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
 #' @param user_ids User IDs or screen names (screen_name). By default, current user ID
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
 #' @examples
 #' \dontrun{
 #' users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
 #' }
 #' @export
-getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersion())
+getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FALSE, v=getAPIVersion())
 {
   get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
     code <- 'var users = [];'
@@ -49,14 +56,14 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersi
                      "name_case":"', name_case, '", "v":"', v, '"});')
       from <- to + 1
       to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
-    }
+  }
     code <- paste0(code, 'return users;')
     if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
     execute(code)
-  }
+}
   
   if (is.character(users_ids) && nchar(users_ids) == 0)
-    return(getUsers(fields = fields, name_case = name_case, v=v))
+    return(getUsers(fields = fields, name_case = name_case, flatten = flatten, v = v))
   
   all_users <- data.frame()
   counter <- 0
@@ -68,7 +75,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersi
     if (to >= length(users_ids)) to <- length(users_ids)
     
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
-    all_users <- rbind.pages(list(all_users, users))
+    all_users <- jsonlite::rbind.pages(list(all_users, users))
     
     if (to >= length(users_ids))
       break
@@ -81,8 +88,11 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersi
       Sys.sleep(1.0)
   }
   
+  if (isTRUE(flatten))
+    all_users <- jsonlite::flatten(all_users)
+  
   all_users
-}
+  }
 
 
 #' Returns a list of users matching the search criteria
@@ -119,51 +129,56 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', v=getAPIVersi
 #' @param company Name of the company where users work
 #' @param position Job position
 #' @param group_id ID of a community to search in communities
-#' @param from_list 
+#' @param from_list List of comma-separated words
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API 
 #' @export
 usersSearch <- function(q='', sort='', offset='', count='20', fields='', city='', country='', hometown='', 
                         university_country='', university='', university_year='', university_faculty='', university_chair='', 
                         sex='', status='', age_from='', age_to='', birth_day='', birth_month='', birth_year='',
                         online='', has_photo='', school_country='', school_city='', school_class='', school='', school_year='',
-                        religion='', interests='', company='', position='', group_id='', v=getAPIVersion()) {
+                        religion='', interests='', company='', position='', group_id='', from_list='', flatten=FALSE, v=getAPIVersion()) {
   query <- queryBuilder('users.search',
-                        q=q,
-                        sort=sort,
-                        offset=offset,
-                        count=count,
-                        fields=fields,
-                        city=city,
-                        country=country,
-                        hometown=hometown,
-                        university_country=university_country,
-                        university=university,
-                        university_year=university_year,
-                        university_faculty=university_faculty,
-                        university_chair=university_chair,
-                        sex=sex,
-                        status=status,
-                        age_from=age_from,
-                        age_to=age_to,
-                        birth_day=birth_day, 
-                        birth_month=birth_month,
-                        birth_year=birth_year,
-                        online=online,
-                        has_photo=has_photo,
-                        school_country=school_country,
-                        school_city=school_city,
-                        school_class=school_class,
-                        school=school,
-                        school_year=school_year,
-                        religion=religion,
-                        interests=interests,
-                        company=company,
-                        position=position,
-                        group_id=group_id,
-                        v=v
+                        q = q,
+                        sort = sort,
+                        offset = offset,
+                        count = count,
+                        fields = fields,
+                        city = city,
+                        country = country,
+                        hometown = hometown,
+                        university_country = university_country,
+                        university = university,
+                        university_year = university_year,
+                        university_faculty = university_faculty,
+                        university_chair = university_chair,
+                        sex = sex,
+                        status = status,
+                        age_from = age_from,
+                        age_to = age_to,
+                        birth_day = birth_day, 
+                        birth_month = birth_month,
+                        birth_year = birth_year,
+                        online = online,
+                        has_photo = has_photo,
+                        school_country = school_country,
+                        school_city = school_city,
+                        school_class = school_class,
+                        school = school,
+                        school_year = school_year,
+                        religion = religion,
+                        interests = interests,
+                        company = company,
+                        position = position,
+                        group_id = group_id,
+                        from_list = from_list,
+                        v = v
   )
-  response <- fromJSON(query)
-  response$response
+  response <- jsonlite::fromJSON(query)
+  response <- response$response
+  
+  if (isTRUE(flatten))
+    response <- jsonlite::flatten(response)
 }
 
 
@@ -171,6 +186,6 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 #' 
 #' @param tag Tag
 #' @export
-tag2Id <-function(tag) {
+tag2Id <- function(tag) {
   getUsers(tag)$id
 }
