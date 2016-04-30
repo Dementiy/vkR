@@ -56,11 +56,11 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FAL
                      "name_case":"', name_case, '", "v":"', v, '"});')
       from <- to + 1
       to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
-  }
+    }
     code <- paste0(code, 'return users;')
     if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
-    execute(code)
-}
+      execute(code)
+  }
   
   if (is.character(users_ids) && nchar(users_ids) == 0)
     return(getUsers(fields = fields, name_case = name_case, flatten = flatten, v = v))
@@ -92,7 +92,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FAL
     all_users <- jsonlite::flatten(all_users)
   
   all_users
-  }
+}
 
 
 #' Returns a list of users matching the search criteria
