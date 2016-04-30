@@ -14,18 +14,23 @@
 #' friends <- friends_list$items
 #' }
 #' @export
-getFriends <- function(user_id='', order='', list_id='', count='', offset='', fields='', name_case='', v=getAPIVersion()) {
+getFriends <- function(user_id='', order='', list_id='', count='', offset='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
   query <- queryBuilder('friends.get', 
-                        user_id=user_id, 
-                        order=order, 
-                        list_id=list_id, 
-                        count=count, 
-                        offset=offset, 
-                        fields=fields, 
-                        name_case=name_case, 
-                        v=v)
-  response <- fromJSON(query)
-  response$response
+                        user_id = user_id, 
+                        order = order, 
+                        list_id = list_id, 
+                        count = count, 
+                        offset = offset, 
+                        fields = fields, 
+                        name_case = name_case, 
+                        v = v)
+  response <- jsonlite::fromJSON(query)
+  response <- response$response
+  
+  if (isTRUE(flatten))
+    response$items <- jsonlite::flatten(response$items)
+  
+  response
 }
 
 
@@ -44,14 +49,20 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' }
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {
-  query <- queryBuilder('friends.getMutual', v=v)
-  response <- fromJSON(rawToChar(POST(URLencode(query),
-                                      body=list(source_id=source_id,
-                                                target_uid=target_uid,
-                                                target_uids=target_uids,
-                                                order=order,
-                                                count=count,
-                                                offset=offset))$content))
+  body <- list(source_id = source_id, 
+               target_uid = target_uid, 
+               order = order,
+               count = count,
+               offset = offset)
+  if (length(target_uids) > 1) {
+    target_uids <- paste(target_uids, collapse = ",")
+    body <- append(body, list(target_uids = target_uids))
+    query <- queryBuilder('friends.getMutual', v = v)
+  } else {
+    query <- queryBuilder('friends.getMutual', target_uids = target_uids, v = v)
+  }
+  response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
+                                                      body = body)$content))
   response$response
 }
 
@@ -72,17 +83,25 @@ areFriends <- function(source_id, target_id)
 #' Returns a list of friends IDs for the specified users
 #' 
 #' @param user_ids User IDs
+#' @examples
+#' \dontrun{
+#' friends <- getFriendsFor(sample(x=seq(1:10000000), size=25, replace=FALSE)) %>% getUsersExecute()
+#' }
+#' @export
 #' @export
 getFriendsBy25 <- function(user_ids) {
   user_ids <- na.omit(user_ids)
   user_ids <- unique(user_ids)
   code <- "var all_friends = {}; var request;"
   for (idx in 1:length(user_ids)) {
-    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], "}); all_friends.user", user_ids[idx], "=request;", sep="")
+    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], "}); all_friends.user", user_ids[idx], "=request;", sep = "")
   }
   code <- paste(code, "return all_friends;")
   response <- execute(code)
   if (!is.null(response)) names(response) <- user_ids
+  response
+  
+  class(response) <- "friends.list"
   response
 }
 
@@ -90,6 +109,10 @@ getFriendsBy25 <- function(user_ids) {
 #' Returns a list of friends IDs for the specified users
 #' 
 #' @param users_ids User IDs
+#' @examples
+#' \dontrun{
+#' friends <- getFriendsFor(sample(x=seq(1:10000000), size=100, replace=FALSE)) %>% getUsersExecute()
+#' }
 #' @export
 getFriendsFor <- function(users_ids) {
   users_friends <- list()
@@ -110,5 +133,7 @@ getFriendsFor <- function(users_ids) {
     if (counter %% 3)
       Sys.sleep(1.0)
   }
+  
+  class(users_friends) <- "friends.list"
   users_friends
 }

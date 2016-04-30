@@ -12,4 +12,9 @@ getFriendsFor(users_ids)
 \description{
 Returns a list of friends IDs for the specified users
 }
+\examples{
+\dontrun{
+friends <- getFriendsFor(sample(x=seq(1:10000000), size=100, replace=FALSE)) \%>\% getUsersExecute()
+}
+}
 
