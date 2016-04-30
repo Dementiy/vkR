@@ -56,14 +56,17 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FAL
                      "name_case":"', name_case, '", "v":"', v, '"});')
       from <- to + 1
       to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
-    }
+  }
     code <- paste0(code, 'return users;')
     if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
-      execute(code)
-  }
+    execute(code)
+}
   
   if (is.character(users_ids) && nchar(users_ids) == 0)
     return(getUsers(fields = fields, name_case = name_case, flatten = flatten, v = v))
+  
+  if (class(users_ids) == "friends.list")
+    users_ids <- unique(unlist(users_ids))
   
   all_users <- data.frame()
   counter <- 0
@@ -92,7 +95,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FAL
     all_users <- jsonlite::flatten(all_users)
   
   all_users
-}
+  }
 
 
 #' Returns a list of users matching the search criteria
@@ -188,4 +191,15 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 #' @export
 tag2Id <- function(tag) {
   getUsers(tag)$id
+}
+
+
+#' Returns current user ID
+#' 
+#' @export 
+me <- function()
+{
+  if (.vkr$me == 0)
+    .vkr$me <- getUsers()$id
+  .vkr$me
 }
