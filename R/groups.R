@@ -14,14 +14,14 @@
 #' @export
 getGroups <- function(user_id='', extended='', filter='', fields='', offset='', count='', v=getAPIVersion()) {
   query <- queryBuilder('groups.get',
-                        user_id=user_id,
-                        extended=extended,
-                        filter=filter,
-                        fields=fields,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        user_id = user_id,
+                        extended = extended,
+                        filter = filter,
+                        fields = fields,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -41,14 +41,14 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
 #' @export
 getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='', filter='', v=getAPIVersion()) {
   query <- queryBuilder('groups.getMembers',
-                        group_id=group_id,
-                        sort=sort,
-                        offset=offset,
-                        count=count,
-                        fields=fields,
-                        filter=filter,
-                        v=v)
-  response <- fromJSON(query)
+                        group_id = group_id,
+                        sort = sort,
+                        offset = offset,
+                        count = count,
+                        fields = fields,
+                        filter = filter,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -56,20 +56,27 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' Returns a list of community members
 #' 
 #' @param group_id ID or screen name of the community
+#' @param fields List of additional fields to be returned
+#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
 #' @export
-getGroupsMembersExecute <- function(group_id = '', v=getAPIVersion())
+getGroupsMembersExecute <- function(group_id = '', fields='', filter='', flatten = FALSE, v=getAPIVersion())
 {
-  getGroupsMembers20 <- function(group_id = '', offset = 0, v=getAPIVersion())
+  getGroupsMembers20 <- function(group_id = '', offset = 0, fields='', filter='', v=getAPIVersion())
   {
     code <- 'var groups_members = [];'
     code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
                    '", "offset":"', offset, 
+                   '", "fields":"', fields, 
+                   '", "filter":"', filter, 
                    '", "v":"', v, '"}).items;')
     code <- paste0(code, 'var offset = 1000;
                    while (offset < 25000 && groups_members.length >= offset) 
                    {
                    groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 
+                   '", "fields":"', fields, 
+                   '", "filter":"', filter, 
                    '", "v":"', v, 
                    '", "offset":(offset+',offset,')}).items;
                    offset = offset + 1000;
@@ -78,19 +85,31 @@ getGroupsMembersExecute <- function(group_id = '', v=getAPIVersion())
     execute(code)
   }
   
-  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "v":"', v, '"});')
+  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "fields":"', fields, '", "filter":"', filter, '", "v":"', v, '"});')
   response <- execute(code)
-  users_ids <- response$items
-  count <- response$count
   
+  members <- response$items
+  len <- ifelse(is.vector(members), length, nrow)
+  count <- response$count
   delay_counter <- 0
-  while (length(users_ids) < count)
+  while (len(members) < count)
   {
-    users_ids <- append(users_ids, getGroupsMembers20(group_id, length(users_ids)))
+    members20 <- getGroupsMembers20(group_id = group_id, 
+                                  offset = len(members), 
+                                  fields = fields, 
+                                  filter = filter, 
+                                  v = v)
+    if (is.vector(members))
+      members <- append(members, members20)
+    else
+      members <- jsonlite::rbind.pages(list(members, members20))
     delay_counter <- delay_counter + 1
     if (delay_counter %% 3 == 0)
       Sys.sleep(1.0)
   }
   
-  users_ids
+  if (isTRUE(flatten) & !is.vector(members))
+    members <- jsonlite::flatten(members)
+  
+  members
 }
