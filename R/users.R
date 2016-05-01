@@ -42,7 +42,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
 #' }
 #' @export
-getUsersExecute <- function(users_ids='', fields='', name_case='', flatten = FALSE, v=getAPIVersion())
+getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion())
 {
   get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
     code <- 'var users = [];'
