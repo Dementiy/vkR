@@ -4,10 +4,12 @@
 \alias{getFriendsBy25}
 \title{Returns a list of friends IDs for the specified users}
 \usage{
-getFriendsBy25(user_ids)
+getFriendsBy25(user_ids, v = getAPIVersion())
 }
 \arguments{
 \item{user_ids}{User IDs}
+
+\item{v}{Version of API}
 }
 \description{
 Returns a list of friends IDs for the specified users

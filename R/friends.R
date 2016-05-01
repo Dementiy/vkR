@@ -83,18 +83,19 @@ areFriends <- function(source_id, target_id)
 #' Returns a list of friends IDs for the specified users
 #' 
 #' @param user_ids User IDs
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' friends <- getFriendsFor(sample(x=seq(1:10000000), size=25, replace=FALSE)) %>% getUsersExecute()
 #' }
 #' @export
 #' @export
-getFriendsBy25 <- function(user_ids) {
+getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   user_ids <- na.omit(user_ids)
   user_ids <- unique(user_ids)
   code <- "var all_friends = {}; var request;"
   for (idx in 1:length(user_ids)) {
-    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], "}); all_friends.user", user_ids[idx], "=request;", sep = "")
+    code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], ", \"v\":", v, "}).items; all_friends.user", user_ids[idx], "=request;", sep = "")
   }
   code <- paste(code, "return all_friends;")
   response <- execute(code)
@@ -109,18 +110,19 @@ getFriendsBy25 <- function(user_ids) {
 #' Returns a list of friends IDs for the specified users
 #' 
 #' @param users_ids User IDs
+#' @param v Version of API
 #' @examples
 #' \dontrun{
 #' friends <- getFriendsFor(sample(x=seq(1:10000000), size=100, replace=FALSE)) %>% getUsersExecute()
 #' }
 #' @export
-getFriendsFor <- function(users_ids) {
+getFriendsFor <- function(users_ids, v=getAPIVersion()) {
   users_friends <- list()
   counter <- 0
   from <- 1
   to <- 25
   repeat {
-    users_friends_25 <- getFriendsBy25(users_ids[from:to])
+    users_friends_25 <- getFriendsBy25(users_ids[from:to], v)
     users_friends <- append(users_friends, users_friends_25)
     
     if (to >= length(users_ids))
