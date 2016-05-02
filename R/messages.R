@@ -10,54 +10,110 @@
 #' @export
 messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', start_message_id='', rev='', v=getAPIVersion()) {
   query <- queryBuilder('messages.getHistory',
-                        offset=offset,
-                        count=count,
-                        user_id=user_id,
-                        peer_id=peer_id,
-                        start_message_id=start_message_id,
-                        rev=rev,
-                        v=v)
-  response <- fromJSON(query)
+                        offset = offset,
+                        count = count,
+                        user_id = user_id,
+                        peer_id = peer_id,
+                        start_message_id = start_message_id,
+                        rev = rev,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
+
+
+#' Returns message history for the specified user or group chat
+#' 
+#' @param offset Offset needed to return a specific subset of messages
+#' @param count Number of messages to return (0 for all history)
+#' @param user_id ID of the user whose message history you want to return
+#' @param peer_id 
+#' @param start_message_id Starting message ID from which to return history
+#' @param rev Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order
+#' @param v Version of API
+#' @export
+messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='', start_message_id='', rev=0, v=getAPIVersion())
+{
+  get_messages <- function(offset='', count='', user_id='', peer_id='', start_message_id='', rev='', v=getAPIVersion())
+  {
+    code <- 'var messages = [];'
+    num_requests <- 0
+    while (num_requests != 3 && count != 0)
+    {
+      current_count <- ifelse((count - 200) >= 0, 200, count)
+      code <- paste0(code, 'messages = messages + API.messages.getHistory({"user_id":"', user_id, 
+                     '", "offset":"', offset,
+                     '", "count":"', current_count,
+                     '", "peer_id":"', peer_id, 
+                     ifelse(start_message_id == '', '', paste0('", "start_message_id":"', start_message_id)),
+                     '", "rev":"', rev, 
+                     '", "v":"', v, '"}).items;')
+      offset <- offset + 200
+      num_requests <- num_requests + 1
+      count <- count - current_count
+    }
+    code <- paste0(code, 'return messages;')
+    execute(code)
+  }
+  
+  code <- paste0('return API.messages.getHistory({"user_id":"', user_id, 
+                 '", "offset":"', offset, 
+                 '", "rev":"', rev, 
+                 '", "count":"', 1, 
+                 '", "peer_id":"', peer_id, 
+                 ifelse(start_message_id == '', '', paste0('", "start_message_id":"', start_message_id)),
+                 '", "v":"', v, '"});')
+  response <- execute(code)
+  messages <- response$items
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  
+  if (max_count == 0)
+    return(list(messages = response$items, 
+                count = response$count, 
+                in_read = response$in_read, 
+                out_read = response$out_read, 
+                unread = NULL))
+  
+  offset_counter <- 0
+  
+  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+  setTxtProgressBar(pb, nrow(messages))
+  
+  while (nrow(messages) < max_count) {
+    messages600 <- get_messages(user_id = user_id,
+                                peer_id = peer_id,
+                                rev = rev,
+                                start_message_id = start_message_id,
+                                count = (max_count - nrow(messages)), 
+                                offset = (1 + offset + offset_counter * 600), 
+                                v = v)
+    messages <- jsonlite::rbind.pages(list(messages, messages600))
+    
+    setTxtProgressBar(pb, nrow(messages))
+    
+    offset_counter <- offset_counter + 1
+    if (offset_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  close(pb)
+  
+  list(messages = messages, 
+       count = response$count, 
+       in_read = response$in_read, 
+       out_read = response$out_read, 
+       unread = response$unread)
+}
+
 
 
 #' Returns all message history for the specified user or group chat
 #' 
 #' @param user_id ID of the user whose message history you want to return
-#' messagesGetAll()
-#' @examples
-#' \dontrun{
-#' friends <- getFriends(fields = 'sex')$items
-#' friends_ids <- friends$id
-#' messages_for_friend <- data.frame()
-#' for (friend_id in friends_ids) {
-#'    messages_for_friend <- rbind(messages_for_friend, messagesGetHistoryAll(friend_id))
-#' }
-#' }
+#' @param peer_id
 #' @export
-messagesGetHistoryAll <- function(user_id) {
-  all_messages <- data.frame()
-  offset_counter <- 0
-  repeat {
-    messages200 <- messagesGetHistory(user_id = user_id, count = '200', offset = as.character(offset_counter * 200))$items
-    
-    # Оставляем только интересные поля
-    actual_messages <- data.frame(
-      id = messages200$id,
-      user_id = messages200$user_id,
-      date = messages200$date,
-      out = messages200$out,
-      body = messages200$body)
-    
-    all_messages <- rbind(all_messages, actual_messages)
-    if (is.data.frame(messages200) == FALSE || nrow(messages200) < 200)
-      break
-    offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
-  }
-  all_messages
+messagesGetHistoryAll <- function(user_id='', peer_id='', rev=0, v=getAPIVersion()) {
+  messagesGetHistoryExecute(user_id = user_id, peer_id = peer_id, rev = rev, count = 0, v = v)
 }
 
 
@@ -74,15 +130,15 @@ messagesGetHistoryAll <- function(user_id) {
 #' @export
 messagesGet <- function(out='', offset='', count='', time_offset='', filters='', preview_length='', last_message_id='', v=getAPIVersion()) {
   query <- queryBuilder('messages.get',
-                        out=out,
-                        offset=offset,
-                        count=count,
-                        time_offset=time_offset,
-                        filters=filters,
-                        preview_length=preview_length,
-                        last_message_id=last_message_id,
-                        v=v)
-  response <- fromJSON(query)
+                        out = out,
+                        offset = offset,
+                        count = count,
+                        time_offset = time_offset,
+                        filters = filters,
+                        preview_length = preview_length,
+                        last_message_id = last_message_id,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -93,7 +149,7 @@ messagesGet <- function(out='', offset='', count='', time_offset='', filters='',
 #' @param format Character string giving a date-time format as used by strptime
 #' @export
 messagesSplitByDate <- function(messages, format = "%y-%m-%d") {
-  days_list <- format(as.POSIXct(messages$date, origin="1970-01-01"), format = format)
+  days_list <- format(as.POSIXct(messages$date, origin = "1970-01-01"), format = format)
   messages_by_days <- split(messages, as.factor(days_list))
   messages_by_days
 }

@@ -4,23 +4,13 @@
 \alias{messagesGetHistoryAll}
 \title{Returns all message history for the specified user or group chat}
 \usage{
-messagesGetHistoryAll(user_id)
+messagesGetHistoryAll(user_id = "", peer_id = "", rev = 0,
+  v = getAPIVersion())
 }
 \arguments{
-\item{user_id}{ID of the user whose message history you want to return
-messagesGetAll()}
+\item{user_id}{ID of the user whose message history you want to return}
 }
 \description{
 Returns all message history for the specified user or group chat
-}
-\examples{
-\dontrun{
-friends <- getFriends(fields = 'sex')$items
-friends_ids <- friends$id
-messages_for_friend <- data.frame()
-for (friend_id in friends_ids) {
-   messages_for_friend <- rbind(messages_for_friend, messagesGetHistoryAll(friend_id))
-}
-}
 }
 
