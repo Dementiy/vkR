@@ -31,9 +31,7 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
                      '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope,
                      '&response_type=token&display=page')
   
-  if ((missing(email) && missing(password)) || 
-      !requireNamespace('XML', quietly = TRUE) || 
-      packageVersion("httr") >= "1.0.0") {
+  if ((missing(email) && missing(password)) || !requireNamespace('XML', quietly = TRUE)) {
     browseURL(auth_url)
   } else {
     if (missing(email)) stop('argument "email" is missing, with no default')
@@ -41,25 +39,32 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
     if (missing(password)) stop('argument "password" is missing, with no default')
     if (!is.character(password)) stop('argument "password" must be a string')
     
-    response <- GET(auth_url)
+    response <- httr::GET(auth_url)
     
-    for (i in 1:2) { # Only God knows why
-      authorize_form <- htmlParse(rawToChar(response$content))
-      form_attrs <- xpathSApply(authorize_form, "//form/input", xmlGetAttr, "value")
-      response <- POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
-                       body=list('_origin'=form_attrs[1], 
-                                 'ip_h'=form_attrs[2],
-                                 'lg_h'=form_attrs[3],
-                                 'to'=form_attrs[4],
-                                 'email'=email, 
-                                 'pass'=password), 
-                       encode='form')
+    for (i in 1:2) {
+      authorize_form <- XML::htmlParse(rawToChar(response$content))
+      form_attrs <- XML::xpathSApply(authorize_form, "//form/input", XML::xmlGetAttr, "value")
+      response <- httr::POST('https://login.vk.com/?act=login&soft=1&utf8=1', 
+                       body = list('_origin' = form_attrs[1], 
+                                 'ip_h'    = form_attrs[2],
+                                 'lg_h'    = form_attrs[3],
+                                 'to'      = form_attrs[4],
+                                 'email'   = email, 
+                                 'pass'    = password), 
+                       encode = 'form' , httr::config(followlocation = 0L))
+      response <- httr::GET('https://login.vk.com/?act=login&soft=1&utf8=1', 
+                      query = list('_origin' = form_attrs[1], 
+                                   'ip_h'    = form_attrs[2],
+                                   'lg_h'    = form_attrs[3],
+                                   'to'      = form_attrs[4],
+                                   'email'   = email, 
+                                   'pass'    = password), 
+                      httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
     }
     
-    if (response$url != "https://oauth.vk.com/blank.html") {
-      accept_perms_page <- htmlParse(rawToChar(response$content))
-      response <- POST(xmlGetAttr(getNodeSet(accept_perms_page, "//form")[[1]], "action"))
-    }
+    authorize_form <- XML::htmlParse(rawToChar(response$content))
+    action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
+    response <- httr::GET(action, httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
     
     for (i in 1:length(response$all_headers)) {
       location <- response$all_headers[[i]]$headers$location
