@@ -64,7 +64,9 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
     
     authorize_form <- XML::htmlParse(rawToChar(response$content))
     action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
-    response <- httr::GET(action, httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
+    
+    if (length(action))
+      response <- httr::GET(action, httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
     
     for (i in 1:length(response$all_headers)) {
       location <- response$all_headers[[i]]$headers$location
