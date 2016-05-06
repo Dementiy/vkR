@@ -102,7 +102,7 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   if (!is.null(response)) names(response) <- user_ids
   response
   
-  class(response) <- "friends.list"
+  class(response) <- c(class(response), "friends.list")
   response
 }
 
@@ -136,6 +136,6 @@ getFriendsFor <- function(users_ids, v=getAPIVersion()) {
       Sys.sleep(1.0)
   }
   
-  class(users_friends) <- "friends.list"
+  class(users_friends) <- c(class(users_friends), "friends.list")
   users_friends
 }
