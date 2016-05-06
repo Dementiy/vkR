@@ -26,16 +26,129 @@
 #' @export
 getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.get',
-                        owner_id=owner_id,
-                        domain=domain,
-                        offset=offset,
-                        count=count,
-                        filter=filter,
-                        extended=extended,
-                        fields=fields,
-                        v=v)
-  response <- fromJSON(query)
+                        owner_id = owner_id,
+                        domain = domain,
+                        offset = offset,
+                        count = count,
+                        filter = filter,
+                        extended = extended,
+                        fields = fields,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
+}
+
+
+#' Returns a list of posts on a user wall or community wall
+#'
+#' @param owner_id ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.
+#' @param domain User or community short address.
+#' @param offset Offset needed to return a specific subset of posts.
+#' @param count Number of posts to return (0 for all posts).
+#' @param filter Filter to apply:
+#' \itemize{
+#' \item \strong{owner} — posts by the wall owner;
+#' \item \strong{others} — posts by someone else;
+#' \item \strong{all} — posts by the wall owner and others (default);
+#' \item \strong{postponed} — timed posts (only available for calls with an access_token);
+#' \item \strong{suggests} — suggested posts on a community wall.
+#' }
+#' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
+#' @param fields
+#' @param v Version of API
+#' getWallExecute()
+#' @return Returns a list of post objects.
+#' If extended is set to 1, also returns the following:
+#' \itemize{
+#' \item \strong{wall} — Contains a list of post objects.
+#' \item \strong{profiles} — Contains user objects with additional fields photo and online.
+#' \item \strong{groups} — Contains community objects.
+#' }
+#' @export
+getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', v=getAPIVersion())
+{
+  get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
+  {
+    if (max_count > 2500) 
+      max_count <- 2500
+    if (max_count <= 100) {
+      execute(paste0('return API.wall.get({"owner_id":"', owner_id, '", 
+                     "domain":"', domain, '",
+                     "offset":"', offset, '",
+                     "count":"', max_count, '",
+                     "filter":"', filter, '",
+                     "extended":"', extended, '",
+                     "v":"', v, '"}).items;'))
+    } else {
+      code <- 'var wall_records = [];'
+      code <- paste0(code, 'wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '", 
+                     "domain":"', domain, '",
+                     "offset":"', offset, '",
+                     "count":"', 100, '",
+                     "filter":"', filter, '",
+                     "extended":"', extended, '",
+                     "v":"', v, '"}).items;')
+      code <- paste0(code, 'var offset = 100 + ', offset, ';
+                     var count = 100; var max_offset = offset + ', max_count, ';
+                     while (offset < max_offset && wall_records.length <= offset && offset-', offset, '<', max_count, ') {
+                       if (', max_count, ' - wall_records.length < 100) {
+                        count = ', max_count, ' - wall_records.length;
+                       };
+                       wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '", 
+                         "domain":"', domain, '",
+                         "offset":offset,
+                         "count":count,
+                         "filter":"', filter, '",
+                         "extended":"', extended, '",
+                         "v":"', v, '"}).items;
+                       offset = offset + 100;
+                     };
+                     return wall_records;')
+      execute(code)
+    }
+  }
+  
+  code <- paste0('return API.wall.get({"owner_id":"', owner_id, '", 
+                 "domain":"', domain, '",
+                 "offset":"', offset, '",
+                 "count":"', 1, '",
+                 "filter":"', filter, '",
+                 "extended":"', extended, '",
+                 "v":"', v, '"});')
+  response <- execute(code)
+  
+  posts <- response$items
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  
+  if (max_count == 0)
+    return(list(posts = response$items, 
+                count = response$count))
+  
+  offset_counter <- 0
+  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+  setTxtProgressBar(pb, nrow(posts))
+  while (nrow(posts) < max_count) {
+    posts2500 <- get_posts2500(owner_id = owner_id,
+                               domain = domain,
+                               filter = filter,
+                               extended = extended,
+                               fields = fields,
+                               max_count = (max_count - nrow(posts)), 
+                               offset = (1 + offset + offset_counter * 2500), 
+                               v = v)
+    posts <- jsonlite::rbind.pages(list(posts, posts2500))
+    
+    setTxtProgressBar(pb, nrow(posts))
+    
+    offset_counter <- offset_counter + 1
+    if (offset_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  close(pb)
+  
+  list(posts = posts, 
+       count = response$count)
 }
 
 
@@ -54,16 +167,16 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @export
 wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='20', offset='0', extended='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.search',
-                        owner_id=owner_id,
-                        domain=domain,
-                        query=query,
-                        owners_only=owners_only,
-                        count=count,
-                        offset=offset,
-                        extended=extended,
-                        fields=fields,
-                        v=v)
-  response <- fromJSON(query)
+                        owner_id = owner_id,
+                        domain = domain,
+                        query = query,
+                        owners_only = owners_only,
+                        count = count,
+                        offset = offset,
+                        extended = extended,
+                        fields = fields,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -86,12 +199,12 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
 #' @export
 wallGetById <- function(posts='', extended='', copy_history_depth='', fields='', v=getAPIVersion()) {
   query <- queryBuilder('wall.getById',
-                        posts=posts,
-                        extended=extended,
-                        copy_history_depth=copy_history_depth,
-                        fields=fields,
-                        v=v)
-  response <- fromJSON(query)
+                        posts = posts,
+                        extended = extended,
+                        copy_history_depth = copy_history_depth,
+                        fields = fields,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -113,12 +226,12 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
 #' @export
 wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=getAPIVersion()) {
   query <- queryBuilder('wall.getReposts',
-                        owner_id=owner_id,
-                        post_id=post_id,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        owner_id = owner_id,
+                        post_id = post_id,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -137,17 +250,17 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
 #' @export
 wallGetComments <- function(owner_id='', post_id='', need_likes='', start_comment_id='', offset='', count='10', sort='', preview_length='0', extended='', v=getAPIVersion()) {
   query <- queryBuilder('wall.getComments',
-                        owner_id=owner_id,
-                        post_id=post_id,
-                        need_likes=need_likes,
-                        start_comment_id=start_comment_id,
-                        offset=offset,
-                        count=count,
-                        sort=sort,
-                        preview_length=preview_length,
-                        extended=extended,
-                        v=v)
-  response <- fromJSON(query)
+                        owner_id = owner_id,
+                        post_id = post_id,
+                        need_likes = need_likes,
+                        start_comment_id = start_comment_id,
+                        offset = offset,
+                        count = count,
+                        sort = sort,
+                        preview_length = preview_length,
+                        extended = extended,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -181,28 +294,10 @@ filterAttachments <- function(attachments, type) {
     if (!is.null(attachments[[i]])) {
       for (j in 1:nrow(attachments[[i]])) {
         if (attachments[[i]][j, ]$type == type) {
-          filtered_attachments <- rbind.fill(filtered_attachments, attachments[[i]][j, ][[type]])
+          filtered_attachments <- plyr::rbind.fill(filtered_attachments, attachments[[i]][j, ][[type]])
         }
       }
     }
   }
   filtered_attachments
-}
-
-
-getAllWall <- function(owner_id) {
-  all_wall <- c()
-  offset_counter <- 0
-  repeat {
-    wall100 <- getWall(owner_id = owner_id, count = '100', offset = as.character(offset_counter * 100))$items
-
-    all_wall <- c(all_wall, wall100$text)
-    if (nrow(wall100) < 100)
-      break
-    
-    offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
-  }
-  all_wall
 }
