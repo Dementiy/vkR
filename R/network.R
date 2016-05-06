@@ -36,6 +36,7 @@ getArbitraryNetwork <- function(users_ids, format='edgelist') {
   if (!require("dplyr")) stop("The package dplyr was not installed")
   
   users_lists <- getFriendsFor(users_ids)
+  users_lists <- users_lists[!sapply(users_lists, is.null)]
   edge_list <- melt(users_lists)
   colnames(edge_list) <- c("from", "to")
   edge_list <- edge_list %>% filter(from %in% users_ids & to %in% users_ids)
