@@ -11,8 +11,8 @@
 #' @param user_id User ID
 #' @export
 age_predict <- function(user_id='') {
-  friends <- getFriends(user_id=user_id, fields='bdate')$items
-  friends$bdate <- as.Date.character(friends$bdate, format="%d.%M.%Y")
+  friends <- getFriends(user_id = user_id, fields = 'bdate')$items
+  friends$bdate <- as.Date.character(friends$bdate, format = "%d.%M.%Y")
   friends <- friends[!is.na(friends$bdate), ]
   friends$year_of_birth <- as.numeric(format(friends$bdate, "%Y"))
   data.frame(uid = user_id, year_of_birth = median(friends$year_of_birth), 
@@ -23,6 +23,7 @@ age_predict <- function(user_id='') {
 #' Extract URLs from messages
 #' 
 #' @param messages Array of messages
+#' @param message_body 
 #' @export
 getURLs <- function(messages, message_body=FALSE) {
   # http://stackoverflow.com/questions/26496538/extract-urls-with-regex-into-a-new-data-frame-column
@@ -57,7 +58,7 @@ vkApply <- function(objs, method)
     delay_counter <<- delay_counter + 1
     if (delay_counter %% 3 == 0)
       Sys.sleep(1.0)
-    res <- rbind.pages(list(res, method(obj)))
+    res <- jsonlite::rbind.pages(list(res, method(obj)))
   }
   res
 }
@@ -84,5 +85,5 @@ vkPost <- function(...)
                attachments  = args[["attachments"]],
                geo          = args[["geo"]])
   class(post) <- "vkPost"
-  return (post)
+  return(post)
 }

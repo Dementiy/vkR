@@ -23,6 +23,8 @@ getFriends(user_id = "", order = "", list_id = "", count = "",
 
 \item{name_case}{Case for declension of user name and surname}
 
+\item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
 \item{v}{Version of API}
 }
 \description{

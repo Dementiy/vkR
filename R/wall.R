@@ -13,7 +13,7 @@
 #' \item \strong{suggests} — suggested posts on a community wall.
 #' }
 #' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
-#' @param fields
+#' @param fields 
 #' @param v Version of API
 #' getWall()
 #' @return Returns a list of post objects.
@@ -54,7 +54,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' \item \strong{suggests} — suggested posts on a community wall.
 #' }
 #' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
-#' @param fields
+#' @param fields 
 #' @param v Version of API
 #' getWallExecute()
 #' @return Returns a list of post objects.

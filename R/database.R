@@ -12,12 +12,12 @@
 #' @export
 databaseGetCountries <- function(need_all='1', code='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getCountries',
-                        need_all=need_all,
-                        code=code,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        need_all = need_all,
+                        code = code,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -36,12 +36,12 @@ databaseGetCountries <- function(need_all='1', code='', offset='', count='100', 
 #' @export
 databaseGetRegions <- function(country_id='', q='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getRegions',
-                        country_id=country_id,
-                        q=q,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        country_id = country_id,
+                        q = q,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -56,8 +56,8 @@ databaseGetRegions <- function(country_id='', q='', offset='', count='100', v=ge
 #' }
 #' @export
 databaseGetStreetsById <- function(street_ids='', v=getAPIVersion()) {
-  query <- queryBuilder('database.getStreetsById', street_ids=street_ids, v=v)
-  response <- fromJSON(query)
+  query <- queryBuilder('database.getStreetsById', street_ids = street_ids, v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -72,8 +72,8 @@ databaseGetStreetsById <- function(street_ids='', v=getAPIVersion()) {
 #' }
 #' @export
 databaseGetCountriesById <- function(country_ids, v=getAPIVersion()) {
-  query <- queryBuilder('database.getCountriesById', country_ids=country_ids, v=v)
-  response <- fromJSON(query)
+  query <- queryBuilder('database.getCountriesById', country_ids = country_ids, v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -94,14 +94,14 @@ databaseGetCountriesById <- function(country_ids, v=getAPIVersion()) {
 #' @export
 databaseGetCities <- function(country_id='', region_id='', q='', need_all='1', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getCities',
-                        country_id=country_id,
-                        region_id=region_id,
-                        q=q,
-                        need_all=need_all,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        country_id = country_id,
+                        region_id = region_id,
+                        q = q,
+                        need_all = need_all,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -116,8 +116,8 @@ databaseGetCities <- function(country_id='', region_id='', q='', need_all='1', o
 #' }
 #' @export
 databaseGetCitiesById <- function(city_ids='', v=getAPIVersion()) {
-  query <- queryBuilder('database.getCitiesById', city_ids=city_ids, v=v)
-  response <- fromJSON(query)
+  query <- queryBuilder('database.getCitiesById', city_ids = city_ids, v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -137,13 +137,13 @@ databaseGetCitiesById <- function(city_ids='', v=getAPIVersion()) {
 #' @export
 databaseGetUniversities <- function(q='', country_id='', city_id='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getUniversities',
-                        q=q,
-                        country_id=country_id,
-                        city_id=city_id,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        q = q,
+                        country_id = country_id,
+                        city_id = city_id,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -162,12 +162,12 @@ databaseGetUniversities <- function(q='', country_id='', city_id='', offset='', 
 #' @export
 databaseGetSchools <- function(q='', city_id='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getSchools',
-                        q=q,
-                        city_id=city_id,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        q = q,
+                        city_id = city_id,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -182,8 +182,8 @@ databaseGetSchools <- function(q='', city_id='', offset='', count='100', v=getAP
 #' }
 #' @export
 databaseGetSchoolClasses <- function(country_id='', v=getAPIVersion()) {
-  query <- queryBuilder('database.getSchoolClasses', country_id=country_id, v=v)
-  response <- fromJSON(query)
+  query <- queryBuilder('database.getSchoolClasses', country_id = country_id, v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -201,11 +201,11 @@ databaseGetSchoolClasses <- function(country_id='', v=getAPIVersion()) {
 #' @export
 databaseGetFaculties <- function(university_id='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getFaculties',
-                        university_id=university_id,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        university_id = university_id,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -223,11 +223,11 @@ databaseGetFaculties <- function(university_id='', offset='', count='100', v=get
 #' @export
 databaseGetChairs <- function(faculty_id='', offset='', count='100', v=getAPIVersion()) {
   query <- queryBuilder('database.getChairs',
-                        faculty_id=faculty_id,
-                        offset=offset,
-                        count=count,
-                        v=v)
-  response <- fromJSON(query)
+                        faculty_id = faculty_id,
+                        offset = offset,
+                        count = count,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }
 
@@ -238,11 +238,11 @@ databaseGetChairs <- function(faculty_id='', offset='', count='100', v=getAPIVer
 #' @export
 getCountryByCityId <- function(city_id)
 {
-  res <- usersSearch(q= "", fields = "country", city = city_id, count = 1)
+  res <- usersSearch(q = "", fields = "country", city = city_id, count = 1)
   if (res$count == 0)
-    stop("No users from this city") # Из этого города нет ни одного человека
+    stop("No users from this city")
   res <- res$items
-  if (length(res) == 0) # Бывает, что возвращается пустой ответ при count=1, что странно
-    res <- usersSearch(q= "", fields = "country", city = city_id, count = 2)$items
+  if (length(res) == 0) # Бывает, что возвращается пустой ответ при count=1
+    res <- usersSearch(q = "", fields = "country", city = city_id, count = 2)$items
   res$country
 }

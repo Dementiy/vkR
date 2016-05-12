@@ -7,6 +7,7 @@
 #' @param offset Offset needed to return a specific subset of friends
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
 #' @examples
 #' \dontrun{

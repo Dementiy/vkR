@@ -13,17 +13,17 @@
 #' @export
 likesGetList <- function(type='', owner_id='', item_id='', page_url='', filter='', friends_only='0', extended='', offset='', count='100', skip_own=0, v=getAPIVersion()) {
   query <- queryBuilder('likes.getList',
-                        type=type,
-                        owner_id=owner_id,
-                        item_id=item_id,
-                        page_url=page_url,
-                        filter=filter,
-                        friends_only=friends_only,
-                        extended=extended,
-                        offset=offset,
-                        count=count,
-                        skip_own=skip_own,
-                        v=v)
-  response <- fromJSON(query)
+                        type = type,
+                        owner_id = owner_id,
+                        item_id = item_id,
+                        page_url = page_url,
+                        filter = filter,
+                        friends_only = friends_only,
+                        extended = extended,
+                        offset = offset,
+                        count = count,
+                        skip_own = skip_own,
+                        v = v)
+  response <- jsonlite::fromJSON(query)
   response$response
 }

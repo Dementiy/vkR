@@ -27,6 +27,8 @@ getWall(owner_id = "", domain = "", offset = "", count = "",
 
 \item{extended}{1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).}
 
+\item{fields}{}
+
 \item{v}{Version of API
 getWall()}
 }

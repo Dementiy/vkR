@@ -13,3 +13,19 @@ Depends:
     XML
 License: GPL-3
 RoxygenNote: 5.0.1
+Collate:
+    'auth.R'
+    'database.R'
+    'friends.R'
+    'groups.R'
+    'igraph_gefx_exporter.R'
+    'likes.R'
+    'messages.R'
+    'network.R'
+    'queries.R'
+    'search.R'
+    'user_object.R'
+    'users.R'
+    'utils.R'
+    'vkR.R'
+    'wall.R'

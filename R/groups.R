@@ -61,9 +61,9 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
 #' @export
-getGroupsMembersExecute <- function(group_id = '', fields='', filter='', flatten = FALSE, v=getAPIVersion())
+getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=FALSE, v=getAPIVersion())
 {
-  getGroupsMembers20 <- function(group_id = '', offset = 0, fields='', filter='', v=getAPIVersion())
+  getGroupsMembers20 <- function(group_id='', offset = 0, fields='', filter='', v=getAPIVersion())
   {
     code <- 'var groups_members = [];'
     code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id, 

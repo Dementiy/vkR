@@ -7,11 +7,11 @@
 #' @export
 search.getHints <- function(q='', limit='', filters='', search_global='', v=getAPIVersion()) {
   query <- queryBuilder('search.getHints',
-                        q=q,
-                        limit=limit,
-                        filters=filters,
-                        search_global=search_global,
-                        v=v)
-  response <- fromJSON(URLencode(query))
+                        q = q,
+                        limit = limit,
+                        filters = filters,
+                        search_global = search_global,
+                        v = v)
+  response <- jsonlite::fromJSON(URLencode(query))
   response$response
 }
