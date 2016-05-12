@@ -1,10 +1,179 @@
 #' Returns detailed information on users
 #'
 #' @param user_ids User IDs or screen names (screen_name). By default, current user ID (the maximum number of elements allowed is 1000)
-#' @param fields Profile fields to return
+#' @param fields Profile fields to return (see fetails for more information about fields)
 #' @param name_case Case for declension of user name and surname
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
+#' @details 
+#' \href{https://vk.com/dev/fields}{User object} describes a user profile, contains the following fields:
+#' \itemize{
+#'   \item \strong{uid} User ID
+#'   \item \strong{first_name} First name
+#'   \item \strong{last_name} Last name
+#'   \item \strong{deactivated} Returns if a profile is deleted or blocked. Gets the value deleted or banned. Keep in mind that in this case no additional fields are returned
+#'   \item \strong{hidden: 1} Returns while operating without access_token if a user has set the "Who can see my profile on the Internet" -> "Only VK users" privacy setting. Keep in mind that in this case no additional fields are returned
+#'   \item \strong{verified} Returns 1 if the profile is verified, 0 if not
+#'   \item \strong{blacklisted} Returns 1 if a current user is in the requested user's blacklist
+#'   \item \strong{sex} User sex (1 — female; 2 — male; 0 — not specified)
+#'   \item \strong{bdate} User's date of birth.  Returned as DD.MM.YYYY or DD.MM (if birth year is hidden). If the whole date is hidden, no field is returned
+#'   \item \strong{city} ID of the city specified on user's page in "Contacts" section.  Returns city ID that can be used to get its name using places.getCityById method. If no city is specified or main information on the page is hidden for in privacy settings, then it returns 0
+#'   \item \strong{country} ID of the country specified on user's page in "Contacts" section.  Returns country ID that can be used to get its name using places.getCountryById method. If no country is specified or main information on the page is hidden in privacy settings, then it returns 0
+#'   \item \strong{home_town} User's home town
+#'   \item \strong{photo_50} Returns URL of square photo of the user with 50 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_c.gif is returned
+#'   \item \strong{photo_100} Returns URL of square photo of the user with 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+#'   \item \strong{photo_200_orig} Returns URL of user's photo with 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+#'   \item \strong{photo_200} Returns URL of square photo of the user with 200 pixels in width.  If the photo was uploaded long time ago, there can be no image of such size and in this case the reply will not include this field
+#'   \item \strong{photo_400_orig} Returns URL of user's photo with 400 pixels in width.  If user does not have a photo of such size, reply will not include this field
+#'   \item \strong{photo_max} Returns URL of square photo of the user with maximum width. Can be returned a photo both 200 and 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+#'   \item \strong{photo_max_orig} Returns URL of user's photo of maximum size. Can be returned a photo both 400 and 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+#'   \item \strong{online} Information whether the user is online.  Returned values: 1 — online, 0 — offline.  If user utilizes a mobile application or site mobile version, it returns online_mobile additional field that includes 1. With that, in case of application, online_app additional field is returned with application ID.
+#'   \item \strong{lists} Information about friend lists.  Returns IDs of friend lists the user is member of, separated with a comma. The field is available for friends.get method only. To get information about ID and names of friend lists use friends.getLists method. If user is not a member of any friend list, then when accepting data in XML format the respective <user> node does not contain <lists> tag
+#'   \item \strong{domain} Page screen name.  Returns a string with a page screen name (only subdomain is returned, like andrew). If not set, "id'+uid is returned, e.g. id35828305
+#'   \item \strong{has_mobile} Information whether the user's mobile phone number is available.  Returned values: 1 — available, 0 — not available.  We recommend you to use it prior to call of secure.sendSMSNotification method
+#'   \item \strong{contacts} Information about user's phone numbers.  If data are available and not hidden in privacy settings, the following fields are returned (mobile_phone — user's mobile phone number (only for standalone applications); home_phone — user's additional phone number)
+#'   \item \strong{site} Returns a website address from a user profile
+#'   \item \strong{education} Information about user's higher education institution. The following fields are returned:
+#'   \itemize{
+#'     \item \strong{university} University ID
+#'     \item \strong{university_name} University name
+#'     \item \strong{faculty} Faculty ID
+#'     \item \strong{faculty_name} Faculty name
+#'     \item \strong{graduation} Graduation year
+#'   }
+#'   \item \strong{universities} List of higher education institutions where user studied.  Returns universities array with university objects with the following fields:
+#'   \itemize{
+#'     \item \strong{id} University ID
+#'     \item \strong{country} ID of the country the university is located in
+#'     \item \strong{city} ID of the city the university is located in
+#'     \item \strong{name} University name
+#'     \item \strong{faculty} Faculty ID
+#'     \item \strong{faculty_name} Faculty name
+#'     \item \strong{chair} University chair ID
+#'     \item \strong{chair_name} Chair name
+#'     \item \strong{graduation} Graduation year
+#'   }
+#'   \item \strong{schools} List of schools where user studied in.  Returns schools array with school objects with the following fields:
+#'   \itemize{
+#'     \item \strong{id} School ID
+#'     \item \strong{country} ID of the country the school is located in
+#'     \item \strong{city} ID of the city the school is located in
+#'     \item \strong{name} School name
+#'     \item \strong{year_from} Year the user started to study
+#'     \item \strong{year_to} Year the user finished to study
+#'     \item \strong{year_graduated} Graduation year
+#'     \item \strong{class} School class letter
+#'     \item \strong{speciality} Speciality
+#'     \item \strong{type} Type ID
+#'     \item \strong{type_str} Type name
+#'   }
+#'   \item \strong{status} User status.  Returns a string with status text that is in the profile below user's name
+#'   \item \strong{last_seen} Last visit date.  Returns last_seen object with the following fields:
+#'   \itemize{
+#'     \item \strong{time} Last visit date (in Unix time)
+#'     \item \strong{platform} Type of the platform that used for the last authorization. See more at \href{https://vk.com/dev/using_longpoll}{Using LongPoll server}
+#'   }
+#'   \item \strong{followers_count} Number of user's followers 
+#'   \item \strong{common_count} Number of common friends with a current user
+#'   \item \strong{counters} Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
+#'   \itemize{
+#'     \item \strong{albums} Number of photo albums
+#'     \item \strong{videos} Number of videos
+#'     \item \strong{audios} Number of audios
+#'     \item \strong{notes} Number of notes
+#'     \item \strong{friends} Number of friends
+#'     \item \strong{groups} Number of communities
+#'     \item \strong{online_friends} Number of online friends
+#'     \item \strong{mutual_friends} Number of mutual friends
+#'     \item \strong{user_videos} Number of videos the user is tagged on
+#'     \item \strong{followers} Number of followers
+#'     \item \strong{user_photos} Number of photos the user is tagged on
+#'     \item \strong{subscriptions} Number of subscriptions
+#'   }
+#'   \item \strong{occupation} Current user's occupation. Returns following fields:
+#'   \itemize{
+#'     \item \strong{type} Can take the values: work, school, university
+#'     \item \strong{id} ID of school, university, company group (the one a user works in)
+#'     \item \strong{name} Name of school, university or work place
+#'   }
+#'   \item \strong{nickname} User nickname
+#'   \item \strong{relatives} Current user's relatives list. Returns a list of objects with id and type fields (name instead of id if a relative is not a VK user). type – relationship type. Possible values:
+#'   \itemize{
+#'     \item \emph{sibling}
+#'     \item \emph{parent}
+#'     \item \emph{child}
+#'     \item \emph{grandparent}
+#'     \item \emph{grandchild}
+#'   }
+#'   \item \strong{relation} User relationship status. Returned values:
+#'   \itemize{
+#'     \item \strong{1} - Single
+#'     \item \strong{2} - In a relationship
+#'     \item \strong{3} - Engaged
+#'     \item \strong{4} - Married
+#'     \item \strong{5} - It's complicated
+#'     \item \strong{6} - Actively searching
+#'     \item \strong{7} - In love
+#'   }
+#'   \item \strong{personal} Information from the "Personal views" section
+#'   \itemize{
+#'     \item \strong{political} Political views:
+#'     \itemize{
+#'       \item{1} – Communist
+#'       \item{2} – Socialist
+#'       \item{3} – Moderate
+#'       \item{4} – Liberal
+#'       \item{5} – Conservative
+#'       \item{6} – Monarchist
+#'       \item{7} – Ultraconservative
+#'       \item{8} – Apathetic
+#'       \item{9} – Libertian
+#'     }
+#'     \item \strong{langs} Languages
+#'     \item \strong{religion} World view
+#'     \item \strong{inspired_by} Inspired by
+#'     \item \strong{people_main} Improtant in others:
+#'     \itemize{
+#'       \item{1} – Intellect and creativity
+#'       \item{2} – Kindness and honesty
+#'       \item{3} – Health and beauty
+#'       \item{4} – Wealth and power
+#'       \item{5} – Courage and persistance
+#'       \item{6} – Humor and love for life
+#'     }
+#'     \item \strong{life_main} Personal priority:
+#'     \itemize{
+#'       \item{1} – Family and children
+#'       \item{2} – Career and money
+#'       \item{3} – Entertainment and leisure
+#'       \item{4} – Science and research
+#'       \item{5} – Improving the world
+#'       \item{6} – Personal development
+#'       \item{7} – Beauty and art
+#'       \item{8} – Fame and influence
+#'     }
+#'     \item \strong{smoking} Views on smoking (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
+#'     \item \strong{alcohol} Views on alcohol (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
+#'   }
+#'   \item \strong{connections} Returns specified services such as: skype, facebook, twitter, livejournal, instagram
+#'   \item \strong{exports} External services with export configured (twitter, facebook, livejournal, instagram)
+#'   \item \strong{wall_comments} Wall comments allowed(1 — allowed, 0 — not allowed)
+#'   \item \strong{activities} Activities
+#'   \item \strong{interests} Interests
+#'   \item \strong{music} Favorite music
+#'   \item \strong{movies} Favorite movies
+#'   \item \strong{tv} Favorite TV shows
+#'   \item \strong{books} Favorite books
+#'   \item \strong{games} Favorite games
+#'   \item \strong{about} "About me"
+#'   \item \strong{quotes} Favorite quotes
+#'   \item \strong{can_post} Can post on the wall: 1 – allowed, 0 — not allowed
+#'   \item \strong{can_see_all_posts} Can see other users' posts on the wall: 1 – allowed, 0 – not allowed
+#'   \item \strong{can_see_audio} Can see other users' audio on the wall: 1 – allowed, 0 – not allowed
+#'   \item \strong{can_write_private_message} Can write private messages to a current user: 1 – allowed, 0 – not allowed
+#'   \item \strong{timezone} user time zone. Retuns only while requesting current user info
+#'   \item \strong{screen_name} User page's screen name (subdomain)
+#' }
 #' @examples
 #' \dontrun{
 #' user <- getUsers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
@@ -32,11 +201,180 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 
 #' Returns detailed information on arbitrary number of users
 #'
-#' @param user_ids User IDs or screen names (screen_name). By default, current user ID
+#' @param users_ids User IDs or screen names (screen_name). By default, current user ID
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
+#' @details 
+#' \href{https://vk.com/dev/fields}{User object} describes a user profile, contains the following fields:
+#' \itemize{
+#'   \item \strong{uid} User ID
+#'   \item \strong{first_name} First name
+#'   \item \strong{last_name} Last name
+#'   \item \strong{deactivated} Returns if a profile is deleted or blocked. Gets the value deleted or banned. Keep in mind that in this case no additional fields are returned
+#'   \item \strong{hidden: 1} Returns while operating without access_token if a user has set the "Who can see my profile on the Internet" -> "Only VK users" privacy setting. Keep in mind that in this case no additional fields are returned
+#'   \item \strong{verified} Returns 1 if the profile is verified, 0 if not
+#'   \item \strong{blacklisted} Returns 1 if a current user is in the requested user's blacklist
+#'   \item \strong{sex} User sex (1 — female; 2 — male; 0 — not specified)
+#'   \item \strong{bdate} User's date of birth.  Returned as DD.MM.YYYY or DD.MM (if birth year is hidden). If the whole date is hidden, no field is returned
+#'   \item \strong{city} ID of the city specified on user's page in "Contacts" section.  Returns city ID that can be used to get its name using places.getCityById method. If no city is specified or main information on the page is hidden for in privacy settings, then it returns 0
+#'   \item \strong{country} ID of the country specified on user's page in "Contacts" section.  Returns country ID that can be used to get its name using places.getCountryById method. If no country is specified or main information on the page is hidden in privacy settings, then it returns 0
+#'   \item \strong{home_town} User's home town
+#'   \item \strong{photo_50} Returns URL of square photo of the user with 50 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_c.gif is returned
+#'   \item \strong{photo_100} Returns URL of square photo of the user with 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+#'   \item \strong{photo_200_orig} Returns URL of user's photo with 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+#'   \item \strong{photo_200} Returns URL of square photo of the user with 200 pixels in width.  If the photo was uploaded long time ago, there can be no image of such size and in this case the reply will not include this field
+#'   \item \strong{photo_400_orig} Returns URL of user's photo with 400 pixels in width.  If user does not have a photo of such size, reply will not include this field
+#'   \item \strong{photo_max} Returns URL of square photo of the user with maximum width. Can be returned a photo both 200 and 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+#'   \item \strong{photo_max_orig} Returns URL of user's photo of maximum size. Can be returned a photo both 400 and 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+#'   \item \strong{online} Information whether the user is online.  Returned values: 1 — online, 0 — offline.  If user utilizes a mobile application or site mobile version, it returns online_mobile additional field that includes 1. With that, in case of application, online_app additional field is returned with application ID.
+#'   \item \strong{lists} Information about friend lists.  Returns IDs of friend lists the user is member of, separated with a comma. The field is available for friends.get method only. To get information about ID and names of friend lists use friends.getLists method. If user is not a member of any friend list, then when accepting data in XML format the respective <user> node does not contain <lists> tag
+#'   \item \strong{domain} Page screen name.  Returns a string with a page screen name (only subdomain is returned, like andrew). If not set, "id'+uid is returned, e.g. id35828305
+#'   \item \strong{has_mobile} Information whether the user's mobile phone number is available.  Returned values: 1 — available, 0 — not available.  We recommend you to use it prior to call of secure.sendSMSNotification method
+#'   \item \strong{contacts} Information about user's phone numbers.  If data are available and not hidden in privacy settings, the following fields are returned (mobile_phone — user's mobile phone number (only for standalone applications); home_phone — user's additional phone number)
+#'   \item \strong{site} Returns a website address from a user profile
+#'   \item \strong{education} Information about user's higher education institution. The following fields are returned:
+#'   \itemize{
+#'     \item \strong{university} University ID
+#'     \item \strong{university_name} University name
+#'     \item \strong{faculty} Faculty ID
+#'     \item \strong{faculty_name} Faculty name
+#'     \item \strong{graduation} Graduation year
+#'   }
+#'   \item \strong{universities} List of higher education institutions where user studied.  Returns universities array with university objects with the following fields:
+#'   \itemize{
+#'     \item \strong{id} University ID
+#'     \item \strong{country} ID of the country the university is located in
+#'     \item \strong{city} ID of the city the university is located in
+#'     \item \strong{name} University name
+#'     \item \strong{faculty} Faculty ID
+#'     \item \strong{faculty_name} Faculty name
+#'     \item \strong{chair} University chair ID
+#'     \item \strong{chair_name} Chair name
+#'     \item \strong{graduation} Graduation year
+#'   }
+#'   \item \strong{schools} List of schools where user studied in.  Returns schools array with school objects with the following fields:
+#'   \itemize{
+#'     \item \strong{id} School ID
+#'     \item \strong{country} ID of the country the school is located in
+#'     \item \strong{city} ID of the city the school is located in
+#'     \item \strong{name} School name
+#'     \item \strong{year_from} Year the user started to study
+#'     \item \strong{year_to} Year the user finished to study
+#'     \item \strong{year_graduated} Graduation year
+#'     \item \strong{class} School class letter
+#'     \item \strong{speciality} Speciality
+#'     \item \strong{type} Type ID
+#'     \item \strong{type_str} Type name
+#'   }
+#'   \item \strong{status} User status.  Returns a string with status text that is in the profile below user's name
+#'   \item \strong{last_seen} Last visit date.  Returns last_seen object with the following fields:
+#'   \itemize{
+#'     \item \strong{time} Last visit date (in Unix time)
+#'     \item \strong{platform} Type of the platform that used for the last authorization. See more at \href{https://vk.com/dev/using_longpoll}{Using LongPoll server}
+#'   }
+#'   \item \strong{followers_count} Number of user's followers 
+#'   \item \strong{common_count} Number of common friends with a current user
+#'   \item \strong{counters} Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
+#'   \itemize{
+#'     \item \strong{albums} Number of photo albums
+#'     \item \strong{videos} Number of videos
+#'     \item \strong{audios} Number of audios
+#'     \item \strong{notes} Number of notes
+#'     \item \strong{friends} Number of friends
+#'     \item \strong{groups} Number of communities
+#'     \item \strong{online_friends} Number of online friends
+#'     \item \strong{mutual_friends} Number of mutual friends
+#'     \item \strong{user_videos} Number of videos the user is tagged on
+#'     \item \strong{followers} Number of followers
+#'     \item \strong{user_photos} Number of photos the user is tagged on
+#'     \item \strong{subscriptions} Number of subscriptions
+#'   }
+#'   \item \strong{occupation} Current user's occupation. Returns following fields:
+#'   \itemize{
+#'     \item \strong{type} Can take the values: work, school, university
+#'     \item \strong{id} ID of school, university, company group (the one a user works in)
+#'     \item \strong{name} Name of school, university or work place
+#'   }
+#'   \item \strong{nickname} User nickname
+#'   \item \strong{relatives} Current user's relatives list. Returns a list of objects with id and type fields (name instead of id if a relative is not a VK user). type – relationship type. Possible values:
+#'   \itemize{
+#'     \item \emph{sibling}
+#'     \item \emph{parent}
+#'     \item \emph{child}
+#'     \item \emph{grandparent}
+#'     \item \emph{grandchild}
+#'   }
+#'   \item \strong{relation} User relationship status. Returned values:
+#'   \itemize{
+#'     \item \strong{1} - Single
+#'     \item \strong{2} - In a relationship
+#'     \item \strong{3} - Engaged
+#'     \item \strong{4} - Married
+#'     \item \strong{5} - It's complicated
+#'     \item \strong{6} - Actively searching
+#'     \item \strong{7} - In love
+#'   }
+#'   \item \strong{personal} Information from the "Personal views" section
+#'   \itemize{
+#'     \item \strong{political} Political views:
+#'     \itemize{
+#'       \item{1} – Communist
+#'       \item{2} – Socialist
+#'       \item{3} – Moderate
+#'       \item{4} – Liberal
+#'       \item{5} – Conservative
+#'       \item{6} – Monarchist
+#'       \item{7} – Ultraconservative
+#'       \item{8} – Apathetic
+#'       \item{9} – Libertian
+#'     }
+#'     \item \strong{langs} Languages
+#'     \item \strong{religion} World view
+#'     \item \strong{inspired_by} Inspired by
+#'     \item \strong{people_main} Improtant in others:
+#'     \itemize{
+#'       \item{1} – Intellect and creativity
+#'       \item{2} – Kindness and honesty
+#'       \item{3} – Health and beauty
+#'       \item{4} – Wealth and power
+#'       \item{5} – Courage and persistance
+#'       \item{6} – Humor and love for life
+#'     }
+#'     \item \strong{life_main} Personal priority:
+#'     \itemize{
+#'       \item{1} – Family and children
+#'       \item{2} – Career and money
+#'       \item{3} – Entertainment and leisure
+#'       \item{4} – Science and research
+#'       \item{5} – Improving the world
+#'       \item{6} – Personal development
+#'       \item{7} – Beauty and art
+#'       \item{8} – Fame and influence
+#'     }
+#'     \item \strong{smoking} Views on smoking (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
+#'     \item \strong{alcohol} Views on alcohol (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
+#'   }
+#'   \item \strong{connections} Returns specified services such as: skype, facebook, twitter, livejournal, instagram
+#'   \item \strong{exports} External services with export configured (twitter, facebook, livejournal, instagram)
+#'   \item \strong{wall_comments} Wall comments allowed(1 — allowed, 0 — not allowed)
+#'   \item \strong{activities} Activities
+#'   \item \strong{interests} Interests
+#'   \item \strong{music} Favorite music
+#'   \item \strong{movies} Favorite movies
+#'   \item \strong{tv} Favorite TV shows
+#'   \item \strong{books} Favorite books
+#'   \item \strong{games} Favorite games
+#'   \item \strong{about} "About me"
+#'   \item \strong{quotes} Favorite quotes
+#'   \item \strong{can_post} Can post on the wall: 1 – allowed, 0 — not allowed
+#'   \item \strong{can_see_all_posts} Can see other users' posts on the wall: 1 – allowed, 0 – not allowed
+#'   \item \strong{can_see_audio} Can see other users' audio on the wall: 1 – allowed, 0 – not allowed
+#'   \item \strong{can_write_private_message} Can write private messages to a current user: 1 – allowed, 0 – not allowed
+#'   \item \strong{timezone} user time zone. Retuns only while requesting current user info
+#'   \item \strong{screen_name} User page's screen name (subdomain)
+#' }
 #' @examples
 #' \dontrun{
 #' users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
@@ -65,7 +403,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
   if (is.character(users_ids) && nchar(users_ids) == 0)
     return(getUsers(fields = fields, name_case = name_case, flatten = flatten, v = v))
   
-  if (class(users_ids) == "friends.list")
+  if ("friends.list" %in% class(users_ids))
     users_ids <- unique(unlist(users_ids))
   
   all_users <- data.frame()
@@ -73,12 +411,17 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
   from <- 1
   to <- 5000
   
+  pb <- txtProgressBar(min = 0, max = length(users_ids), style = 3)
+  setTxtProgressBar(pb, 0)
+  
   repeat
   {
     if (to >= length(users_ids)) to <- length(users_ids)
     
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
     all_users <- jsonlite::rbind.pages(list(all_users, users))
+    
+    setTxtProgressBar(pb, nrow(all_users))
     
     if (to >= length(users_ids))
       break
@@ -90,6 +433,8 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     if (counter %% 3 == 0)
       Sys.sleep(1.0)
   }
+  
+  close(pb)
   
   if (isTRUE(flatten))
     all_users <- jsonlite::flatten(all_users)
