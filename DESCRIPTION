@@ -24,7 +24,6 @@ Collate:
     'network.R'
     'queries.R'
     'search.R'
-    'user_object.R'
     'users.R'
     'utils.R'
     'vkR.R'
