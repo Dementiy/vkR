@@ -443,6 +443,90 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
 }
 
 
+#' Returns a list of IDs of followers of the user in question, sorted by date added, most recent first
+#' 
+#' @param user_id User ID
+#' @param offset Offset needed to return a specific subset of followers
+#' @param count Number of followers to return
+#' @param fields Profile fields to return
+#' @param name_case Case for declension of user name and surname
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param v Version of API
+#' @export
+usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', flatten=FALSE, v=getAPIVersion())
+{
+  get_followers <- function(user_id='', offset=0, count=0, fields='', name_case='', v=getAPIVersion())
+  {
+    code <- 'var followers = [];'
+    num_requests <- 0
+    while (num_requests != 3 && count != 0)
+    {
+      current_count <- ifelse((count - 200) >= 0, 200, count)
+      code <- paste0(code, 'followers = followers + API.users.getFollowers({"user_id":"', user_id, 
+                     '", "offset":"', offset,
+                     '", "count":"', current_count,
+                     '", "fields":"', fields, 
+                     '", "name_case":"', name_case, 
+                     '", "v":"', v, '"}).items;')
+      offset <- offset + 200
+      num_requests <- num_requests + 1
+      count <- count - current_count
+    }
+    code <- paste0(code, 'return followers;')
+    execute(code)
+  }
+  
+  code <- paste0('return API.users.getFollowers({"user_id":"', user_id, '", 
+                 "offset":"', offset, '",
+                 "count":"', 1, '",
+                 "fields":"', fields, '",
+                 "name_case":"', name_case, '",
+                 "v":"', v, '"});')
+  
+  response <- execute(code)
+  followers <- response$items
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  
+  if (max_count == 0)
+    return(list(followers = response$items, 
+                count = response$count))
+  
+  len <- ifelse(is.vector(followers), length, nrow)
+  
+  offset_counter <- 0
+  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+  setTxtProgressBar(pb, len(followers))
+  
+  while (len(followers) < max_count) {
+    followers600 <- get_followers(user_id = user_id,
+                                  offset = (1 + offset + offset_counter * 600), 
+                                  count = (max_count - len(followers)), 
+                                  fields = fields,
+                                  name_case = name_case,
+                                  v = v)
+    if (is.vector(followers))
+      followers <- append(followers, followers600)
+    else
+      followers <- jsonlite::rbind.pages(list(followers, followers600))
+    
+    setTxtProgressBar(pb, len(followers))
+    
+    offset_counter <- offset_counter + 1
+    if (offset_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  close(pb)
+  
+  if (isTRUE(flatten) & !is.vector(followers))
+    followers <- jsonlite::flatten(followers)
+  
+  list(followers = followers, 
+       count = response$count)
+  
+}
+
+
 #' Returns a list of users matching the search criteria
 #' 
 #' @param q Search query string (e.g., Vasya Babich)
