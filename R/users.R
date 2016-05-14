@@ -527,6 +527,84 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 }
 
 
+#' Returns a list of IDs of users and communities followed by the user
+#' 
+#' @param user_id User ID
+#' @param offset Offset needed to return a specific subset of subscriptions
+#' @param count Number of users and communities to return
+#' @param fields Profile fields to return
+#' @param extended 1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities (not implemented yet)
+#' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param v Version of API
+#' @export
+usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fields='', flatten=FALSE, v=getAPIVersion())
+{
+  get_subscriptions <- function(user_id='', extended='', offset='', count='', fields='', v=getAPIVersion())
+  {
+    code <- 'var subscriptions = [];'
+    num_requests <- 0
+    while (num_requests != 3 && count != 0)
+    {
+      current_count <- ifelse((count - 200) >= 0, 200, count)
+      code <- paste0(code, 'subscriptions = subscriptions + API.users.getSubscriptions({"user_id":"', user_id, 
+                     '", "offset":"', offset,
+                     '", "count":"', current_count,
+                     '", "fields":"', fields, 
+                     '", "extended":"', 1, 
+                     '", "v":"', v, '"}).items;')
+      offset <- offset + 200
+      num_requests <- num_requests + 1
+      count <- count - current_count
+    }
+    code <- paste0(code, 'return subscriptions;')
+    execute(code)
+  }
+  
+  code <- paste0('return API.users.getSubscriptions({"user_id":"', user_id, '", 
+                 "extended":"', 1, '",
+                 "offset":"', offset, '",
+                 "count":"', 1, '",
+                 "fields":"', fields, '",
+                 "v":"', v, '"});')
+  
+  response <- execute(code)
+  subscriptions <- response$items
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  
+  if (max_count == 0)
+    return(list(subscriptions = subscriptions,
+                count = response$count))
+  
+  offset_counter <- 0
+  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+  setTxtProgressBar(pb, nrow(subscriptions))
+  
+  while (nrow(subscriptions) < max_count) {
+    subscriptions600 <- get_subscriptions(user_id = user_id,
+                                          offset = (1 + offset + offset_counter * 600), 
+                                          count = (max_count - nrow(subscriptions)), 
+                                          fields = fields,
+                                          extended = extended,
+                                          v = v)
+    subscriptions <- jsonlite::rbind.pages(list(subscriptions, subscriptions600))
+    
+    setTxtProgressBar(pb, nrow(subscriptions))
+    
+    offset_counter <- offset_counter + 1
+    if (offset_counter %% 3 == 0)
+      Sys.sleep(1.0)
+  }
+  
+  close(pb)
+  
+  if (isTRUE(flatten))
+    subscriptions <- jsonlite::flatten(subscriptions)
+  
+  list(subscriptions = subscriptions, 
+       count = response$count)
+}
+
+
 #' Returns a list of users matching the search criteria
 #' 
 #' @param q Search query string (e.g., Vasya Babich)
