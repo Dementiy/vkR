@@ -5,7 +5,7 @@
 \title{Returns detailed information on arbitrary number of users}
 \usage{
 getUsersExecute(users_ids = "", fields = "", name_case = "",
-  flatten = FALSE, v = getAPIVersion())
+  flatten = FALSE, progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{users_ids}{User IDs or screen names (screen_name). By default, current user ID}
@@ -15,6 +15,8 @@ getUsersExecute(users_ids = "", fields = "", name_case = "",
 \item{name_case}{Case for declension of user name and surname}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
+\item{progress_bar}{Display progress bar}
 
 \item{v}{Version of API}
 }

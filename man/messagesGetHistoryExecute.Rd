@@ -5,7 +5,8 @@
 \title{Returns message history for the specified user or group chat}
 \usage{
 messagesGetHistoryExecute(offset = 0, count = 0, user_id = "",
-  peer_id = "", start_message_id = "", rev = 0, v = getAPIVersion())
+  peer_id = "", start_message_id = "", rev = 0, progress_bar = FALSE,
+  v = getAPIVersion())
 }
 \arguments{
 \item{offset}{Offset needed to return a specific subset of messages}
@@ -19,6 +20,8 @@ messagesGetHistoryExecute(offset = 0, count = 0, user_id = "",
 \item{start_message_id}{Starting message ID from which to return history}
 
 \item{rev}{Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order}
+
+\item{progress_bar}{Display progress bar}
 
 \item{v}{Version of API}
 }

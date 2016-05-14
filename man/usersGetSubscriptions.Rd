@@ -5,7 +5,8 @@
 \title{Returns a list of IDs of users and communities followed by the user}
 \usage{
 usersGetSubscriptions(user_id = "", extended = "", offset = 0,
-  count = 0, fields = "", flatten = FALSE, v = getAPIVersion())
+  count = 0, fields = "", flatten = FALSE, progress_bar = FALSE,
+  v = getAPIVersion())
 }
 \arguments{
 \item{user_id}{User ID}
@@ -19,6 +20,8 @@ usersGetSubscriptions(user_id = "", extended = "", offset = 0,
 \item{fields}{Profile fields to return}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
+\item{progress_bar}{Display progress bar}
 
 \item{v}{Version of API}
 }

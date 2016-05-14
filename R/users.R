@@ -205,6 +205,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @details 
 #' \href{https://vk.com/dev/fields}{User object} describes a user profile, contains the following fields:
@@ -380,7 +381,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
 #' }
 #' @export
-getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion())
+getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
     code <- 'var users = [];'
@@ -411,8 +412,10 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
   from <- 1
   to <- 5000
   
-  pb <- txtProgressBar(min = 0, max = length(users_ids), style = 3)
-  setTxtProgressBar(pb, 0)
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = length(users_ids), style = 3)
+    setTxtProgressBar(pb, 0)
+  }
   
   repeat
   {
@@ -421,7 +424,8 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
     all_users <- jsonlite::rbind.pages(list(all_users, users))
     
-    setTxtProgressBar(pb, nrow(all_users))
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(all_users))
     
     if (to >= length(users_ids))
       break
@@ -434,7 +438,8 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
       Sys.sleep(1.0)
   }
   
-  close(pb)
+  if (progress_bar)
+    close(pb)
   
   if (isTRUE(flatten))
     all_users <- jsonlite::flatten(all_users)
@@ -451,9 +456,10 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', flatten=FALSE, v=getAPIVersion())
+usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_followers <- function(user_id='', offset=0, count=0, fields='', name_case='', v=getAPIVersion())
   {
@@ -494,8 +500,11 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
   len <- ifelse(is.vector(followers), length, nrow)
   
   offset_counter <- 0
-  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
-  setTxtProgressBar(pb, len(followers))
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, len(followers))
+  }
   
   while (len(followers) < max_count) {
     followers3000 <- get_followers(user_id = user_id,
@@ -509,14 +518,16 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     else
       followers <- jsonlite::rbind.pages(list(followers, followers3000))
     
-    setTxtProgressBar(pb, len(followers))
+    if (progress_bar)
+      setTxtProgressBar(pb, len(followers))
     
     offset_counter <- offset_counter + 1
     if (offset_counter %% 3 == 0)
       Sys.sleep(1.0)
   }
   
-  close(pb)
+  if (progress_bar)
+    close(pb)
   
   if (isTRUE(flatten) & !is.vector(followers))
     followers <- jsonlite::flatten(followers)
@@ -535,9 +546,10 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 #' @param fields Profile fields to return
 #' @param extended 1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities (not implemented yet)
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fields='', flatten=FALSE, v=getAPIVersion())
+usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fields='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_subscriptions <- function(user_id='', extended='', offset='', count='', fields='', v=getAPIVersion())
   {
@@ -576,8 +588,11 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
                 count = response$count))
   
   offset_counter <- 0
-  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
-  setTxtProgressBar(pb, nrow(subscriptions))
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, nrow(subscriptions))
+  }
   
   while (nrow(subscriptions) < max_count) {
     subscriptions600 <- get_subscriptions(user_id = user_id,
@@ -588,14 +603,16 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
                                           v = v)
     subscriptions <- jsonlite::rbind.pages(list(subscriptions, subscriptions600))
     
-    setTxtProgressBar(pb, nrow(subscriptions))
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(subscriptions))
     
     offset_counter <- offset_counter + 1
     if (offset_counter %% 3 == 0)
       Sys.sleep(1.0)
   }
   
-  close(pb)
+  if (progress_bar)
+    close(pb)
   
   if (isTRUE(flatten))
     subscriptions <- jsonlite::flatten(subscriptions)

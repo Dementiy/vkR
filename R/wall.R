@@ -55,6 +55,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' }
 #' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
 #' @param fields 
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' getWallExecute()
 #' @return Returns a list of post objects.
@@ -65,7 +66,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' \item \strong{groups} — Contains community objects.
 #' }
 #' @export
-getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', v=getAPIVersion())
+getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
 {
   get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
   {
@@ -125,8 +126,12 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                 count = response$count))
   
   offset_counter <- 0
-  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
-  setTxtProgressBar(pb, nrow(posts))
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, nrow(posts))
+  }
+  
   while (nrow(posts) < max_count) {
     posts2500 <- get_posts2500(owner_id = owner_id,
                                domain = domain,
@@ -138,14 +143,16 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                                v = v)
     posts <- jsonlite::rbind.pages(list(posts, posts2500))
     
-    setTxtProgressBar(pb, nrow(posts))
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(posts))
     
     offset_counter <- offset_counter + 1
     if (offset_counter %% 3 == 0)
       Sys.sleep(1.0)
   }
   
-  close(pb)
+  if (progress_bar)
+    close(pb)
   
   list(posts = posts, 
        count = response$count)

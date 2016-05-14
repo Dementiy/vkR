@@ -30,9 +30,10 @@ messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', star
 #' @param peer_id 
 #' @param start_message_id Starting message ID from which to return history
 #' @param rev Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='', start_message_id='', rev=0, v=getAPIVersion())
+messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='', start_message_id='', rev=0, progress_bar=FALSE, v=getAPIVersion())
 {
   get_messages <- function(offset='', count='', user_id='', peer_id='', start_message_id='', rev='', v=getAPIVersion())
   {
@@ -76,8 +77,10 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
   
   offset_counter <- 0
   
-  pb <- txtProgressBar(min = 0, max = max_count, style = 3)
-  setTxtProgressBar(pb, nrow(messages))
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, nrow(messages))
+  }
   
   while (nrow(messages) < max_count) {
     messages600 <- get_messages(user_id = user_id,
@@ -89,14 +92,16 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
                                 v = v)
     messages <- jsonlite::rbind.pages(list(messages, messages600))
     
-    setTxtProgressBar(pb, nrow(messages))
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(messages))
     
     offset_counter <- offset_counter + 1
     if (offset_counter %% 3 == 0)
       Sys.sleep(1.0)
   }
   
-  close(pb)
+  if (progress_bar)
+    close(pb)
   
   list(messages = messages, 
        count = response$count, 

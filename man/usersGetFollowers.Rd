@@ -5,7 +5,8 @@
 \title{Returns a list of IDs of followers of the user in question, sorted by date added, most recent first}
 \usage{
 usersGetFollowers(user_id = "", offset = 0, count = 0, fields = "",
-  name_case = "", flatten = FALSE, v = getAPIVersion())
+  name_case = "", flatten = FALSE, progress_bar = FALSE,
+  v = getAPIVersion())
 }
 \arguments{
 \item{user_id}{User ID}
@@ -19,6 +20,8 @@ usersGetFollowers(user_id = "", offset = 0, count = 0, fields = "",
 \item{name_case}{Case for declension of user name and surname}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
+\item{progress_bar}{Display progress bar}
 
 \item{v}{Version of API}
 }
