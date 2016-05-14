@@ -55,7 +55,7 @@ vkApply <- function(objs, method)
   delay_counter <- 1
   for (obj in objs)
   {
-    delay_counter <<- delay_counter + 1
+    delay_counter <- delay_counter + 1
     if (delay_counter %% 3 == 0)
       Sys.sleep(1.0)
     res <- jsonlite::rbind.pages(list(res, method(obj)))
