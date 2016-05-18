@@ -94,7 +94,6 @@ getPaths <- function(source_id, target_id, are_friends = FALSE, max_depth = 5)
     friends_sid <- subset(friends_sid, !(id %in% visited))
     friends_tid <- subset(friends_tid, !(id %in% visited))
     
-    Sys.sleep(0.5)
     friends_sid <- getFriendsFor(unique(friends_sid$id))
     friends_tid <- getFriendsFor(unique(friends_tid$id))
     
@@ -162,7 +161,6 @@ getPaths <- function(source_id, target_id, are_friends = FALSE, max_depth = 5)
   if ((are_friends == FALSE) & areFriends(target_id, source_id))
     return(c(source_id, target_id))
   
-  Sys.sleep(0.5)
   source_id_info <- getUsers(user_ids = c(source_id), fields = 'city')
   target_id_info <- getUsers(user_ids = c(target_id), fields = 'city')
   
