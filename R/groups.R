@@ -21,6 +21,7 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
                         offset = offset,
                         count = count,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -48,6 +49,7 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
                         fields = fields,
                         filter = filter,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -91,7 +93,6 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
   members <- response$items
   len <- ifelse(is.vector(members), length, nrow)
   count <- response$count
-  delay_counter <- 0
   while (len(members) < count)
   {
     members20 <- getGroupsMembers20(group_id = group_id, 
@@ -103,9 +104,6 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
       members <- append(members, members20)
     else
       members <- jsonlite::rbind.pages(list(members, members20))
-    delay_counter <- delay_counter + 1
-    if (delay_counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (isTRUE(flatten) & !is.vector(members))

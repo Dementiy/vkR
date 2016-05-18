@@ -25,6 +25,7 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
                         fields = fields, 
                         name_case = name_case, 
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response <- response$response
   
@@ -62,6 +63,7 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
   } else {
     query <- queryBuilder('friends.getMutual', target_uids = target_uids, v = v)
   }
+  request_delay()
   response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
                                                       body = body)$content))
   response$response
@@ -119,7 +121,6 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
 #' @export
 getFriendsFor <- function(users_ids, v=getAPIVersion()) {
   users_friends <- list()
-  counter <- 0
   from <- 1
   to <- 25
   repeat {
@@ -131,10 +132,6 @@ getFriendsFor <- function(users_ids, v=getAPIVersion()) {
     
     from <- to + 1
     to <- to + 25
-    
-    counter <- counter + 1
-    if (counter %% 3)
-      Sys.sleep(1.0)
   }
   
   class(users_friends) <- c(class(users_friends), "friends.list")

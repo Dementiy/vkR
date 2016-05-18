@@ -17,6 +17,7 @@ messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', star
                         start_message_id = start_message_id,
                         rev = rev,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -96,8 +97,6 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
       setTxtProgressBar(pb, nrow(messages))
     
     offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (progress_bar)
@@ -143,6 +142,7 @@ messagesGet <- function(out='', offset='', count='', time_offset='', filters='',
                         preview_length = preview_length,
                         last_message_id = last_message_id,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }

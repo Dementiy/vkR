@@ -24,6 +24,7 @@ likesGetList <- function(type='', owner_id='', item_id='', page_url='', filter='
                         count = count,
                         skip_own = skip_own,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }

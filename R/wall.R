@@ -34,6 +34,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
                         extended = extended,
                         fields = fields,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -147,8 +148,6 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
       setTxtProgressBar(pb, nrow(posts))
     
     offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (progress_bar)
@@ -183,6 +182,7 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
                         extended = extended,
                         fields = fields,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -211,6 +211,7 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
                         copy_history_depth = copy_history_depth,
                         fields = fields,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -238,6 +239,7 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
                         offset = offset,
                         count = count,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }
@@ -267,6 +269,7 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
                         preview_length = preview_length,
                         extended = extended,
                         v = v)
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response$response
 }

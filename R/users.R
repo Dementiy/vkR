@@ -188,6 +188,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
   } else {
     query <- queryBuilder('users.get', user_ids = user_ids, v = v)
   }
+  request_delay()
   response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
                                                       body = body)$content))
   response <- response$response
@@ -408,7 +409,6 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     users_ids <- unique(unlist(users_ids))
   
   all_users <- data.frame()
-  counter <- 0
   from <- 1
   to <- 5000
   
@@ -432,10 +432,6 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     
     from <- to + 1
     to <- to + 5000
-    
-    counter <- counter + 1
-    if (counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (progress_bar)
@@ -522,8 +518,6 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
       setTxtProgressBar(pb, len(followers))
     
     offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (progress_bar)
@@ -607,8 +601,6 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
       setTxtProgressBar(pb, nrow(subscriptions))
     
     offset_counter <- offset_counter + 1
-    if (offset_counter %% 3 == 0)
-      Sys.sleep(1.0)
   }
   
   if (progress_bar)
@@ -701,6 +693,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         from_list = from_list,
                         v = v
   )
+  request_delay()
   response <- jsonlite::fromJSON(query)
   response <- response$response
   
