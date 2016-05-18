@@ -2,11 +2,14 @@
 % Please edit documentation in R/queries.R
 \name{execute}
 \alias{execute}
-\title{Универсальный метод, который позволяет запускать последовательность других методов, сохраняя и фильтруя промежуточные результаты}
+\title{A universal method for calling a sequence of other methods while saving and filtering interim results}
 \usage{
 execute(code)
 }
+\arguments{
+\item{code}{Algorithm code in VKScript}
+}
 \description{
-Универсальный метод, который позволяет запускать последовательность других методов, сохраняя и фильтруя промежуточные результаты
+A universal method for calling a sequence of other methods while saving and filtering interim results
 }
 

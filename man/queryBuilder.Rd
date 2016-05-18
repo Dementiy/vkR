@@ -2,14 +2,14 @@
 % Please edit documentation in R/queries.R
 \name{queryBuilder}
 \alias{queryBuilder}
-\title{Возвращает строку запроса, созданную из переданных аргументов}
+\title{Returns a query string}
 \usage{
 queryBuilder(method_name, ...)
 }
 \arguments{
-\item{method_name}{Имя метода}
+\item{method_name}{Method name}
 }
 \description{
-Возвращает строку запроса, созданную из переданных аргументов
+Returns a query string
 }
 
