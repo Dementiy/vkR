@@ -1,6 +1,21 @@
-#' Возвращает строку запроса, созданную из переданных аргументов
+#' Delaying a request if necessary
+#' 
+#' VK can accept maximum 3 requests to API methods per second from a client.
+request_delay <- function()
+{
+  start_time <- Sys.time()
+  taken_time <- start_time - .vkr$last_request_time
+  if (taken_time <= 1.0 & .vkr$num_requests >= .vkr$max_requests) {
+    Sys.sleep(1.0 - taken_time)
+  }
+  .vkr$num_requests <- ifelse(.vkr$num_requests < 3, .vkr$num_requests + 1, 1)
+  .vkr$last_request_time <- Sys.time()
+}
+
+
+#' Returns a query string
 #'
-#' @param method_name Имя метода
+#' @param method_name Method name
 queryBuilder <- function(method_name, ...) {
   query <- paste("https://api.vk.com/method/", method_name, "?", sep = "")
   arguments <- sapply(substitute(list(...))[-1], deparse)
@@ -22,10 +37,11 @@ queryBuilder <- function(method_name, ...) {
 }
 
 
-#' Универсальный метод, который позволяет запускать последовательность других методов, сохраняя и фильтруя промежуточные результаты
-#' @param code
+#' A universal method for calling a sequence of other methods while saving and filtering interim results
+#' @param code Algorithm code in VKScript
 #' @export
 execute <- function(code) {
+  request_delay()
   query <- "https://api.vk.com/method/execute"
   post_res <- httr::POST(url = query, 
                    body = list('code' = code, 
