@@ -23,6 +23,7 @@ Collate:
     'messages.R'
     'network.R'
     'queries.R'
+    'status.R'
     'search.R'
     'users.R'
     'utils.R'
