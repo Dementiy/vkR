@@ -402,8 +402,13 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     execute(code)
   }
   
-  if (is.character(users_ids) && nchar(users_ids) == 0)
-    return(getUsers(fields = fields, name_case = name_case, flatten = flatten, v = v))
+  if (is.character(users_ids) && nchar(users_ids) == 0) {
+    code <- paste0('return API.users.get({"fields":"', fields, '", "name_case":"', name_case, '", "v":"', v, '"});')
+    response <- execute(code)
+    if (isTRUE(flatten))
+      response <- jsonlite::flatten(response)
+    return(response)
+  }
   
   if ("friends.list" %in% class(users_ids))
     users_ids <- unique(unlist(users_ids))
