@@ -466,7 +466,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
   {
     code <- 'var followers = [];'
     num_requests <- 0
-    while (num_requests != 3 && count != 0)
+    while (num_requests != 25 && count != 0)
     {
       current_count <- ifelse((count - 1000) >= 0, 1000, count)
       code <- paste0(code, 'followers = followers + API.users.getFollowers({"user_id":"', user_id, 
@@ -554,7 +554,7 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
   {
     code <- 'var subscriptions = [];'
     num_requests <- 0
-    while (num_requests != 3 && count != 0)
+    while (num_requests != 25 && count != 0)
     {
       current_count <- ifelse((count - 200) >= 0, 200, count)
       code <- paste0(code, 'subscriptions = subscriptions + API.users.getSubscriptions({"user_id":"', user_id, 
