@@ -704,6 +704,8 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
   
   if (isTRUE(flatten))
     response <- jsonlite::flatten(response)
+  
+  response
 }
 
 
