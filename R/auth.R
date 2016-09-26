@@ -90,6 +90,7 @@ setAccessToken <- function(access_token = '') {
 
 
 #' Get access token
+#' @export
 getAccessToken <- function() {
   if (!is.null(.vkr$access_token)) {
     .vkr$access_token
