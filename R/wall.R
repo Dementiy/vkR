@@ -275,6 +275,154 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
 }
 
 
+#' Returns a list of comments on a post on a user wall or community wall
+#' 
+#' @param owner_id User ID or community ID. Use a negative value to designate a community ID.
+#' @param post_id Post ID.
+#' @param need_likes 1 — to return the likes field (default), 0 — not to return the likes field.
+#' @param offset Offset needed to return a specific subset of comments.
+#' @param count Number of comments to return.
+#' @param sort Sort order: asc — chronological, desc — reverse chronological. 
+#' @param preview_length Number of characters at which to truncate comments when previewed. Specify 0 (default) if you do not want to truncate comments.
+#' @param extended Flag, either 1 or 0.
+#' @param progress_bar Display progress bar
+#' @param v Version of API
+#' @export
+postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, count=10, sort='', preview_length=0, extended='', progress_bar = FALSE, v=getAPIVersion()) {
+  get_comments2500 <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, max_count='', sort='', preview_length=0, extended='', v=getAPIVersion())
+  {
+    if (max_count > 2500) 
+      max_count <- 2500
+    if (max_count <= 100) {
+      execute(paste0('return API.wall.getComments({
+                     "owner_id":"', owner_id, '",
+                     "post_id":"', post_id, '",
+                     "count":"', max_count, '",
+                     "offset":"', offset, '",
+                     "need_likes":"', need_likes, '",
+                     "start_comment_id":"', start_comment_id, '",
+                     "sort":"', sort, '",
+                     "preview_length":"', preview_length, '",
+                     "extended":"', extended, '", "v":"', v, '"}).items;'))
+    } else {
+      code <- 'var comments = [];'
+      code <- paste0(code, 'comments = comments + API.wall.getComments({
+                     "owner_id":"', owner_id, '",
+                     "post_id":"', post_id, '",
+                     "count":"', 100, '",
+                     "offset":"', offset, '",
+                     "need_likes":"', need_likes, '",
+                     "start_comment_id":"', start_comment_id, '",
+                     "sort":"', sort, '",
+                     "preview_length":"', preview_length, '",
+                     "extended":"', extended, '", "v":"', v, '"}).items;')
+      code <- paste0(code, 'var offset = 100 + ', offset, ';
+                     var count = 100; var max_offset = offset + ', max_count, ';
+                     while (offset < max_offset && comments.length <= offset && offset-', offset, '<', max_count, ') {
+                     if (', max_count, ' - comments.length < 100) {
+                     count = ', max_count, ' - comments.length;
+                     };
+                     comments = comments + API.wall.getComments({
+                     "owner_id":"', owner_id, '",
+                     "post_id":"', post_id, '",
+                     "offset":offset,
+                     "count":count,
+                     "need_likes":"', need_likes, '",
+                     "start_comment_id":"', start_comment_id, '",
+                     "sort":"', sort, '",
+                     "preview_length":"', preview_length, '",
+                     "extended":"', extended, '", "v":"', v, '"}).items;
+                     offset = offset + 100;
+                     };
+                     return comments;')
+      execute(code)
+    }
+  }
+  
+  code <- paste0('return API.wall.getComments({
+                 "owner_id":"', owner_id, '",
+                 "post_id":"', post_id, '",
+                 "count":"', 1, '",
+                 "offset":"', offset, '",
+                 "need_likes":"', need_likes, '",
+                 "start_comment_id":"', start_comment_id, '",
+                 "sort":"', sort, '",
+                 "preview_length":"', preview_length, '",
+                 "extended":"', extended, '", "v":"', v, '"});')
+  response <- execute(code)
+  comments <- response$items
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  
+  if (max_count == 0)
+    return(list(comments = response$items, 
+                count = response$count))
+  
+  offset_counter <- 0
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, nrow(comments))
+  }
+  
+  while (nrow(comments) < max_count) {
+    comments2500 <- get_comments2500(owner_id = owner_id,
+                                     post_id = post_id,
+                                     need_likes = need_likes,
+                                     extended = extended,
+                                     sort = sort,
+                                     preview_length = preview_length,
+                                     start_comment_id = start_comment_id,
+                                     max_count = (max_count - nrow(comments)), 
+                                     offset = (1 + offset + offset_counter * 2500), 
+                                     v = v)
+    comments <- jsonlite::rbind.pages(list(comments, comments2500))
+    
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(comments))
+    
+    offset_counter <- offset_counter + 1
+  }
+  
+  if (progress_bar)
+    close(pb)
+  
+  list(comments = comments, 
+       count = response$count)
+}
+
+
+#' Returns a list of comments on a user wall or community wall
+#' 
+#' @param posts A list of posts (from getWallExecute())
+#' @param progress_bar Display progress bar
+#' @export 
+wallGetCommentsList <- function(posts, progress_bar = FALSE)
+{
+  res <- list()
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = nrow(posts), style = 3)
+    setTxtProgressBar(pb, length(res))
+  }
+  
+  for (i in 1:nrow(posts))
+  {
+    owner_id <- posts$owner_id[i]
+    post_id <- posts$id[i]
+    comments <- postGetComments(owner_id = owner_id, post_id = post_id, v = getAPIVersion())$comments
+    res[[paste0(post_id)]] <- comments
+    
+    if (progress_bar)
+      setTxtProgressBar(pb, length(res))
+  }
+  
+  if (progress_bar)
+    close(pb)
+  
+  res
+}
+
+
 #' Filtering attachments by type
 #' 
 #' @param attachments List of attachments
