@@ -7,7 +7,7 @@
 wallGetCommentsList(posts, progress_bar = FALSE)
 }
 \arguments{
-\item{posts}{A list of posts (from getWallExecute())}
+\item{posts}{A list of posts or wall object (from getWallExecute())}
 
 \item{progress_bar}{Display progress bar}
 }

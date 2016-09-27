@@ -153,8 +153,11 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
   if (progress_bar)
     close(pb)
   
-  list(posts = posts, 
-       count = response$count)
+  wall <- list(posts = posts, 
+               count = response$count)
+  class(wall) <- c(class(posts), "posts.list")
+  
+  return(wall)
 }
 
 
@@ -393,11 +396,14 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
 
 #' Returns a list of comments on a user wall or community wall
 #' 
-#' @param posts A list of posts (from getWallExecute())
+#' @param posts A list of posts or wall object (from getWallExecute())
 #' @param progress_bar Display progress bar
 #' @export 
 wallGetCommentsList <- function(posts, progress_bar = FALSE)
 {
+  if ("posts.list" %in% class(posts))
+    posts <- posts$posts
+  
   res <- list()
   
   if (progress_bar) {
