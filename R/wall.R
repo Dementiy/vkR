@@ -155,7 +155,7 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
   
   wall <- list(posts = posts, 
                count = response$count)
-  class(wall) <- c(class(posts), "posts.list")
+  class(wall) <- c(class(wall), "posts.list")
   
   return(wall)
 }
