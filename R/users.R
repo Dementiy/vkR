@@ -411,7 +411,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     return(response)
   }
   
-  if ("friends.list" %in% class(users_ids))
+  if ("vk.friends.ids" %in% class(users_ids))
     users_ids <- unique(unlist(users_ids))
   
   all_users <- data.frame()
