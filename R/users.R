@@ -180,6 +180,7 @@
 #' }
 #' @export
 getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
+  .Deprecated("getUsersExecute()")
   body <- list(fields = fields, name_case = name_case)
   if (length(user_ids) > 1) {
     user_ids <- paste(user_ids, collapse = ",")
@@ -716,7 +717,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
 #' @param tag Tag
 #' @export
 tag2Id <- function(tag) {
-  getUsers(tag)$id
+  suppressWarnings(getUsers(tag)$id)
 }
 
 
@@ -726,6 +727,6 @@ tag2Id <- function(tag) {
 me <- function()
 {
   if (.vkr$me == 0)
-    .vkr$me <- getUsers()$id
+    .vkr$me <- suppressWarnings(getUsers()$id)
   .vkr$me
 }
