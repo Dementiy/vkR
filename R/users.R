@@ -446,6 +446,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
   if (isTRUE(flatten))
     all_users <- jsonlite::flatten(all_users)
   
+  class(response) <- c(class(response), "vk.users")
   all_users
 }
 
