@@ -47,5 +47,7 @@ execute <- function(code) {
                    body = list('code' = code, 
                                'access_token' = getAccessToken()))
   response <- jsonlite::fromJSON(rawToChar(post_res$content))
+  if (!is.null(response$error))
+    stop(paste0('Server side error: ', response$error$error_msg))
   response$response
 }
