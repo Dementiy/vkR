@@ -103,7 +103,6 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   code <- paste(code, "return all_friends;")
   response <- execute(code)
   if (!is.null(response)) names(response) <- user_ids
-  response
   
   class(response) <- c(class(response), "friends.list")
   response
