@@ -196,6 +196,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
   if (isTRUE(flatten))
     response <- jsonlite::flatten(response)
   
+  class(response) <- c(class(response), "vk.users")
   response
 }
 
