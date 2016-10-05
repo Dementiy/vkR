@@ -32,6 +32,7 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
   if (isTRUE(flatten))
     response$items <- jsonlite::flatten(response$items)
   
+  class(response) <- c(class(response), "vk.friends")
   response
 }
 
@@ -104,7 +105,7 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   response <- execute(code)
   if (!is.null(response)) names(response) <- user_ids
   
-  class(response) <- c(class(response), "friends.list")
+  class(response) <- c(class(response), "vk.friends.ids")
   response
 }
 
@@ -133,6 +134,6 @@ getFriendsFor <- function(users_ids, v=getAPIVersion()) {
     to <- to + 25
   }
   
-  class(users_friends) <- c(class(users_friends), "friends.list")
+  class(users_friends) <- c(class(users_friends), "vk.friends.ids")
   users_friends
 }
