@@ -126,28 +126,31 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
     return(list(posts = response$items, 
                 count = response$count))
   
-  offset_counter <- 0
-  
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(posts))
   }
   
+  num_records <- max_count - nrow(posts)
   while (nrow(posts) < max_count) {
-    posts2500 <- get_posts2500(owner_id = owner_id,
+    tryCatch({ posts2500 <- get_posts2500(owner_id = owner_id,
                                domain = domain,
                                filter = filter,
                                extended = extended,
                                fields = fields,
-                               max_count = (max_count - nrow(posts)), 
-                               offset = (1 + offset + offset_counter * 2500), 
+                               max_count = num_records, 
+                               offset = offset + nrow(posts), 
                                v = v)
-    posts <- jsonlite::rbind.pages(list(posts, posts2500))
+      posts <- jsonlite::rbind.pages(list(posts, posts2500))
+      num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
+    error = function(e) {
+      num_records <<- as.integer(num_records / 2)
+      warning(e)
+      warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
+    })
     
     if (progress_bar)
       setTxtProgressBar(pb, nrow(posts))
-    
-    offset_counter <- offset_counter + 1
   }
   
   if (progress_bar)
