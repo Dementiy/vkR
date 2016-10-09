@@ -5,7 +5,7 @@
 \title{Returns a list of community members}
 \usage{
 getGroupsMembersExecute(group_id = "", fields = "", filter = "",
-  flatten = FALSE, v = getAPIVersion())
+  flatten = FALSE, progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{group_id}{ID or screen name of the community}
@@ -15,6 +15,8 @@ getGroupsMembersExecute(group_id = "", fields = "", filter = "",
 \item{filter}{friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
+
+\item{progress_bar}{Display progress bar}
 
 \item{v}{Version of API}
 }

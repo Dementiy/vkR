@@ -61,9 +61,10 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' @param fields List of additional fields to be returned
 #' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=FALSE, v=getAPIVersion())
+getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   getGroupsMembers20 <- function(group_id='', offset = 0, fields='', filter='', v=getAPIVersion())
   {
@@ -93,6 +94,12 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
   members <- response$items
   len <- ifelse(is.vector(members), length, nrow)
   count <- response$count
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = count, style = 3)
+    setTxtProgressBar(pb, ifelse(is.vector(members), len(members), nrow(members)))
+  }
+  
   while (len(members) < count)
   {
     members20 <- getGroupsMembers20(group_id = group_id, 
@@ -104,7 +111,13 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
       members <- append(members, members20)
     else
       members <- jsonlite::rbind.pages(list(members, members20))
+    
+    if (progress_bar)
+      setTxtProgressBar(pb, ifelse(is.vector(members), len(members), nrow(members)))
   }
+  
+  if (progress_bar)
+    close(pb)
   
   if (isTRUE(flatten) & !is.vector(members))
     members <- jsonlite::flatten(members)
