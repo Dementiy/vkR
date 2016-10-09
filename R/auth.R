@@ -81,6 +81,38 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
 }
 
 
+#' Client authorization (for web application)
+#'
+#' @param app_name Application name
+#' @param client_id Application ID
+#' @param client_secret Application secret key
+#' @export
+vkOAuthWeb <- function(app_name, client_id, client_secret) {
+  if (!require("httpuv")) stop("The package httpuv was not installed")
+  
+  if (missing(app_name)) stop('argument "app_name" is missing, with no default')
+  if (!is.character(app_name)) stop('argument "app_name" must be a string')
+  if (missing(client_id)) stop('argument "client_id" is missing, with no default')
+  if (!is.numeric(client_id) || floor(client_id) != client_id) stop('argument "client_id" must be an integer value')
+  if (missing(client_secret)) stop('argument "client_secret" is missing, with no default')
+  if (!is.character(scope)) stop('argument "client_secret" must be a string')
+  
+  accessURL <- "https://oauth.vk.com/access_token"
+  authURL <- "https://oauth.vk.com/authorize"
+  vk <- oauth_endpoint(authorize = authURL,
+                       access = accessURL)
+  vk_app <- oauth_app(app_name, client_id, client_secret)
+  ig_oauth <- oauth2.0_token(vk,
+                             vk_app,
+                             type = 'application/x-www-form-urlencoded',
+                             cache = FALSE)
+  my_session <-  strsplit(toString(names(ig_oauth$credentials)), '"')
+  access_token <- paste0('access_token=', my_session[[1]][4])
+  
+  setAccessToken(access_token)
+}
+
+
 #' Set access token
 #' @param access_token Access token
 #' @export
