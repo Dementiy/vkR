@@ -371,7 +371,8 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
   }
   
   while (nrow(comments) < max_count) {
-    comments2500 <- get_comments2500(owner_id = owner_id,
+    tryCatch({
+      comments2500 <- get_comments2500(owner_id = owner_id,
                                      post_id = post_id,
                                      need_likes = need_likes,
                                      extended = extended,
@@ -381,12 +382,15 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                                      max_count = (max_count - nrow(comments)), 
                                      offset = (1 + offset + offset_counter * 2500), 
                                      v = v)
-    comments <- jsonlite::rbind.pages(list(comments, comments2500))
+      comments <- jsonlite::rbind.pages(list(comments, comments2500))
+      offset_counter <- offset_counter + 1
+      }, error = function(e) {
+        warning(e)
+      })
     
     if (progress_bar)
       setTxtProgressBar(pb, nrow(comments))
     
-    offset_counter <- offset_counter + 1
   }
   
   if (progress_bar)
@@ -401,34 +405,92 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
 #' 
 #' @param posts A list of posts or wall object (from getWallExecute())
 #' @param progress_bar Display progress bar
+#' @param v Version of API
 #' @export 
-wallGetCommentsList <- function(posts, progress_bar = FALSE)
-{
+wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()) {
+  get_comments <- function(posts, v = getAPIVersion())
+  {
+    num_requests <- ceiling(nrow(posts) / 25)
+    from <- 1
+    to <- 25
+    comments <- list()
+    for (i in 1:num_requests) {
+      code <- 'var comments_per_post = {}; var comments;'
+      if (to > nrow(posts))
+        to <- nrow(posts)
+      for (index in from:to) {
+        code <- paste0(code, 'comments = API.wall.getComments({
+                       "owner_id":"', posts[index, ]$owner_id, '", 
+                       "post_id":"', posts[index, ]$id, '", 
+                       "need_likes":"', 1, '", 
+                       "count":"', 100, '", 
+                       "v":"', v, '"}).items; 
+                       comments_per_post.post', posts[index, ]$id, "=comments;", sep = "")
+      }
+      code <- paste0(code, 'return comments_per_post;')
+      comments <- append(comments, execute(code))
+      from <- from + 25
+      to <- to + 25
+    }
+    names(comments) <- posts$id
+    comments
+  }
+  
   if ("posts.list" %in% class(posts))
     posts <- posts$posts
   
-  res <- list()
+  cmt_groups <- split(posts, posts$comments$count > 100)
+  posts_le100 <- cmt_groups[['FALSE']]
+  posts_gt100 <- cmt_groups[['TRUE']]
+  
+  comments <- list()
+  from <- 1
+  max_count <- nrow(posts_le100)
+  to <- ifelse(max_count >= 75, 75, max_count)
   
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = nrow(posts), style = 3)
-    setTxtProgressBar(pb, length(res))
+    setTxtProgressBar(pb, 0)
   }
   
-  for (i in 1:nrow(posts))
-  {
-    owner_id <- posts$owner_id[i]
-    post_id <- posts$id[i]
-    comments <- postGetComments(owner_id = owner_id, post_id = post_id, v = getAPIVersion())$comments
-    res[[paste0(post_id)]] <- comments
+  repeat {
+    comments75 <- get_comments(posts_le100[from:to, ], v)
+    comments <- append(comments, comments75)
     
     if (progress_bar)
-      setTxtProgressBar(pb, length(res))
+      setTxtProgressBar(pb, length(comments))
+    
+    if (to >= max_count)
+      break
+    
+    from <- to + 1
+    to <- ifelse(to + 75 >= max_count, max_count, to + 75)
+  }
+  
+  
+  if (!is.null(posts_gt100)) {
+    for (i in 1:nrow(posts_gt100)) {
+      owner_id <- posts_gt100$owner_id[i]
+      post_id <- posts_gt100$id[i]
+      comments[[paste0(post_id)]] <- postGetComments(owner_id = owner_id,
+                                                     post_id = post_id,
+                                                     count = 0,
+                                                     v = v)$comments
+      if (progress_bar)
+        setTxtProgressBar(pb, length(comments))
+    }
   }
   
   if (progress_bar)
     close(pb)
   
-  res
+  comments_ordered <- list()
+  for (i in 1:nrow(posts)) {
+    comments_ordered[[paste0(posts$id[i])]] <- comments[[paste0(posts$id[i])]]
+  }
+  
+  class(comments_ordered) <- c(class(comments_ordered), "vk.comments")
+  comments_ordered
 }
 
 

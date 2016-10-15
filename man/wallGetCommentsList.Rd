@@ -4,12 +4,14 @@
 \alias{wallGetCommentsList}
 \title{Returns a list of comments on a user wall or community wall}
 \usage{
-wallGetCommentsList(posts, progress_bar = FALSE)
+wallGetCommentsList(posts, progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{posts}{A list of posts or wall object (from getWallExecute())}
 
 \item{progress_bar}{Display progress bar}
+
+\item{v}{Version of API}
 }
 \description{
 Returns a list of comments on a user wall or community wall
