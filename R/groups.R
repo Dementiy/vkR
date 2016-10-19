@@ -124,3 +124,79 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
   
   members
 }
+
+
+#' Returns a list of the communities for the specified users
+#' 
+#' @param users A list of users
+#' @param extended 1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default) 
+#' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
+#' @param fields Profile fields to return
+#' @param progress_bar Display progress bar
+#' @param v Version of API
+#' @export
+getGroupsForUsers <- function(users, extended='', filter='', fields='', progress_bar = FALSE, v = getAPIVersion()) {
+  get_groups_for_users <- function(users, extended='', filter='', fields='', offset='', v = getAPIVersion())
+  {
+    num_requests <- ceiling(length(users) / 25)
+    from <- 1
+    to <- 25
+    groups <- list()
+    for (i in 1:num_requests) {
+      code <- 'var groups_per_user = {}; var groups;'
+      if (to > length(users))
+        to <- length(users)
+      for (index in from:to) {
+        code <- paste0(code, 'groups = API.groups.get({
+                       "user_id":"', users[index], '", 
+                       "extended":"', extended, '", 
+                       "filter":"', filter, '", 
+                       "fields":"', fields, '",
+                       "offset":"', offset, '", 
+                       "count":"', 1000, '", 
+                       "v":"', v, '"}).items; 
+                       groups_per_user.user', users[index], "=groups;", sep = "")
+    }
+      code <- paste0(code, 'return groups_per_user;')
+      groups <- append(groups, execute(code))
+      from <- from + 25
+      to <- to + 25
+    }
+    names(groups) <- users
+    groups
+  }
+  
+  groups <- list()
+  from <- 1
+  max_count <- length(users)
+  to <- ifelse(max_count >= 75, 75, max_count)
+  
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = length(users), style = 3)
+    setTxtProgressBar(pb, 0)
+  }
+  
+  repeat {
+    groups75 <- get_groups_for_users(users = users[from:to], 
+                                     extended = extended,
+                                     filter = filter,
+                                     fields = fields,
+                                     v = v)
+    groups <- append(groups, groups75)
+    
+    if (progress_bar)
+      setTxtProgressBar(pb, length(groups))
+    
+    if (to >= max_count)
+      break
+    
+    from <- to + 1
+    to <- ifelse(to + 75 >= max_count, max_count, to + 75)
+  }
+  
+  if (progress_bar)
+    close(pb)
+  
+  class(groups) <- c(class(groups), "vk.groups_per_user")
+  groups
+}
