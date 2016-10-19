@@ -166,6 +166,9 @@ getGroupsForUsers <- function(users, extended='', filter='', fields='', progress
     groups
   }
   
+  if ("vk.users" %in% class(users))
+    users <- users$id
+  
   groups <- list()
   from <- 1
   max_count <- length(users)
