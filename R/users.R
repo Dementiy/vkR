@@ -551,7 +551,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fields='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, fields='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_subscriptions <- function(user_id='', extended='', offset='', count='', fields='', v=getAPIVersion())
   {
@@ -564,7 +564,7 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
                      '", "offset":"', offset,
                      '", "count":"', current_count,
                      '", "fields":"', fields, 
-                     '", "extended":"', 1, 
+                     '", "extended":"', extended, 
                      '", "v":"', v, '"}).items;')
       offset <- offset + 200
       num_requests <- num_requests + 1
@@ -601,7 +601,7 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
                                           offset = (1 + offset + offset_counter * 600), 
                                           count = (max_count - nrow(subscriptions)), 
                                           fields = fields,
-                                          extended = extended,
+                                          extended = 1,
                                           v = v)
     subscriptions <- jsonlite::rbind.pages(list(subscriptions, subscriptions600))
     
@@ -616,6 +616,13 @@ usersGetSubscriptions <- function(user_id='', extended='', offset=0, count=0, fi
   
   if (isTRUE(flatten))
     subscriptions <- jsonlite::flatten(subscriptions)
+  
+  if (as.numeric(extended) == 0) {
+    subscriptions_splt <- split(subscriptions, subscriptions$type == 'page')
+    groups <- subscriptions_splt$`TRUE`
+    users <- subscriptions_splt$`FALSE`
+    return(list(groups = groups, users=users))
+  }
   
   list(subscriptions = subscriptions, 
        count = response$count)
