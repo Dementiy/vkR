@@ -546,7 +546,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 #' @param offset Offset needed to return a specific subset of subscriptions
 #' @param count Number of users and communities to return
 #' @param fields Profile fields to return
-#' @param extended 1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities (not implemented yet)
+#' @param extended 1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API

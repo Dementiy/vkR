@@ -11,7 +11,7 @@ usersGetSubscriptions(user_id = "", extended = "1", offset = 0,
 \arguments{
 \item{user_id}{User ID}
 
-\item{extended}{1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities (not implemented yet)}
+\item{extended}{1 — to return a combined list of users and communities, 0 — to return separate lists of users and communities}
 
 \item{offset}{Offset needed to return a specific subset of subscriptions}
 
