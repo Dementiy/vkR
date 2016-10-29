@@ -25,6 +25,7 @@
 #' }
 #' @export
 getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', fields='', v=getAPIVersion()) {
+  .Deprecated("getWall()")
   query <- queryBuilder('wall.get',
                         owner_id = owner_id,
                         domain = domain,
