@@ -58,7 +58,7 @@ execute <- function(code, params = list()) {
       
       captcha_sid <- response$error$captcha_sid
       captcha_key <- readline("Enter the key from captcha: ")
-      response <- execute(code, params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid))
+      return(execute(code, params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid)))
     } else {
       stop(paste0('Server side error: ', response$error$error_msg))
     }
