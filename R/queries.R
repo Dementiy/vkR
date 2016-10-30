@@ -42,6 +42,7 @@ queryBuilder <- function(method_name, ...) {
 #' @param params Parameters list
 #' @export
 execute <- function(code, params = list()) {
+  request_delay()
   query <- "https://api.vk.com/method/execute"
   body = list('code' = code, 'access_token' = getAccessToken())
   post_res <- httr::POST(url = query, body = append(body, params))
