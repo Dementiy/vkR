@@ -50,7 +50,7 @@ execute <- function(code, params = list()) {
   if (!is.null(response$error)) {
     if (response$error$error_code == 14) {
       # Captcha handling
-      if (!require("jpeq")) stop("The package jpeq was not installed")
+      if (!require("jpeq")) stop("The package jpeg was not installed")
       download.file(url = response$error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
       captcha_img <- readJPEG("captcha.jpg", native = TRUE)
       plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
