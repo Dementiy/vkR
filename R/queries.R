@@ -39,15 +39,30 @@ queryBuilder <- function(method_name, ...) {
 
 #' A universal method for calling a sequence of other methods while saving and filtering interim results
 #' @param code Algorithm code in VKScript
+#' @param params Parameters list
 #' @export
-execute <- function(code) {
-  request_delay()
+execute <- function(code, params = list()) {
   query <- "https://api.vk.com/method/execute"
-  post_res <- httr::POST(url = query, 
-                   body = list('code' = code, 
-                               'access_token' = getAccessToken()))
+  body = list('code' = code, 'access_token' = getAccessToken())
+  post_res <- httr::POST(url = query, body = append(body, params))
   response <- jsonlite::fromJSON(rawToChar(post_res$content))
-  if (!is.null(response$error))
-    stop(paste0('Server side error: ', response$error$error_msg))
+  
+  if (!is.null(response$error)) {
+    if (response$error$error_code == 14) {
+      # Captcha handling
+      if (!require("jpeq")) stop("The package jpeq was not installed")
+      download.file(url = response$error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
+      captcha_img <- readJPEG("captcha.jpg", native = TRUE)
+      plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
+      rasterImage(captcha_img, 0, 0, 1, 1)
+      
+      captcha_sid <- response$error$captcha_sid
+      captcha_key <- readline("Enter the key from captcha: ")
+      response <- execute(code, params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid))
+    } else {
+      stop(paste0('Server side error: ', response$error$error_msg))
+    }
+  }
+  
   response$response
 }
