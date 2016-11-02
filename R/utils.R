@@ -94,8 +94,9 @@ get_stop_words <- function(stop_words = c()) {
       tm_stop_words <- stopwords('russian')
   
   google_stop_words <- c()
-  if (file.exists('R/stop_words_russian.txt'))
-    google_stop_words <- as.vector(read.table('R/stop_words_russian.txt')$V1)
+  filename <- system.file("extdata", "stop_words_russian.txt", package = 'vkR')
+  if (file.exists(filename))
+    google_stop_words <- as.vector(read.table(filename)$V1)
   
   stop_words <- unique(c(stop_words, google_stop_words, tm_stop_words))
   stop_words
