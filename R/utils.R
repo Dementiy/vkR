@@ -81,3 +81,45 @@ vkPost <- function(...)
   class(post) <- "vkPost"
   return(post)
 }
+
+
+# Functions for NLP
+
+#' Get stop words list for russian language
+#' @param stop_words User defined stop words
+#' @export
+get_stop_words <- function(stop_words = c()) {
+  tm_stop_words <- ifelse(require("tm"), stopwords('russian'), c())
+  google_stop_words <- ifelse(file.exists('stop_words_russian.txt'), 
+                              as.vector(read.table('stop_words_russian.txt')$V1), c())
+  stop_words <- unique(c(stop_words, google_stop_words, tm_stop_words))
+  stop_words
+}
+
+
+#' Clear text
+#' @param lines List of lines
+#' @param patterns List of user defined patterns
+#' @export
+clear_text <- function(lines, patterns = list()) {
+  if (!require("stringr")) stop("The package stringr was not installed")
+  lines <- str_replace_all(lines, "[ё]", "е")
+  lines <- str_replace_all(lines, "[[:punct:]]", " ")
+  lines <- str_replace_all(lines, "[[:digit:]]", " ")
+  lines <- str_replace_all(lines, "http\\S+\\s*", " ")
+  lines <- str_replace_all(lines, "[a-zA-Z]", " ")
+  
+  if (is.list(patterns) & length(patterns)) {
+    for (pattern in patterns) {
+      if (length(pattern) > 1)
+        lines <- str_replace_all(lines, pattern[1], pattern[2])
+      else
+        lines <- str_replace_all(lines, pattern, " ")
+    }
+  }
+  
+  lines <- str_replace_all(lines, "\\s+", " ")
+  lines <- tolower(lines)
+  lines <- str_trim(lines, side = "both")
+  lines
+}
