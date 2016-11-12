@@ -6,7 +6,7 @@
 \usage{
 getWallExecute(owner_id = "", domain = "", offset = 0, count = 10,
   filter = "owner", extended = "", fields = "", progress_bar = FALSE,
-  v = getAPIVersion())
+  use_db = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{owner_id}{ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.}
