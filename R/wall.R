@@ -68,7 +68,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' \item \strong{groups} — Contains community objects.
 #' }
 #' @export
-getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
+getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, use_db = FALSE, v=getAPIVersion())
 {
   get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
   {
@@ -108,6 +108,20 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                      };
                      return wall_records;')
       execute(code)
+    }
+  }
+  
+  if (use_db) {
+    collection_name <- ifelse(nchar(domain) > 0, domain, owner_id)
+    db_connection <- get_connection("wall", collection_name)
+    db_count <- db_connection$count()
+    if (db_count > 0) {
+      posts <- db_connection$find()
+      wall <- list(posts = posts, count = db_count)
+      rm(db_connection)
+      gc()
+      class(wall) <- c(class(wall), "posts.list")
+      return(wall)
     }
   }
   
@@ -156,6 +170,12 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
   
   if (progress_bar)
     close(pb)
+  
+  if (use_db) {
+    db_connection$insert(posts)
+    rm(db_connection)
+    gc()
+  }
   
   wall <- list(posts = posts, 
                count = response$count)
