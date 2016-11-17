@@ -95,7 +95,7 @@ vkOAuthWeb <- function(app_name, client_id, client_secret) {
   if (missing(client_id)) stop('argument "client_id" is missing, with no default')
   if (!is.numeric(client_id) || floor(client_id) != client_id) stop('argument "client_id" must be an integer value')
   if (missing(client_secret)) stop('argument "client_secret" is missing, with no default')
-  if (!is.character(scope)) stop('argument "client_secret" must be a string')
+  if (!is.character(client_secret)) stop('argument "client_secret" must be a string')
   
   accessURL <- "https://oauth.vk.com/access_token"
   authURL <- "https://oauth.vk.com/authorize"
