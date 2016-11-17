@@ -74,6 +74,8 @@ try_handle_error <- function(response) {
     return(handle_captcha(response$error))
   } else if (has_error(response) == 17) {
     return(handle_validation(response$error))
+  } else if (has_error(response) == 13) {
+    warning(response$error$error_msg)
   } else {
     stop(response$error$error_msg)
   }
