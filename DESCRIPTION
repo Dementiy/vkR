@@ -3,7 +3,7 @@ Type: Package
 Title: Access to VK API via R
 Version: 0.1
 Date: 2015-02-26
-Author: Dmitriy Sorokin
+Author: Dmitriy Sorokin <dementiy@yandex.ru>
 Maintainer: Dmitriy Sorokin <dementiy@yandex.ru>
 Description: Provides an interface to the VK API
 Depends:
