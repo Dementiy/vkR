@@ -14,12 +14,15 @@ request_delay <- function()
 
 
 #' Get error code from response
+#' @param response httr response object
 has_error <- function(response) {
   return(ifelse(!is.null(response$error), response$error$error_code, 0))
 }
 
 
 #' Repeat last function call
+#' @param params Query params
+#' @param n The number of generations to go back
 repeat_last_query <- function(params = list(), n = 1) {
   parent_name <- deparse(sys.calls()[[sys.nframe()-n]])
   parent_args <- as.list(sys.frame(-n))
@@ -30,21 +33,21 @@ repeat_last_query <- function(params = list(), n = 1) {
 
 
 #' Check response for errors
+#' @param response httr response object
 try_handle_error <- function(response) {
   if (!has_error(response))
       return(NULL)
   
   handle_captcha <- function(error) {
-    if (!require("jpeg")) stop("The package jpeg was not installed")
+    if (!requireNamespace("jpeg", quietly = TRUE)) stop("The package jpeg was not installed")
     download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
-    captcha_img <- readJPEG("captcha.jpg", native = TRUE)
+    captcha_img <- jpeg::readJPEG("captcha.jpg", native = TRUE)
     plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
     rasterImage(captcha_img, 0, 0, 1, 1)
     captcha_sid <- error$captcha_sid
     captcha_key <- readline("Enter the key from captcha: ")
     return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 3))
   }
-  
   
   handle_validation <- function(error) {
     response <- httr::GET(error$redirect_uri)
@@ -68,7 +71,6 @@ try_handle_error <- function(response) {
     }
   }
   
-  
   # Handle errors
   if (has_error(response) == 14) {
     return(handle_captcha(response$error))
@@ -85,6 +87,7 @@ try_handle_error <- function(response) {
 #' Returns a query string
 #'
 #' @param method_name Method name
+#' @param ... Method arguments
 queryBuilder <- function(method_name, ...) {
   query <- paste("https://api.vk.com/method/", method_name, "?", sep = "")
   arguments <- sapply(substitute(list(...))[-1], deparse)

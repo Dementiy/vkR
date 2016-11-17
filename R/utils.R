@@ -15,7 +15,7 @@ age_predict <- function(user_id='') {
   friends$bdate <- as.Date.character(friends$bdate, format = "%d.%M.%Y")
   friends <- friends[!is.na(friends$bdate), ]
   friends$year_of_birth <- as.numeric(format(friends$bdate, "%Y"))
-  data.frame(uid = user_id, year_of_birth = median(friends$year_of_birth), 
+  data.frame(uid = user_id, year_of_birth = stats::median(friends$year_of_birth), 
              nfriends = length(friends$year_of_birth))
 }
 
@@ -23,7 +23,7 @@ age_predict <- function(user_id='') {
 #' Extract URLs from messages
 #' 
 #' @param messages Array of messages
-#' @param message_body 
+#' @param message_body Add message body to URLs
 #' @export
 getURLs <- function(messages, message_body=FALSE) {
   # http://stackoverflow.com/questions/26496538/extract-urls-with-regex-into-a-new-data-frame-column
@@ -90,7 +90,7 @@ vkPost <- function(...)
 #' @export
 get_stop_words <- function(stop_words = c()) {
   tm_stop_words <- c()
-  if (require("tm"))
+  if (requireNamespace("tm", quietly = TRUE))
       tm_stop_words <- tm::stopwords('russian')
   
   google_stop_words <- c()
@@ -108,8 +108,10 @@ get_stop_words <- function(stop_words = c()) {
 #' @param patterns List of user defined patterns
 #' @export
 clear_text <- function(lines, patterns = list()) {
-  if (!require("stringr")) stop("The package stringr was not installed")
-  lines <- stringr::str_replace_all(lines, "[ё]", "е")
+  if (!requireNamespace("stringr", quietly = TRUE))
+    stop("The package stringr was not installed")
+  
+  lines <- stringr::str_replace_all(lines, "[\u0451]", "\u0435")
   lines <- stringr::str_replace_all(lines, "[[:punct:]]", " ")
   lines <- stringr::str_replace_all(lines, "[[:digit:]]", " ")
   lines <- stringr::str_replace_all(lines, "http\\S+\\s*", " ")
