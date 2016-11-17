@@ -88,7 +88,7 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
 #' @param client_secret Application secret key
 #' @export
 vkOAuthWeb <- function(app_name, client_id, client_secret) {
-  if (!require("httpuv")) stop("The package httpuv was not installed")
+  if (!requireNamespace("httpuv", quietly = TRUE)) stop("The package httpuv was not installed")
   
   if (missing(app_name)) stop('argument "app_name" is missing, with no default')
   if (!is.character(app_name)) stop('argument "app_name" must be a string')
@@ -99,10 +99,10 @@ vkOAuthWeb <- function(app_name, client_id, client_secret) {
   
   accessURL <- "https://oauth.vk.com/access_token"
   authURL <- "https://oauth.vk.com/authorize"
-  vk <- oauth_endpoint(authorize = authURL,
+  vk <- httr::oauth_endpoint(authorize = authURL,
                        access = accessURL)
-  vk_app <- oauth_app(app_name, client_id, client_secret)
-  ig_oauth <- oauth2.0_token(vk,
+  vk_app <- httr::oauth_app(app_name, client_id, client_secret)
+  ig_oauth <- httr::oauth2.0_token(vk,
                              vk_app,
                              type = 'application/x-www-form-urlencoded',
                              cache = FALSE)
