@@ -1,7 +1,7 @@
 if (!exists(".vkr")) {
   .vkr <- new.env()
   .vkr$aceess_token <- NULL
-  .vkr$api_version <- '5.57'
+  .vkr$api_version <- '5.60'
   .vkr$me <- 0
   .vkr$last_request_time <- 0
   .vkr$num_requests <- 0
