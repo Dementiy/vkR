@@ -6,6 +6,9 @@
 \usage{
 try_handle_error(response)
 }
+\arguments{
+\item{response}{httr response object}
+}
 \description{
 Check response for errors
 }

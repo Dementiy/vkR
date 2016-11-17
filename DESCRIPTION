@@ -6,11 +6,22 @@ Date: 2015-02-26
 Author: Dmitriy Sorokin <dementiy@yandex.ru>
 Maintainer: Dmitriy Sorokin <dementiy@yandex.ru>
 Description: Provides an interface to the VK API
-Depends:
-    R (>= 3.0.0),
+Depends: 
+    R (>= 3.0.0)
+Imports:
     httr,
     jsonlite,
     XML
+Suggests:
+    stringr,
+    tm,
+    plyr,
+    dplyr,
+    reshape2,
+    jpeg,
+    igraph,
+    rgexf,
+    httpuv
 License: GPL-3
 RoxygenNote: 5.0.1
 Collate:

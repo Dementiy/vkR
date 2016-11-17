@@ -15,13 +15,15 @@ wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
 
 \item{query}{Search query string.}
 
-\item{owners_only}{1 – returns only page owner's posts.}
+\item{owners_only}{1 - returns only page owner's posts.}
 
 \item{count}{Count of posts to return.}
 
 \item{offset}{Results offset.}
 
 \item{extended}{Show extended post info.}
+
+\item{fields}{List of comma-separated words}
 
 \item{v}{Version of API}
 }

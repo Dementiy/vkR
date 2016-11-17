@@ -18,7 +18,7 @@ messagesGetHistory(offset = "", count = "", user_id = "", peer_id = "",
 
 \item{start_message_id}{Starting message ID from which to return history}
 
-\item{rev}{Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order}
+\item{rev}{Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order}
 
 \item{v}{Version of API}
 }

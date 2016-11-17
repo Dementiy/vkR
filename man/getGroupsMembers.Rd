@@ -18,7 +18,7 @@ getGroupsMembers(group_id = "", sort = "", offset = "", count = "",
 
 \item{fields}{List of additional fields to be returned}
 
-\item{filter}{friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)}
+\item{filter}{friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)}
 
 \item{v}{Version of API}
 }
@@ -27,7 +27,7 @@ Returns a list of community members
 }
 \examples{
 \dontrun{
-groups <- getGroupsMembers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+groups <- getGroupsMembers('1', fields='sex,bdate,city')
 }
 }
 

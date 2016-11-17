@@ -10,7 +10,7 @@ getGroupsForUsers(users, extended = "", filter = "", fields = "",
 \arguments{
 \item{users}{A list of users}
 
-\item{extended}{1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default)}
+\item{extended}{1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default)}
 
 \item{filter}{Types of communities to return: admin, editor, moder, groups, publics, events}
 

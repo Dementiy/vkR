@@ -18,16 +18,16 @@ getWall(owner_id = "", domain = "", offset = "", count = "",
 
 \item{filter}{Filter to apply:
 \itemize{
-\item \strong{owner} — posts by the wall owner;
-\item \strong{others} — posts by someone else;
-\item \strong{all} — posts by the wall owner and others (default);
-\item \strong{postponed} — timed posts (only available for calls with an access_token);
-\item \strong{suggests} — suggested posts on a community wall.
+\item \strong{owner} - posts by the wall owner;
+\item \strong{others} - posts by someone else;
+\item \strong{all} - posts by the wall owner and others (default);
+\item \strong{postponed} - timed posts (only available for calls with an access_token);
+\item \strong{suggests} - suggested posts on a community wall.
 }}
 
-\item{extended}{1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).}
+\item{extended}{1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).}
 
-\item{fields}{}
+\item{fields}{List of comma-separated words}
 
 \item{v}{Version of API
 getWall()}
@@ -36,9 +36,9 @@ getWall()}
 Returns a list of post objects.
 If extended is set to 1, also returns the following:
 \itemize{
-\item \strong{wall} — Contains a list of post objects.
-\item \strong{profiles} — Contains user objects with additional fields photo and online.
-\item \strong{groups} — Contains community objects.
+\item \strong{wall} - Contains a list of post objects.
+\item \strong{profiles} - Contains user objects with additional fields photo and online.
+\item \strong{groups} - Contains community objects.
 }
 }
 \description{

@@ -12,6 +12,10 @@ search.getHints(q = "", limit = "", filters = "", search_global = "",
 
 \item{limit}{Maximum number of results to return}
 
+\item{filters}{List of comma-separated words}
+
+\item{search_global}{Flag, either 1 or 0, default 1}
+
 \item{v}{Version of API}
 }
 \description{

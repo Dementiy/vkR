@@ -1,7 +1,7 @@
 #' Returns a list of the communities to which a user belongs
 #'
 #' @param user_id User ID
-#' @param extended 1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default) 
+#' @param extended 1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default) 
 #' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
 #' @param fields Profile fields to return
 #' @param offset Offset needed to return a specific subset of communities
@@ -9,7 +9,7 @@
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' groups <- getGroups('1', fields='city,country,place,description,wiki_page,members_count,counters,start_date,finish_date,can_post,can_see_all_posts,activity,status,contacts,links,fixed_post,verified,site,can_create_topic')
+#' groups <- getGroups('1', fields='city')
 #' }
 #' @export
 getGroups <- function(user_id='', extended='', filter='', fields='', offset='', count='', v=getAPIVersion()) {
@@ -33,11 +33,11 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
 #' @param offset Offset needed to return a specific subset of community members
 #' @param count Number of community members to return (maximum value 1000)
 #' @param fields List of additional fields to be returned
-#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
+#' @param filter friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' groups <- getGroupsMembers('1', fields='sex,bdate,city,country,photo_50,education,interests,music,movies,tv,books,games,about,quotes,personal')
+#' groups <- getGroupsMembers('1', fields='sex,bdate,city')
 #' }
 #' @export
 getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='', filter='', v=getAPIVersion()) {
@@ -59,7 +59,7 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' 
 #' @param group_id ID or screen name of the community
 #' @param fields List of additional fields to be returned
-#' @param filter friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)
+#' @param filter friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API
@@ -129,7 +129,7 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
 #' Returns a list of the communities for the specified users
 #' 
 #' @param users A list of users
-#' @param extended 1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default) 
+#' @param extended 1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default) 
 #' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
 #' @param fields Profile fields to return
 #' @param progress_bar Display progress bar

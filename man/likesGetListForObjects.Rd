@@ -11,13 +11,13 @@ likesGetListForObjects(objects, type = "post", filter = "likes",
 \arguments{
 \item{type}{Object type (post or comment; objects must contain fields owner_id and id)}
 
-\item{filter}{Filters to apply: likes — returns information about all users who liked the object (default); copies — returns information only about users who told their friends about the object}
+\item{filter}{Filters to apply: likes - returns information about all users who liked the object (default); copies - returns information only about users who told their friends about the object}
 
-\item{friends_only}{Specifies which users are returned: 1 — to return only the current user's friends; 0 — to return all users (default)}
+\item{friends_only}{Specifies which users are returned: 1 - to return only the current user's friends; 0 - to return all users (default)}
 
-\item{extended}{1 — Specifies whether extended information will be returned. 1 — to return extended information about users and communities from the Likes list; 0 — to return no additional information (default)}
+\item{extended}{Specifies whether extended information will be returned. 1 - to return extended information about users and communities from the Likes list; 0 - to return no additional information (default)}
 
-\item{skip_own}{- flag, either 1 or 0}
+\item{skip_own}{flag, either 1 or 0}
 
 \item{progress_bar}{Display progress bar}
 
@@ -27,8 +27,11 @@ likesGetListForObjects(objects, type = "post", filter = "likes",
 Returns a list of IDs of users who added the specified objects to their Likes list
 }
 \examples{
+\dontrun{
 wall <- getWallExecute(domain = 'privivkanet', count = 10, progress_bar = TRUE)
 post_likers <- likesGetListForObjects(wall, type = 'post', progress_bar = TRUE)
-post_likers_extended <- likesGetListForObjects(wall, type = 'post', extended = 1, progress_bar = TRUE)
+post_likers_extended <- likesGetListForObjects(wall, type = 'post', 
+   extended = 1, progress_bar = TRUE)
+}
 }
 

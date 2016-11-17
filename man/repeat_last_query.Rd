@@ -6,6 +6,11 @@
 \usage{
 repeat_last_query(params = list(), n = 1)
 }
+\arguments{
+\item{params}{Query params}
+
+\item{n}{The number of generations to go back}
+}
 \description{
 Repeat last function call
 }

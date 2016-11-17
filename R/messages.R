@@ -5,7 +5,7 @@
 #' @param user_id ID of the user whose message history you want to return
 #' @param peer_id 
 #' @param start_message_id Starting message ID from which to return history
-#' @param rev Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order
+#' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
 #' @param v Version of API
 #' @export
 messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', start_message_id='', rev='', v=getAPIVersion()) {
@@ -30,7 +30,7 @@ messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', star
 #' @param user_id ID of the user whose message history you want to return
 #' @param peer_id 
 #' @param start_message_id Starting message ID from which to return history
-#' @param rev Sort order: 1 — return messages in chronological order; 0 — return messages in reverse chronological order
+#' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
@@ -114,7 +114,9 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
 #' Returns all message history for the specified user or group chat
 #' 
 #' @param user_id ID of the user whose message history you want to return
-#' @param peer_id
+#' @param peer_id 
+#' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
+#' @param v Version of API
 #' @export
 messagesGetHistoryAll <- function(user_id='', peer_id='', rev=0, v=getAPIVersion()) {
   messagesGetHistoryExecute(user_id = user_id, peer_id = peer_id, rev = rev, count = 0, v = v)
@@ -123,11 +125,11 @@ messagesGetHistoryAll <- function(user_id='', peer_id='', rev=0, v=getAPIVersion
 
 #' Returns a list of the current user's incoming or outgoing private messages
 #' 
-#' @param out 1 — to return outgoing messages; 0 — to return incoming messages (default)
+#' @param out 1 - to return outgoing messages; 0 - to return incoming messages (default)
 #' @param offset Offset needed to return a specific subset of messages
 #' @param count Number of messages to return
 #' @param time_offset Maximum time since a message was sent, in seconds. To return messages without a time limitation, set as 0
-#' @param filters Filter to apply:  1 — unread only; 2 — not from the chat; 4 — messages from friends 
+#' @param filters Filter to apply: 1 - unread only; 2 - not from the chat; 4 - messages from friends 
 #' @param preview_length Number of characters after which to truncate a previewed message. To preview the full message, specify 0
 #' @param last_message_id ID of the message received before the message that will be returned last
 #' @param v Version of API

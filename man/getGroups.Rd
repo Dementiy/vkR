@@ -10,7 +10,7 @@ getGroups(user_id = "", extended = "", filter = "", fields = "",
 \arguments{
 \item{user_id}{User ID}
 
-\item{extended}{1 — to return complete information about a user's communities; 0 — to return a list of community IDs without any additional fields (default)}
+\item{extended}{1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default)}
 
 \item{filter}{Types of communities to return: admin, editor, moder, groups, publics, events}
 
@@ -27,7 +27,7 @@ Returns a list of the communities to which a user belongs
 }
 \examples{
 \dontrun{
-groups <- getGroups('1', fields='city,country,place,description,wiki_page,members_count,counters,start_date,finish_date,can_post,can_see_all_posts,activity,status,contacts,links,fixed_post,verified,site,can_create_topic')
+groups <- getGroups('1', fields='city')
 }
 }
 

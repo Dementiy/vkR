@@ -24,7 +24,8 @@ Returns data required to show the status of a users and/or communities
 status.me <- getStatus()
 status.friends <- getStatus(users_ids = getFriends()$items)
 status.groups  <- getStatus(groups_ids = getGroups()$items)
-status.friends_and_groups <- getStatus(users_ids = getFriends()$items, groups_ids = getGroups()$items, progress_bar = T)
+status.friends_and_groups <- getStatus(users_ids = getFriends()$items, 
+ groups_ids = getGroups()$items, progress_bar = T)
 }
 }
 

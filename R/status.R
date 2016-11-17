@@ -9,7 +9,8 @@
 #' status.me <- getStatus()
 #' status.friends <- getStatus(users_ids = getFriends()$items)
 #' status.groups  <- getStatus(groups_ids = getGroups()$items)
-#' status.friends_and_groups <- getStatus(users_ids = getFriends()$items, groups_ids = getGroups()$items, progress_bar = T)
+#' status.friends_and_groups <- getStatus(users_ids = getFriends()$items, 
+#'  groups_ids = getGroups()$items, progress_bar = T)
 #' }
 #' @export
 getStatus <- function(users_ids=c(), groups_ids=c(), progress_bar=FALSE, v=getAPIVersion()) {

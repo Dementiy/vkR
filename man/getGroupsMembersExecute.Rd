@@ -12,7 +12,7 @@ getGroupsMembersExecute(group_id = "", fields = "", filter = "",
 
 \item{fields}{List of additional fields to be returned}
 
-\item{filter}{friends – only friends in this community will be returned; unsure – only those who pressed 'I may attend' will be returned (if it's an event)}
+\item{filter}{friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
 

@@ -17,7 +17,7 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
 \arguments{
 \item{q}{Search query string (e.g., Vasya Babich)}
 
-\item{sort}{Sort order: 1 — by date registered; 0 — by rating}
+\item{sort}{Sort order: 1 - by date registered; 0 - by rating}
 
 \item{offset}{Offset needed to return a specific subset of users}
 
@@ -41,9 +41,9 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
 
 \item{university_chair}{Chair ID}
 
-\item{sex}{1 — female; 2 — male; 0 — any (default)}
+\item{sex}{1 - female; 2 - male; 0 - any (default)}
 
-\item{status}{Relationship status: 1 — Not married; 2 — In a relationship; 3 — Engaged; 4 — Married; 5 — It's complicated; 6 — Actively searching; 7 — In love}
+\item{status}{Relationship status: 1 - Not married; 2 - In a relationship; 3 - Engaged; 4 - Married; 5 - It's complicated; 6 - Actively searching; 7 - In love}
 
 \item{age_from}{Minimum age}
 
@@ -55,13 +55,15 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
 
 \item{birth_year}{Year of birth}
 
-\item{online}{1 — online only; 0 — all users}
+\item{online}{1 - online only; 0 - all users}
 
-\item{has_photo}{1 — with photo only; 0 — all users}
+\item{has_photo}{1 - with photo only; 0 - all users}
 
 \item{school_country}{ID of the country where users finished school}
 
 \item{school_city}{ID of the city where users finished school}
+
+\item{school_class}{Positive number}
 
 \item{school}{ID of the school}
 

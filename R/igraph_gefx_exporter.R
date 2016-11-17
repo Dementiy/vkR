@@ -5,8 +5,10 @@
 #' @author Gopalakrishna Palem, \email{Gopalakrishna.Palem@@Yahoo.com}
 #' @export
 saveAsGEXF <- function(g, filepath="converted_graph.gexf") {
-  require(igraph)
-  require(rgexf)
+  if (!requireNamespace("igraph", quietly = TRUE))
+    stop("The package igraph was not installed")
+  if (!requireNamespace("rgexf", quietly = TRUE))
+    stop("The package rgexf was not installed")
   
   # gexf nodes require two column data frame (id, label)
   # check if the input vertices has label already present

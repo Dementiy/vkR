@@ -9,7 +9,7 @@ messagesGet(out = "", offset = "", count = "", time_offset = "",
   v = getAPIVersion())
 }
 \arguments{
-\item{out}{1 — to return outgoing messages; 0 — to return incoming messages (default)}
+\item{out}{1 - to return outgoing messages; 0 - to return incoming messages (default)}
 
 \item{offset}{Offset needed to return a specific subset of messages}
 
@@ -17,7 +17,7 @@ messagesGet(out = "", offset = "", count = "", time_offset = "",
 
 \item{time_offset}{Maximum time since a message was sent, in seconds. To return messages without a time limitation, set as 0}
 
-\item{filters}{Filter to apply:  1 — unread only; 2 — not from the chat; 4 — messages from friends}
+\item{filters}{Filter to apply: 1 - unread only; 2 - not from the chat; 4 - messages from friends}
 
 \item{preview_length}{Number of characters after which to truncate a previewed message. To preview the full message, specify 0}
 

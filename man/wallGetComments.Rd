@@ -13,13 +13,15 @@ wallGetComments(owner_id = "", post_id = "", need_likes = "",
 
 \item{post_id}{Post ID.}
 
-\item{need_likes}{1 — to return the likes field, 0 — not to return the likes field (default).}
+\item{need_likes}{1 - to return the likes field, 0 - not to return the likes field (default).}
+
+\item{start_comment_id}{Positive number.}
 
 \item{offset}{Offset needed to return a specific subset of comments.}
 
 \item{count}{Number of comments to return (maximum 100).}
 
-\item{sort}{Sort order: asc — chronological, desc — reverse chronological.}
+\item{sort}{Sort order: asc - chronological, desc - reverse chronological.}
 
 \item{preview_length}{Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.}
 

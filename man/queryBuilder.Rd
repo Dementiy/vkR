@@ -8,6 +8,8 @@ queryBuilder(method_name, ...)
 }
 \arguments{
 \item{method_name}{Method name}
+
+\item{...}{Method arguments}
 }
 \description{
 Returns a query string

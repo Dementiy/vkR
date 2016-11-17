@@ -87,7 +87,7 @@ databaseGetCountriesById <- function(country_ids, v=getAPIVersion()) {
 #' @param country_id Country ID
 #' @param region_id Region ID
 #' @param q Search query
-#' @param need_all 1 – to return all cities in the country; 0 – to return major cities in the country (default)
+#' @param need_all 1 - to return all cities in the country; 0 - to return major cities in the country (default)
 #' @param offset Offset needed to return a specific subset of cities
 #' @param count Number of cities to return
 #' @param v Version of API

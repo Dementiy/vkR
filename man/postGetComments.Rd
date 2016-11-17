@@ -14,13 +14,15 @@ postGetComments(owner_id = "", post_id = "", need_likes = 1,
 
 \item{post_id}{Post ID.}
 
-\item{need_likes}{1 — to return the likes field (default), 0 — not to return the likes field.}
+\item{need_likes}{1 - to return the likes field (default), 0 - not to return the likes field.}
+
+\item{start_comment_id}{Positive number}
 
 \item{offset}{Offset needed to return a specific subset of comments.}
 
 \item{count}{Number of comments to return.}
 
-\item{sort}{Sort order: asc — chronological, desc — reverse chronological.}
+\item{sort}{Sort order: asc - chronological, desc - reverse chronological.}
 
 \item{preview_length}{Number of characters at which to truncate comments when previewed. Specify 0 (default) if you do not want to truncate comments.}
 

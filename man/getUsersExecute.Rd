@@ -33,7 +33,7 @@ Returns detailed information on arbitrary number of users
   \item \strong{hidden: 1} Returns while operating without access_token if a user has set the "Who can see my profile on the Internet" -> "Only VK users" privacy setting. Keep in mind that in this case no additional fields are returned
   \item \strong{verified} Returns 1 if the profile is verified, 0 if not
   \item \strong{blacklisted} Returns 1 if a current user is in the requested user's blacklist
-  \item \strong{sex} User sex (1 — female; 2 — male; 0 — not specified)
+  \item \strong{sex} User sex (1 - female; 2 - male; 0 - not specified)
   \item \strong{bdate} User's date of birth.  Returned as DD.MM.YYYY or DD.MM (if birth year is hidden). If the whole date is hidden, no field is returned
   \item \strong{city} ID of the city specified on user's page in "Contacts" section.  Returns city ID that can be used to get its name using places.getCityById method. If no city is specified or main information on the page is hidden for in privacy settings, then it returns 0
   \item \strong{country} ID of the country specified on user's page in "Contacts" section.  Returns country ID that can be used to get its name using places.getCountryById method. If no country is specified or main information on the page is hidden in privacy settings, then it returns 0
@@ -45,11 +45,11 @@ Returns detailed information on arbitrary number of users
   \item \strong{photo_400_orig} Returns URL of user's photo with 400 pixels in width.  If user does not have a photo of such size, reply will not include this field
   \item \strong{photo_max} Returns URL of square photo of the user with maximum width. Can be returned a photo both 200 and 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
   \item \strong{photo_max_orig} Returns URL of user's photo of maximum size. Can be returned a photo both 400 and 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
-  \item \strong{online} Information whether the user is online.  Returned values: 1 — online, 0 — offline.  If user utilizes a mobile application or site mobile version, it returns online_mobile additional field that includes 1. With that, in case of application, online_app additional field is returned with application ID.
-  \item \strong{lists} Information about friend lists.  Returns IDs of friend lists the user is member of, separated with a comma. The field is available for friends.get method only. To get information about ID and names of friend lists use friends.getLists method. If user is not a member of any friend list, then when accepting data in XML format the respective <user> node does not contain <lists> tag
+  \item \strong{online} Information whether the user is online.  Returned values: 1 - online, 0 - offline.  If user utilizes a mobile application or site mobile version, it returns online_mobile additional field that includes 1. With that, in case of application, online_app additional field is returned with application ID.
+  \item \strong{lists} Information about friend lists. Returns IDs of friend lists the user is member of, separated with a comma. The field is available for friends.get method only. To get information about ID and names of friend lists use friends.getLists method. If user is not a member of any friend list, then when accepting data in XML format the respective <user> node does not contain <lists> tag
   \item \strong{domain} Page screen name.  Returns a string with a page screen name (only subdomain is returned, like andrew). If not set, "id'+uid is returned, e.g. id35828305
-  \item \strong{has_mobile} Information whether the user's mobile phone number is available.  Returned values: 1 — available, 0 — not available.  We recommend you to use it prior to call of secure.sendSMSNotification method
-  \item \strong{contacts} Information about user's phone numbers.  If data are available and not hidden in privacy settings, the following fields are returned (mobile_phone — user's mobile phone number (only for standalone applications); home_phone — user's additional phone number)
+  \item \strong{has_mobile} Information whether the user's mobile phone number is available.  Returned values: 1 - available, 0 - not available.  We recommend you to use it prior to call of secure.sendSMSNotification method
+  \item \strong{contacts} Information about user's phone numbers.  If data are available and not hidden in privacy settings, the following fields are returned (mobile_phone - user's mobile phone number (only for standalone applications); home_phone - user's additional phone number)
   \item \strong{site} Returns a website address from a user profile
   \item \strong{education} Information about user's higher education institution. The following fields are returned:
   \itemize{
@@ -115,7 +115,7 @@ Returns detailed information on arbitrary number of users
     \item \strong{name} Name of school, university or work place
   }
   \item \strong{nickname} User nickname
-  \item \strong{relatives} Current user's relatives list. Returns a list of objects with id and type fields (name instead of id if a relative is not a VK user). type – relationship type. Possible values:
+  \item \strong{relatives} Current user's relatives list. Returns a list of objects with id and type fields (name instead of id if a relative is not a VK user). type - relationship type. Possible values:
   \itemize{
     \item \emph{sibling}
     \item \emph{parent}
@@ -137,45 +137,45 @@ Returns detailed information on arbitrary number of users
   \itemize{
     \item \strong{political} Political views:
     \itemize{
-      \item{1} – Communist
-      \item{2} – Socialist
-      \item{3} – Moderate
-      \item{4} – Liberal
-      \item{5} – Conservative
-      \item{6} – Monarchist
-      \item{7} – Ultraconservative
-      \item{8} – Apathetic
-      \item{9} – Libertian
+      \item{1} - Communist
+      \item{2} - Socialist
+      \item{3} - Moderate
+      \item{4} - Liberal
+      \item{5} - Conservative
+      \item{6} - Monarchist
+      \item{7} - Ultraconservative
+      \item{8} - Apathetic
+      \item{9} - Libertian
     }
     \item \strong{langs} Languages
     \item \strong{religion} World view
     \item \strong{inspired_by} Inspired by
     \item \strong{people_main} Improtant in others:
     \itemize{
-      \item{1} – Intellect and creativity
-      \item{2} – Kindness and honesty
-      \item{3} – Health and beauty
-      \item{4} – Wealth and power
-      \item{5} – Courage and persistance
-      \item{6} – Humor and love for life
+      \item{1} - Intellect and creativity
+      \item{2} - Kindness and honesty
+      \item{3} - Health and beauty
+      \item{4} - Wealth and power
+      \item{5} - Courage and persistance
+      \item{6} - Humor and love for life
     }
     \item \strong{life_main} Personal priority:
     \itemize{
-      \item{1} – Family and children
-      \item{2} – Career and money
-      \item{3} – Entertainment and leisure
-      \item{4} – Science and research
-      \item{5} – Improving the world
-      \item{6} – Personal development
-      \item{7} – Beauty and art
-      \item{8} – Fame and influence
+      \item{1} - Family and children
+      \item{2} - Career and money
+      \item{3} - Entertainment and leisure
+      \item{4} - Science and research
+      \item{5} - Improving the world
+      \item{6} - Personal development
+      \item{7} - Beauty and art
+      \item{8} - Fame and influence
     }
-    \item \strong{smoking} Views on smoking (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
-    \item \strong{alcohol} Views on alcohol (1 – very negative; 2 – negative; 3 – neutral; 4 – compromisable; 5 – positive)
+    \item \strong{smoking} Views on smoking (1 - very negative; 2 - negative; 3 - neutral; 4 - compromisable; 5 - positive)
+    \item \strong{alcohol} Views on alcohol (1 - very negative; 2 - negative; 3 - neutral; 4 - compromisable; 5 - positive)
   }
   \item \strong{connections} Returns specified services such as: skype, facebook, twitter, livejournal, instagram
   \item \strong{exports} External services with export configured (twitter, facebook, livejournal, instagram)
-  \item \strong{wall_comments} Wall comments allowed(1 — allowed, 0 — not allowed)
+  \item \strong{wall_comments} Wall comments allowed(1 - allowed, 0 - not allowed)
   \item \strong{activities} Activities
   \item \strong{interests} Interests
   \item \strong{music} Favorite music
@@ -185,17 +185,18 @@ Returns detailed information on arbitrary number of users
   \item \strong{games} Favorite games
   \item \strong{about} "About me"
   \item \strong{quotes} Favorite quotes
-  \item \strong{can_post} Can post on the wall: 1 – allowed, 0 — not allowed
-  \item \strong{can_see_all_posts} Can see other users' posts on the wall: 1 – allowed, 0 – not allowed
-  \item \strong{can_see_audio} Can see other users' audio on the wall: 1 – allowed, 0 – not allowed
-  \item \strong{can_write_private_message} Can write private messages to a current user: 1 – allowed, 0 – not allowed
+  \item \strong{can_post} Can post on the wall: 1 - allowed, 0 - not allowed
+  \item \strong{can_see_all_posts} Can see other users' posts on the wall: 1 - allowed, 0 - not allowed
+  \item \strong{can_see_audio} Can see other users' audio on the wall: 1 - allowed, 0 - not allowed
+  \item \strong{can_write_private_message} Can write private messages to a current user: 1 - allowed, 0 - not allowed
   \item \strong{timezone} user time zone. Retuns only while requesting current user info
   \item \strong{screen_name} User page's screen name (subdomain)
 }
 }
 \examples{
 \dontrun{
-users <- getUsersExecute(sample(x=seq(1:10000000), size=10000, replace=FALSE), fields='sex,bdate,city')
+random_ids <- sample(x=seq(1:10000000), size=10000, replace=FALSE)
+users <- getUsersExecute(random_ids, fields='sex,bdate,city')
 }
 }
 

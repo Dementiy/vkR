@@ -14,9 +14,4 @@ getFriendsBy25(user_ids, v = getAPIVersion())
 \description{
 Returns a list of friends IDs for the specified users
 }
-\examples{
-\dontrun{
-friends <- getFriendsFor(sample(x=seq(1:10000000), size=25, replace=FALSE)) \%>\% getUsersExecute()
-}
-}
 

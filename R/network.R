@@ -32,15 +32,15 @@ getNetwork <- function(users_ids='') {
 #' @param format Either "edgelist" for a list of edges or "adjmatrix" for an adjacency matrix
 #' @export
 getArbitraryNetwork <- function(users_ids, format='edgelist') {
-  if (!require("reshape2")) stop("The package reshape2 was not installed")
-  if (!require("dplyr")) stop("The package dplyr was not installed")
+  if (!requireNamespace("reshape2", quietly = TRUE)) stop("The package reshape2 was not installed")
+  if (!requireNamespace("dplyr", quietly = TRUE)) stop("The package dplyr was not installed")
   
   users_lists <- getFriendsFor(users_ids)
   users_lists <- users_lists[!sapply(users_lists, is.null)]
   users_lists <- users_lists[!!sapply(users_lists, length)]
   edge_list <- reshape2::melt(users_lists)
   colnames(edge_list) <- c("from", "to")
-  edge_list <- edge_list %>% filter(from %in% users_ids & to %in% users_ids)
+  edge_list <- dplyr::filter(edge_list, from %in% users_ids & to %in% users_ids)
   edge_list$from <- as.character(edge_list$from)
   edge_list$to <- as.character(edge_list$to)
   

@@ -6,22 +6,22 @@
 #' @param count Number of posts to return (maximum 100).
 #' @param filter Filter to apply:
 #' \itemize{
-#' \item \strong{owner} — posts by the wall owner;
-#' \item \strong{others} — posts by someone else;
-#' \item \strong{all} — posts by the wall owner and others (default);
-#' \item \strong{postponed} — timed posts (only available for calls with an access_token);
-#' \item \strong{suggests} — suggested posts on a community wall.
+#' \item \strong{owner} - posts by the wall owner;
+#' \item \strong{others} - posts by someone else;
+#' \item \strong{all} - posts by the wall owner and others (default);
+#' \item \strong{postponed} - timed posts (only available for calls with an access_token);
+#' \item \strong{suggests} - suggested posts on a community wall.
 #' }
-#' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
-#' @param fields 
+#' @param extended 1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).
+#' @param fields List of comma-separated words
 #' @param v Version of API
 #' getWall()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
 #' \itemize{
-#' \item \strong{wall} — Contains a list of post objects.
-#' \item \strong{profiles} — Contains user objects with additional fields photo and online.
-#' \item \strong{groups} — Contains community objects.
+#' \item \strong{wall} - Contains a list of post objects.
+#' \item \strong{profiles} - Contains user objects with additional fields photo and online.
+#' \item \strong{groups} - Contains community objects.
 #' }
 #' @export
 getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', fields='', v=getAPIVersion()) {
@@ -49,23 +49,23 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @param count Number of posts to return (0 for all posts).
 #' @param filter Filter to apply:
 #' \itemize{
-#' \item \strong{owner} — posts by the wall owner;
-#' \item \strong{others} — posts by someone else;
-#' \item \strong{all} — posts by the wall owner and others (default);
-#' \item \strong{postponed} — timed posts (only available for calls with an access_token);
-#' \item \strong{suggests} — suggested posts on a community wall.
+#' \item \strong{owner} - posts by the wall owner;
+#' \item \strong{others} - posts by someone else;
+#' \item \strong{all} - posts by the wall owner and others (default);
+#' \item \strong{postponed} - timed posts (only available for calls with an access_token);
+#' \item \strong{suggests} - suggested posts on a community wall.
 #' }
-#' @param extended 1 — to return wall, profiles, and groups fields, 0 — to return no additional fields (default).
-#' @param fields 
+#' @param extended 1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).
+#' @param fields List of comma-separated words
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' getWallExecute()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
 #' \itemize{
-#' \item \strong{wall} — Contains a list of post objects.
-#' \item \strong{profiles} — Contains user objects with additional fields photo and online.
-#' \item \strong{groups} — Contains community objects.
+#' \item \strong{wall} - Contains a list of post objects.
+#' \item \strong{profiles} - Contains user objects with additional fields photo and online.
+#' \item \strong{groups} - Contains community objects.
 #' }
 #' @export
 getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
@@ -169,11 +169,11 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
 #' @param owner_id User or community id. Remember that for a community owner_id must be negative.
 #' @param domain User or community screen name.
 #' @param query Search query string.
-#' @param owners_only 1 – returns only page owner's posts.
+#' @param owners_only 1 - returns only page owner's posts.
 #' @param count Count of posts to return.
 #' @param offset Results offset.
 #' @param extended Show extended post info.
-#' @param fields
+#' @param fields List of comma-separated words
 #' @param v Version of API
 #' @return If executed successfully, returns a list of post objects.
 #' @export
@@ -197,16 +197,16 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
 #' Returns a list of posts from user or community walls by their IDs
 #' 
 #' @param posts User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.
-#' @param extended 1 — to return user and community objects needed to display posts, 0 — no additional fields are returned (default).
+#' @param extended 1 - to return user and community objects needed to display posts, 0 - no additional fields are returned (default).
 #' @param copy_history_depth Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.
-#' @param fields
+#' @param fields List of comma-separated words
 #' @param v Version of API
 #' @return Returns a list of post objects. 
 #' If extended is set to 1, returns the following:
 #' \itemize{
-#' \item \strong{wall} — Contains post objects.
-#' \item \strong{profiles} — Contains user objects with additional fields sex, photo, photo_medium_rec, and online.
-#' \item \strong{groups} — Contains community objects.
+#' \item \strong{wall} - Contains post objects.
+#' \item \strong{profiles} - Contains user objects with additional fields sex, photo, photo_medium_rec, and online.
+#' \item \strong{groups} - Contains community objects.
 #' }
 #' If the post is a copy of another post, returns an additional array copy_history with information about original posts.
 #' @export
@@ -233,9 +233,9 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
 #' @return
 #' Returns an object containing the following fields:
 #' \itemize{
-#' \item \strong{items} — An array of wall reposts.
-#' \item \strong{profiles} — Information about users with additional fields sex, online, photo, photo_medium_rec, and screen_name.
-#' \item \strong{groups} — Information about communities.
+#' \item \strong{items} - An array of wall reposts.
+#' \item \strong{profiles} - Information about users with additional fields sex, online, photo, photo_medium_rec, and screen_name.
+#' \item \strong{groups} - Information about communities.
 #' }
 #' @export
 wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=getAPIVersion()) {
@@ -255,10 +255,11 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
 #' 
 #' @param owner_id User ID or community ID. Use a negative value to designate a community ID.
 #' @param post_id Post ID.
-#' @param need_likes 1 — to return the likes field, 0 — not to return the likes field (default).
+#' @param need_likes 1 - to return the likes field, 0 - not to return the likes field (default).
+#' @param start_comment_id Positive number.
 #' @param offset Offset needed to return a specific subset of comments.
 #' @param count Number of comments to return (maximum 100).
-#' @param sort Sort order: asc — chronological, desc — reverse chronological. 
+#' @param sort Sort order: asc - chronological, desc - reverse chronological. 
 #' @param preview_length Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
 #' @param v Version of API
@@ -285,10 +286,11 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
 #' 
 #' @param owner_id User ID or community ID. Use a negative value to designate a community ID.
 #' @param post_id Post ID.
-#' @param need_likes 1 — to return the likes field (default), 0 — not to return the likes field.
+#' @param need_likes 1 - to return the likes field (default), 0 - not to return the likes field.
+#' @param start_comment_id Positive number
 #' @param offset Offset needed to return a specific subset of comments.
 #' @param count Number of comments to return.
-#' @param sort Sort order: asc — chronological, desc — reverse chronological. 
+#' @param sort Sort order: asc - chronological, desc - reverse chronological. 
 #' @param preview_length Number of characters at which to truncate comments when previewed. Specify 0 (default) if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
 #' @param progress_bar Display progress bar

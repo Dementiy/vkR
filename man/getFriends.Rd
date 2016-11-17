@@ -11,7 +11,7 @@ getFriends(user_id = "", order = "", list_id = "", count = "",
 \arguments{
 \item{user_id}{User ID. By default, the current user ID}
 
-\item{order}{Sort order (name — by name, hints — by rating)}
+\item{order}{Sort order (name - by name, hints - by rating)}
 
 \item{list_id}{ID of the friend list returned by the friends.getLists method to be used as the source. This parameter is taken into account only when the uid parameter is set to the current user ID}
 

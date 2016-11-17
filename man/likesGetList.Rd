@@ -17,15 +17,17 @@ likesGetList(type = "", owner_id = "", item_id = "", page_url = "",
 
 \item{page_url}{URL of the page where the Like widget is installed. Used instead of the item_id parameter}
 
-\item{filter}{Filters to apply: likes — returns information about all users who liked the object (default); copies — returns information only about users who told their friends about the object}
+\item{filter}{Filters to apply: likes - returns information about all users who liked the object (default); copies - returns information only about users who told their friends about the object}
 
-\item{friends_only}{Specifies which users are returned: 1 — to return only the current user's friends; 0 — to return all users (default)}
+\item{friends_only}{Specifies which users are returned: 1 - to return only the current user's friends; 0 - to return all users (default)}
 
-\item{extended}{1 — Specifies whether extended information will be returned. 1 — to return extended information about users and communities from the Likes list; 0 — to return no additional information (default)}
+\item{extended}{Specifies whether extended information will be returned. 1 - to return extended information about users and communities from the Likes list; 0 - to return no additional information (default)}
 
 \item{offset}{Offset needed to select a specific subset of users}
 
 \item{count}{Number of user IDs to return (maximum 1000)}
+
+\item{skip_own}{Flag, either 1 or 0}
 
 \item{v}{Version of API}
 }

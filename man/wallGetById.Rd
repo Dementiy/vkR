@@ -10,9 +10,11 @@ wallGetById(posts = "", extended = "", copy_history_depth = "",
 \arguments{
 \item{posts}{User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.}
 
-\item{extended}{1 — to return user and community objects needed to display posts, 0 — no additional fields are returned (default).}
+\item{extended}{1 - to return user and community objects needed to display posts, 0 - no additional fields are returned (default).}
 
 \item{copy_history_depth}{Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.}
+
+\item{fields}{List of comma-separated words}
 
 \item{v}{Version of API}
 }
@@ -20,9 +22,9 @@ wallGetById(posts = "", extended = "", copy_history_depth = "",
 Returns a list of post objects. 
 If extended is set to 1, returns the following:
 \itemize{
-\item \strong{wall} — Contains post objects.
-\item \strong{profiles} — Contains user objects with additional fields sex, photo, photo_medium_rec, and online.
-\item \strong{groups} — Contains community objects.
+\item \strong{wall} - Contains post objects.
+\item \strong{profiles} - Contains user objects with additional fields sex, photo, photo_medium_rec, and online.
+\item \strong{groups} - Contains community objects.
 }
 If the post is a copy of another post, returns an additional array copy_history with information about original posts.
 }

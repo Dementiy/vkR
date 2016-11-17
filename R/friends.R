@@ -1,7 +1,7 @@
 #' Returns a list of user IDs or detailed information about a user's friends
 #'
 #' @param user_id User ID. By default, the current user ID
-#' @param order Sort order (name — by name, hints — by rating)
+#' @param order Sort order (name - by name, hints - by rating)
 #' @param list_id ID of the friend list returned by the friends.getLists method to be used as the source. This parameter is taken into account only when the uid parameter is set to the current user ID
 #' @param count Number of friends to return
 #' @param offset Offset needed to return a specific subset of friends
@@ -88,11 +88,6 @@ areFriends <- function(source_id, target_id)
 #' 
 #' @param user_ids User IDs
 #' @param v Version of API
-#' @examples
-#' \dontrun{
-#' friends <- getFriendsFor(sample(x=seq(1:10000000), size=25, replace=FALSE)) %>% getUsersExecute()
-#' }
-#' @export
 #' @export
 getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   user_ids <- na.omit(user_ids)
@@ -116,7 +111,8 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' friends <- getFriendsFor(sample(x=seq(1:10000000), size=100, replace=FALSE)) %>% getUsersExecute()
+#' friends <- getFriendsFor(sample(x=seq(1:10000000), size=100, replace=FALSE))
+#' users <- getUsersExecute(friends, fields = 'sex')
 #' }
 #' @export
 getFriendsFor <- function(users_ids, v=getAPIVersion()) {

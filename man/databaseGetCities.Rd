@@ -14,7 +14,7 @@ databaseGetCities(country_id = "", region_id = "", q = "",
 
 \item{q}{Search query}
 
-\item{need_all}{1 – to return all cities in the country; 0 – to return major cities in the country (default)}
+\item{need_all}{1 - to return all cities in the country; 0 - to return major cities in the country (default)}
 
 \item{offset}{Offset needed to return a specific subset of cities}
 

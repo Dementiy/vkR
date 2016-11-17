@@ -1,8 +1,8 @@
 #' Allows the programmer to do a quick search for any substring
 #' @param q Search query string
 #' @param limit Maximum number of results to return
-#' @param filters
-#' @param search_global
+#' @param filters List of comma-separated words
+#' @param search_global Flag, either 1 or 0, default 1
 #' @param v Version of API
 #' @export
 search.getHints <- function(q='', limit='', filters='', search_global='', v=getAPIVersion()) {
