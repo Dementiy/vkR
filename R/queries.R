@@ -35,7 +35,7 @@ try_handle_error <- function(response) {
       return(NULL)
   
   handle_captcha <- function(error) {
-    if (!require("jpeq")) stop("The package jpeg was not installed")
+    if (!require("jpeg")) stop("The package jpeg was not installed")
     download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
     captcha_img <- readJPEG("captcha.jpg", native = TRUE)
     plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
