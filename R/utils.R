@@ -91,7 +91,7 @@ vkPost <- function(...)
 get_stop_words <- function(stop_words = c()) {
   tm_stop_words <- c()
   if (require("tm"))
-      tm_stop_words <- stopwords('russian')
+      tm_stop_words <- tm::stopwords('russian')
   
   google_stop_words <- c()
   filename <- system.file("extdata", "stop_words_russian.txt", package = 'vkR')
@@ -109,23 +109,23 @@ get_stop_words <- function(stop_words = c()) {
 #' @export
 clear_text <- function(lines, patterns = list()) {
   if (!require("stringr")) stop("The package stringr was not installed")
-  lines <- str_replace_all(lines, "[ё]", "е")
-  lines <- str_replace_all(lines, "[[:punct:]]", " ")
-  lines <- str_replace_all(lines, "[[:digit:]]", " ")
-  lines <- str_replace_all(lines, "http\\S+\\s*", " ")
-  lines <- str_replace_all(lines, "[a-zA-Z]", " ")
+  lines <- stringr::str_replace_all(lines, "[ё]", "е")
+  lines <- stringr::str_replace_all(lines, "[[:punct:]]", " ")
+  lines <- stringr::str_replace_all(lines, "[[:digit:]]", " ")
+  lines <- stringr::str_replace_all(lines, "http\\S+\\s*", " ")
+  lines <- stringr::str_replace_all(lines, "[a-zA-Z]", " ")
   
   if (is.list(patterns) & length(patterns)) {
     for (pattern in patterns) {
       if (length(pattern) > 1)
-        lines <- str_replace_all(lines, pattern[1], pattern[2])
+        lines <- stringr::str_replace_all(lines, pattern[1], pattern[2])
       else
-        lines <- str_replace_all(lines, pattern, " ")
+        lines <- stringr::str_replace_all(lines, pattern, " ")
     }
   }
   
-  lines <- str_replace_all(lines, "\\s+", " ")
+  lines <- stringr::str_replace_all(lines, "\\s+", " ")
   lines <- tolower(lines)
-  lines <- str_trim(lines, side = "both")
+  lines <- stringr::str_trim(lines, side = "both")
   lines
 }
