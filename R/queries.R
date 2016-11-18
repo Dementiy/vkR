@@ -78,7 +78,9 @@ try_handle_error <- function(response) {
   } else if (has_error(response) == 13) {
     warning(response$error$error_msg)
   } else {
-    stop(response$error$error_msg)
+    stop(sprintf("VK API request failed\nVK error message [%s]: %s",
+                 response$error$error_code,
+                 response$error$error_msg), call. = FALSE)
   }
 }
 
