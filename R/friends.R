@@ -27,6 +27,10 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response <- response$response
   
   if (isTRUE(flatten))
@@ -67,6 +71,9 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
   request_delay()
   response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
                                                       body = body)$content))
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 

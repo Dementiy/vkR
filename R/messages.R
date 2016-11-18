@@ -19,6 +19,10 @@ messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', star
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -146,6 +150,10 @@ messagesGet <- function(out='', offset='', count='', time_offset='', filters='',
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 

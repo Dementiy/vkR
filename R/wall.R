@@ -37,6 +37,10 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -190,6 +194,10 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -219,6 +227,10 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -247,6 +259,10 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -278,6 +294,10 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 

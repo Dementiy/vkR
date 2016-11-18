@@ -192,6 +192,10 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
   request_delay()
   response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
                                                       body = body)$content))
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response <- response$response
   
   if (isTRUE(flatten))
@@ -711,6 +715,10 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
   )
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response <- response$response
   
   if (isTRUE(flatten) && response$count > 0)

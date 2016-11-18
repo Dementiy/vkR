@@ -14,5 +14,9 @@ search.getHints <- function(q='', limit='', filters='', search_global='', v=getA
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(URLencode(query))
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }

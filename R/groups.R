@@ -23,6 +23,10 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
@@ -51,6 +55,10 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
+  
+  if (has_error(response))
+    return(try_handle_error(response))
+  
   response$response
 }
 
