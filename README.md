@@ -32,9 +32,9 @@ setAccessToken(access_token = 'YOUR ACCESS TOKEN')
 Building a Friend Graph:
 
 ``` r
-my_friends <- getFriends()
-my_friends <- my_friends$items
-network <- getNetwork(my_friends)
+my_friends <- getFriends(fields = 'sex')
+my_friends <- filter(my_friends$items, is.na(deactivated))
+network <- getNetwork(my_friends$id)
 
 library("igraph")
 g <- graph.adjacency(as.matrix(network), weighted = T, mode = "undirected")
