@@ -6,8 +6,10 @@ if (!exists(".vkr")) {
   .vkr$last_request_time <- 0
   .vkr$num_requests <- 0
   .vkr$max_requests <- 3
-  .vkr$dbs <- list()
-  .vkr$active_db <- NULL
+  .vkr$db_active <- NULL
+  .vkr$db_name <- 'vkR_projects'
+  .vkr$db_meta_name <- 'meta_collection'
+  .vkr$db_metadata <- NULL
 }
 
 
