@@ -409,7 +409,7 @@ getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE
     execute(code)
   }
   
-  if (is.character(users_ids) && nchar(users_ids) == 0) {
+  if (missing(users_ids)) {
     code <- paste0('return API.users.get({"fields":"', fields, '", "name_case":"', name_case, '", "v":"', v, '"});')
     response <- execute(code)
     if (isTRUE(flatten))
