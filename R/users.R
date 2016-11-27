@@ -598,6 +598,7 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
     execute(code)
   }
   
+  user_id <- as.integer(user_id)
   code <- paste0('return API.users.getSubscriptions({"user_id":"', user_id, '", 
                  "extended":"', 1, '",
                  "offset":"', offset, '",
