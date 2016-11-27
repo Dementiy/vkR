@@ -498,6 +498,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     execute(code)
   }
   
+  user_id <- as.integer(user_id)
   code <- paste0('return API.users.getFollowers({"user_id":"', user_id, '", 
                  "offset":"', offset, '",
                  "count":"', 1, '",
