@@ -454,6 +454,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
   if (isTRUE(drop) && "deactivated" %in% colnames(all_users)) {
     all_users <- subset(all_users, is.na(deactivated))
     all_users$deactivated <- NULL
+    rownames(all_users) <- NULL
   }
   
   if (isTRUE(flatten))
