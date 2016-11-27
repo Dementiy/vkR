@@ -4,8 +4,8 @@
 \alias{getUsersExecute}
 \title{Returns detailed information on arbitrary number of users}
 \usage{
-getUsersExecute(users_ids, fields = "", name_case = "", flatten = FALSE,
-  progress_bar = FALSE, v = getAPIVersion())
+getUsersExecute(users_ids, fields = "", name_case = "", drop = FALSE,
+  flatten = FALSE, progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{users_ids}{User IDs or screen names (screen_name). By default, current user ID}
@@ -13,6 +13,8 @@ getUsersExecute(users_ids, fields = "", name_case = "", flatten = FALSE,
 \item{fields}{Profile fields to return}
 
 \item{name_case}{Case for declension of user name and surname}
+
+\item{drop}{Drop deleted or banned users}
 
 \item{flatten}{Automatically flatten nested data frames into a single non-nested data frame}
 
