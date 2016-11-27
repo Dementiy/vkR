@@ -389,7 +389,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' users <- getUsersExecute(random_ids, fields='sex,bdate,city')
 #' }
 #' @export
-getUsersExecute <- function(users_ids='', fields='', name_case='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+getUsersExecute <- function(users_ids, fields='', name_case='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
     code <- 'var users = [];'

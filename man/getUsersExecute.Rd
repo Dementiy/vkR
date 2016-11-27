@@ -4,8 +4,8 @@
 \alias{getUsersExecute}
 \title{Returns detailed information on arbitrary number of users}
 \usage{
-getUsersExecute(users_ids = "", fields = "", name_case = "",
-  flatten = FALSE, progress_bar = FALSE, v = getAPIVersion())
+getUsersExecute(users_ids, fields = "", name_case = "", flatten = FALSE,
+  progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{users_ids}{User IDs or screen names (screen_name). By default, current user ID}
