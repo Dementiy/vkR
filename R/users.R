@@ -471,11 +471,12 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
 #' @param count Number of followers to return
 #' @param fields Profile fields to return
 #' @param name_case Case for declension of user name and surname
+#' @param drop Drop deleted or banned followers
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
   get_followers <- function(user_id='', offset=0, count=0, fields='', name_case='', v=getAPIVersion())
   {
@@ -497,6 +498,9 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     code <- paste0(code, 'return followers;')
     execute(code)
   }
+  
+  if (isTRUE(drop) && fields == '')
+    fields <- 'deactivated'
   
   user_id <- as.integer(user_id)
   code <- paste0('return API.users.getFollowers({"user_id":"', user_id, '", 
@@ -543,6 +547,12 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
   
   if (progress_bar)
     close(pb)
+  
+  if (isTRUE(drop) && "deactivated" %in% colnames(followers)) {
+    followers <- subset(followers, is.na(deactivated))
+    followers$deactivated <- NULL
+    rownames(followers) <- NULL
+  }
   
   if (isTRUE(flatten) & !is.vector(followers))
     followers <- jsonlite::flatten(followers)
