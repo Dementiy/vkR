@@ -23,6 +23,7 @@ age_predict <- function(user_id='') {
 #' Extract URLs from messages
 #'
 #' @param messages Array of messages
+#' @param message_body Add message body to URLs
 #' @export
 getURLs <- function(messages, message_body=FALSE) {
   # http://stackoverflow.com/questions/26496538/extract-urls-with-regex-into-a-new-data-frame-column

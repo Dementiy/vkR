@@ -37,7 +37,8 @@ likesGetList <- function(type='', owner_id='', item_id='', page_url='', filter='
 
 #' Returns a list of IDs of users who added the specified objects to their Likes list
 #'
-#' @param type Object type (post or comment; objects must contain fields owner_id and id)
+#' @param objects List of objects (objects must contain fields owner_id and id)
+#' @param type Object type (post or comment)
 #' @param filter Filters to apply: likes - returns information about all users who liked the object (default); copies - returns information only about users who told their friends about the object
 #' @param friends_only Specifies which users are returned: 1 - to return only the current user's friends; 0 - to return all users (default)
 #' @param extended Specifies whether extended information will be returned. 1 - to return extended information about users and communities from the Likes list; 0 - to return no additional information (default)

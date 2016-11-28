@@ -8,6 +8,8 @@ getURLs(messages, message_body = FALSE)
 }
 \arguments{
 \item{messages}{Array of messages}
+
+\item{message_body}{Add message body to URLs}
 }
 \description{
 Extract URLs from messages
