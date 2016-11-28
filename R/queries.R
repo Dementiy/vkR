@@ -14,6 +14,7 @@ request_delay <- function()
 
 
 #' Get error code from response
+#' @param response httr response object
 has_error <- function(response) {
   return(ifelse(!is.null(response$error), response$error$error_code, 0))
 }
