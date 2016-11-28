@@ -15,8 +15,6 @@ messagesGetHistoryExecute(offset = 0, count = 0, user_id = "",
 
 \item{user_id}{ID of the user whose message history you want to return}
 
-\item{peer_id}{}
-
 \item{start_message_id}{Starting message ID from which to return history}
 
 \item{rev}{Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order}

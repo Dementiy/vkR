@@ -4,6 +4,7 @@
 #' @param filters List of comma-separated words
 #' @param search_global Flag, either 1 or 0, default 1
 #' @param v Version of API
+#' @importFrom utils URLencode
 #' @export
 search.getHints <- function(q='', limit='', filters='', search_global='', v=getAPIVersion()) {
   query <- queryBuilder('search.getHints',
@@ -14,9 +15,9 @@ search.getHints <- function(q='', limit='', filters='', search_global='', v=getA
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(URLencode(query))
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }

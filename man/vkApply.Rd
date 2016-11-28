@@ -12,7 +12,7 @@ vkApply(objs, method)
 \item{method}{The function to be applied to each element of `objs`}
 }
 \description{
-Returns a data frame of the same number of rows as length of `objs`, each element of which is the 
+Returns a data frame of the same number of rows as length of `objs`, each element of which is the
 result of applying `method` to the corresponding element of `objs`
 }
 \examples{

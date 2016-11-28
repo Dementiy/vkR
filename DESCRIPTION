@@ -5,12 +5,15 @@ Version: 0.1
 Date: 2015-02-26
 Author: Dmitriy Sorokin <dementiy@yandex.ru>
 Maintainer: Dmitriy Sorokin <dementiy@yandex.ru>
-Description: Provides an interface to the VK API
+Description: Provides an interface to the VK API.
 Depends: 
     R (>= 3.0.0)
 Imports:
+    graphics,
     httr,
     jsonlite,
+    stats,
+    utils,
     XML
 Suggests:
     stringr,

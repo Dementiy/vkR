@@ -2,7 +2,7 @@
 % Please edit documentation in R/auth.R
 \name{vkOAuth}
 \alias{vkOAuth}
-\title{Clinet authorization}
+\title{Client authorization}
 \usage{
 vkOAuth(client_id, scope = "friends", email, password)
 }
@@ -16,7 +16,7 @@ vkOAuth(client_id, scope = "friends", email, password)
 \item{password}{Password}
 }
 \description{
-Clinet authorization
+Client authorization
 }
 \details{
 List of Available Settings of \href{https://vk.com/dev/permissions}{Access Permissions}:

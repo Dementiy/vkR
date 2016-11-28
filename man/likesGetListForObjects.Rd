@@ -30,7 +30,7 @@ Returns a list of IDs of users who added the specified objects to their Likes li
 \dontrun{
 wall <- getWallExecute(domain = 'privivkanet', count = 10, progress_bar = TRUE)
 post_likers <- likesGetListForObjects(wall, type = 'post', progress_bar = TRUE)
-post_likers_extended <- likesGetListForObjects(wall, type = 'post', 
+post_likers_extended <- likesGetListForObjects(wall, type = 'post',
    extended = 1, progress_bar = TRUE)
 }
 }

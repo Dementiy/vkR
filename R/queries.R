@@ -1,5 +1,5 @@
 #' Delaying a request if necessary
-#' 
+#'
 #' VK can accept maximum 3 requests to API methods per second from a client.
 request_delay <- function()
 {
@@ -33,10 +33,12 @@ repeat_last_query <- function(params = list(), n = 1) {
 
 #' Check response for errors
 #' @param response httr response object
+#' @importFrom graphics plot rasterImage
+#' @importFrom utils download.file
 try_handle_error <- function(response) {
   if (!has_error(response))
       return(NULL)
-  
+
   handle_captcha <- function(error) {
     if (!requireNamespace("jpeg", quietly = TRUE)) stop("The package jpeg was not installed")
     download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
@@ -47,7 +49,7 @@ try_handle_error <- function(response) {
     captcha_key <- readline("Enter the key from captcha: ")
     return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 3))
   }
-  
+
   handle_validation <- function(error) {
     response <- httr::GET(error$redirect_uri)
     authorize_form <- XML::htmlParse(rawToChar(response$content))
@@ -56,8 +58,8 @@ try_handle_error <- function(response) {
       phone <- XML::xpathSApply(authorize_form, "//*/span", XML::xmlValue)
       print(phone)
       missing_numbers <- readline("Enter the missing numbers in the phone number: ")
-      response <- httr::GET(paste0("https://m.vk.com",action), 
-                            query = list('code' = missing_numbers), 
+      response <- httr::GET(paste0("https://m.vk.com",action),
+                            query = list('code' = missing_numbers),
                             httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
       for (i in 1:length(response$all_headers)) {
         location <- response$all_headers[[i]]$headers$location
@@ -69,7 +71,7 @@ try_handle_error <- function(response) {
       }
     }
   }
-  
+
   # Handle errors
   if (has_error(response) == 14) {
     return(handle_captcha(response$error))
@@ -120,9 +122,9 @@ execute <- function(code, params = list()) {
   body = list('code' = code, 'access_token' = getAccessToken())
   post_res <- httr::POST(url = query, body = append(body, params))
   response <- jsonlite::fromJSON(rawToChar(post_res$content))
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }

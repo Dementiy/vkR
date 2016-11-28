@@ -37,10 +37,10 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
@@ -71,15 +71,16 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' \item \strong{profiles} - Contains user objects with additional fields photo and online.
 #' \item \strong{groups} - Contains community objects.
 #' }
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
 {
   get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
   {
-    if (max_count > 2500) 
+    if (max_count > 2500)
       max_count <- 2500
     if (max_count <= 100) {
-      execute(paste0('return API.wall.get({"owner_id":"', owner_id, '", 
+      execute(paste0('return API.wall.get({"owner_id":"', owner_id, '",
                      "domain":"', domain, '",
                      "offset":"', offset, '",
                      "count":"', max_count, '",
@@ -88,7 +89,7 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                      "v":"', v, '"}).items;'))
     } else {
       code <- 'var wall_records = [];'
-      code <- paste0(code, 'wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '", 
+      code <- paste0(code, 'wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '",
                      "domain":"', domain, '",
                      "offset":"', offset, '",
                      "count":"', 100, '",
@@ -101,7 +102,7 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                        if (', max_count, ' - wall_records.length < 100) {
                         count = ', max_count, ' - wall_records.length;
                        };
-                       wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '", 
+                       wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '",
                          "domain":"', domain, '",
                          "offset":offset,
                          "count":count,
@@ -114,8 +115,8 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
       execute(code)
     }
   }
-  
-  code <- paste0('return API.wall.get({"owner_id":"', owner_id, '", 
+
+  code <- paste0('return API.wall.get({"owner_id":"', owner_id, '",
                  "domain":"', domain, '",
                  "offset":"', offset, '",
                  "count":"', 1, '",
@@ -123,19 +124,19 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                  "extended":"', extended, '",
                  "v":"', v, '"});')
   response <- execute(code)
-  
+
   posts <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
-  
+
   if (max_count == 0)
-    return(list(posts = response$items, 
+    return(list(posts = response$items,
                 count = response$count))
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(posts))
   }
-  
+
   num_records <- max_count - nrow(posts)
   while (nrow(posts) < max_count) {
     tryCatch({ posts2500 <- get_posts2500(owner_id = owner_id,
@@ -143,8 +144,8 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                                filter = filter,
                                extended = extended,
                                fields = fields,
-                               max_count = num_records, 
-                               offset = offset + nrow(posts), 
+                               max_count = num_records,
+                               offset = offset + nrow(posts),
                                v = v)
       posts <- jsonlite::rbind.pages(list(posts, posts2500))
       num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
@@ -152,24 +153,24 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
       num_records <<- as.integer(num_records / 2)
       warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
     })
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, nrow(posts))
   }
-  
+
   if (progress_bar)
     close(pb)
-  
-  wall <- list(posts = posts, 
+
+  wall <- list(posts = posts,
                count = response$count)
   class(wall) <- c(class(wall), "posts.list")
-  
+
   return(wall)
 }
 
 
 #' Allows to search posts on user or community walls
-#' 
+#'
 #' @param owner_id User or community id. Remember that for a community owner_id must be negative.
 #' @param domain User or community screen name.
 #' @param query Search query string.
@@ -194,22 +195,22 @@ wallSearch <- function(owner_id='', domain='', query='', owners_only='', count='
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
 
 #' Returns a list of posts from user or community walls by their IDs
-#' 
+#'
 #' @param posts User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.
 #' @param extended 1 - to return user and community objects needed to display posts, 0 - no additional fields are returned (default).
 #' @param copy_history_depth Sets the number of parent elements to include in the array copy_history that is returned if the post is a repost from another wall.
 #' @param fields List of comma-separated words
 #' @param v Version of API
-#' @return Returns a list of post objects. 
+#' @return Returns a list of post objects.
 #' If extended is set to 1, returns the following:
 #' \itemize{
 #' \item \strong{wall} - Contains post objects.
@@ -227,16 +228,16 @@ wallGetById <- function(posts='', extended='', copy_history_depth='', fields='',
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
 
 #' Returns information about reposts of a post on user wall or community wall
-#' 
+#'
 #' @param owner_id User ID or community ID. By default, current user ID. Use a negative value to designate a community ID.
 #' @param post_id Post ID.
 #' @param offset Offset needed to return a specific subset of reposts.
@@ -259,23 +260,23 @@ wallGetReposts <- function(owner_id='', post_id='', offset='', count='20', v=get
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
 
 #' Returns a list of comments on a post on a user wall or community wall
-#' 
+#'
 #' @param owner_id User ID or community ID. Use a negative value to designate a community ID.
 #' @param post_id Post ID.
 #' @param need_likes 1 - to return the likes field, 0 - not to return the likes field (default).
 #' @param start_comment_id Positive number.
 #' @param offset Offset needed to return a specific subset of comments.
 #' @param count Number of comments to return (maximum 100).
-#' @param sort Sort order: asc - chronological, desc - reverse chronological. 
+#' @param sort Sort order: asc - chronological, desc - reverse chronological.
 #' @param preview_length Number of characters at which to truncate comments when previewed. By default, 90. Specify 0 if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
 #' @param v Version of API
@@ -294,23 +295,23 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
 
 #' Returns a list of comments on a post on a user wall or community wall
-#' 
+#'
 #' @param owner_id User ID or community ID. Use a negative value to designate a community ID.
 #' @param post_id Post ID.
 #' @param need_likes 1 - to return the likes field (default), 0 - not to return the likes field.
 #' @param start_comment_id Positive number
 #' @param offset Offset needed to return a specific subset of comments.
 #' @param count Number of comments to return.
-#' @param sort Sort order: asc - chronological, desc - reverse chronological. 
+#' @param sort Sort order: asc - chronological, desc - reverse chronological.
 #' @param preview_length Number of characters at which to truncate comments when previewed. Specify 0 (default) if you do not want to truncate comments.
 #' @param extended Flag, either 1 or 0.
 #' @param progress_bar Display progress bar
@@ -319,7 +320,7 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
 postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, count=10, sort='', preview_length=0, extended='', progress_bar = FALSE, v=getAPIVersion()) {
   get_comments2500 <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, max_count='', sort='', preview_length=0, extended='', v=getAPIVersion())
   {
-    if (max_count > 2500) 
+    if (max_count > 2500)
       max_count <- 2500
     if (max_count <= 100) {
       execute(paste0('return API.wall.getComments({
@@ -366,7 +367,7 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
       execute(code)
     }
   }
-  
+
   code <- paste0('return API.wall.getComments({
                  "owner_id":"', owner_id, '",
                  "post_id":"', post_id, '",
@@ -380,18 +381,18 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
   response <- execute(code)
   comments <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
-  
+
   if (max_count == 0)
-    return(list(comments = response$items, 
+    return(list(comments = response$items,
                 count = response$count))
-  
+
   offset_counter <- 0
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(comments))
   }
-  
+
   while (nrow(comments) < max_count) {
     tryCatch({
       comments2500 <- get_comments2500(owner_id = owner_id,
@@ -401,34 +402,34 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                                      sort = sort,
                                      preview_length = preview_length,
                                      start_comment_id = start_comment_id,
-                                     max_count = (max_count - nrow(comments)), 
-                                     offset = (1 + offset + offset_counter * 2500), 
+                                     max_count = (max_count - nrow(comments)),
+                                     offset = (1 + offset + offset_counter * 2500),
                                      v = v)
       comments <- jsonlite::rbind.pages(list(comments, comments2500))
       offset_counter <- offset_counter + 1
       }, error = function(e) {
         warning(e)
       })
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, nrow(comments))
-    
+
   }
-  
+
   if (progress_bar)
     close(pb)
-  
-  list(comments = comments, 
+
+  list(comments = comments,
        count = response$count)
 }
 
 
 #' Returns a list of comments on a user wall or community wall
-#' 
+#'
 #' @param posts A list of posts or wall object (from getWallExecute())
 #' @param progress_bar Display progress bar
 #' @param v Version of API
-#' @export 
+#' @export
 wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()) {
   get_comments <- function(posts, v = getAPIVersion())
   {
@@ -442,11 +443,11 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
         to <- nrow(posts)
       for (index in from:to) {
         code <- paste0(code, 'comments = API.wall.getComments({
-                       "owner_id":"', posts[index, ]$owner_id, '", 
-                       "post_id":"', posts[index, ]$id, '", 
-                       "need_likes":"', 1, '", 
-                       "count":"', 100, '", 
-                       "v":"', v, '"}).items; 
+                       "owner_id":"', posts[index, ]$owner_id, '",
+                       "post_id":"', posts[index, ]$id, '",
+                       "need_likes":"', 1, '",
+                       "count":"', 100, '",
+                       "v":"', v, '"}).items;
                        comments_per_post.post', posts[index, ]$id, "=comments;", sep = "")
       }
       code <- paste0(code, 'return comments_per_post;')
@@ -457,39 +458,39 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
     names(comments) <- posts$id
     comments
   }
-  
+
   if ("posts.list" %in% class(posts))
     posts <- posts$posts
-  
+
   cmt_groups <- split(posts, posts$comments$count > 100)
   posts_le100 <- cmt_groups[['FALSE']]
   posts_gt100 <- cmt_groups[['TRUE']]
-  
+
   comments <- list()
   from <- 1
   max_count <- nrow(posts_le100)
   to <- ifelse(max_count >= 75, 75, max_count)
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = nrow(posts), style = 3)
     setTxtProgressBar(pb, 0)
   }
-  
+
   repeat {
     comments75 <- get_comments(posts_le100[from:to, ], v)
     comments <- append(comments, comments75)
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, length(comments))
-    
+
     if (to >= max_count)
       break
-    
+
     from <- to + 1
     to <- ifelse(to + 75 >= max_count, max_count, to + 75)
   }
-  
-  
+
+
   if (!is.null(posts_gt100)) {
     for (i in 1:nrow(posts_gt100)) {
       owner_id <- posts_gt100$owner_id[i]
@@ -502,22 +503,22 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
         setTxtProgressBar(pb, length(comments))
     }
   }
-  
+
   if (progress_bar)
     close(pb)
-  
+
   comments_ordered <- list()
   for (i in 1:nrow(posts)) {
     comments_ordered[[paste0(posts$id[i])]] <- comments[[paste0(posts$id[i])]]
   }
-  
+
   class(comments_ordered) <- c(class(comments_ordered), "vk.comments")
   comments_ordered
 }
 
 
 #' Filtering attachments by type
-#' 
+#'
 #' @param attachments List of attachments
 #' @param type type field may have the following values:
 #' \itemize{
@@ -539,7 +540,7 @@ filterAttachments <- function(attachments, type) {
     stop("plyr package needed for this function to work. Please install it.", .call = FALSE)
   }
   if (!is.character(type)) stop('type must be a character')
-  
+
   filtered_attachments <- data.frame()
   for (i in 1:length(attachments)) {
     if (!is.null(attachments[[i]])) {
