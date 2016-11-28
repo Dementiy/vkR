@@ -10,8 +10,6 @@ messagesGetHistoryAll(user_id = "", peer_id = "", rev = 0,
 \arguments{
 \item{user_id}{ID of the user whose message history you want to return}
 
-\item{peer_id}{}
-
 \item{rev}{Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order}
 
 \item{v}{Version of API}

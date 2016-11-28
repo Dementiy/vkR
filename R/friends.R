@@ -16,33 +16,33 @@
 #' }
 #' @export
 getFriends <- function(user_id='', order='', list_id='', count='', offset='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
-  query <- queryBuilder('friends.get', 
-                        user_id = user_id, 
-                        order = order, 
-                        list_id = list_id, 
-                        count = count, 
-                        offset = offset, 
-                        fields = fields, 
-                        name_case = name_case, 
+  query <- queryBuilder('friends.get',
+                        user_id = user_id,
+                        order = order,
+                        list_id = list_id,
+                        count = count,
+                        offset = offset,
+                        fields = fields,
+                        name_case = name_case,
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response <- response$response
-  
+
   if (isTRUE(flatten))
     response$items <- jsonlite::flatten(response$items)
-  
+
   class(response) <- c(class(response), "vk.friends")
   response
 }
 
 
 #' Returns a list of user IDs of the mutual friends of two users
-#' 
+#'
 #' @param source_id ID of the user whose friends will be checked against the friends of the user specified in target_uid
 #' @param target_uid ID of the user whose friends will be checked against the friends of the user specified in source_uid
 #' @param target_uids List of target uids
@@ -56,8 +56,8 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' }
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {
-  body <- list(source_id = source_id, 
-               target_uid = target_uid, 
+  body <- list(source_id = source_id,
+               target_uid = target_uid,
                order = order,
                count = count,
                offset = offset)
@@ -73,13 +73,13 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
                                                       body = body)$content))
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response$response
 }
 
 
 #' Checks the friendship status between two users
-#' 
+#'
 #' @param source_id Source user ID
 #' @param target_id Target user ID
 #' @export
@@ -92,9 +92,10 @@ areFriends <- function(source_id, target_id)
 
 
 #' Returns a list of friends IDs for the specified users
-#' 
+#'
 #' @param user_ids User IDs
 #' @param v Version of API
+#' @importFrom stats na.omit
 #' @export
 getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   user_ids <- na.omit(user_ids)
@@ -106,14 +107,14 @@ getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   code <- paste(code, "return all_friends;")
   response <- execute(code)
   if (!is.null(response)) names(response) <- user_ids
-  
+
   class(response) <- c(class(response), "vk.friends.ids")
   response
 }
 
 
 #' Returns a list of friends IDs for the specified users
-#' 
+#'
 #' @param users_ids User IDs
 #' @param v Version of API
 #' @examples
@@ -129,14 +130,14 @@ getFriendsFor <- function(users_ids, v=getAPIVersion()) {
   repeat {
     users_friends_25 <- getFriendsBy25(users_ids[from:to], v)
     users_friends <- append(users_friends, users_friends_25)
-    
+
     if (to >= length(users_ids))
       break
-    
+
     from <- to + 1
     to <- to + 25
   }
-  
+
   class(users_friends) <- c(class(users_friends), "vk.friends.ids")
   users_friends
 }

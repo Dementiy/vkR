@@ -19,7 +19,7 @@ wallGetById(posts = "", extended = "", copy_history_depth = "",
 \item{v}{Version of API}
 }
 \value{
-Returns a list of post objects. 
+Returns a list of post objects.
 If extended is set to 1, returns the following:
 \itemize{
 \item \strong{wall} - Contains post objects.

@@ -89,7 +89,7 @@ Returns detailed information on users
     \item \strong{time} Last visit date (in Unix time)
     \item \strong{platform} Type of the platform that used for the last authorization. See more at \href{https://vk.com/dev/using_longpoll}{Using LongPoll server}
   }
-  \item \strong{followers_count} Number of user's followers 
+  \item \strong{followers_count} Number of user's followers
   \item \strong{common_count} Number of common friends with a current user
   \item \strong{counters} Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
   \itemize{

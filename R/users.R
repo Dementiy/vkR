@@ -5,7 +5,7 @@
 #' @param name_case Case for declension of user name and surname
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param v Version of API
-#' @details 
+#' @details
 #' \href{https://vk.com/dev/fields}{User object} describes a user profile, contains the following fields:
 #' \itemize{
 #'   \item \strong{uid} User ID
@@ -73,7 +73,7 @@
 #'     \item \strong{time} Last visit date (in Unix time)
 #'     \item \strong{platform} Type of the platform that used for the last authorization. See more at \href{https://vk.com/dev/using_longpoll}{Using LongPoll server}
 #'   }
-#'   \item \strong{followers_count} Number of user's followers 
+#'   \item \strong{followers_count} Number of user's followers
 #'   \item \strong{common_count} Number of common friends with a current user
 #'   \item \strong{counters} Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
 #'   \itemize{
@@ -178,6 +178,7 @@
 #' \dontrun{
 #' user <- getUsers('1', fields='sex,bdate,city')
 #' }
+#' @importFrom utils URLencode
 #' @export
 getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
   .Deprecated("getUsersExecute()")
@@ -192,15 +193,15 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
   request_delay()
   response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
                                                       body = body)$content))
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response <- response$response
-  
+
   if (isTRUE(flatten))
     response <- jsonlite::flatten(response)
-  
+
   class(response) <- c(class(response), "vk.users")
   response
 }
@@ -215,7 +216,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API
-#' @details 
+#' @details
 #' \href{https://vk.com/dev/fields}{User object} describes a user profile, contains the following fields:
 #' \itemize{
 #'   \item \strong{uid} User ID
@@ -283,7 +284,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #'     \item \strong{time} Last visit date (in Unix time)
 #'     \item \strong{platform} Type of the platform that used for the last authorization. See more at \href{https://vk.com/dev/using_longpoll}{Using LongPoll server}
 #'   }
-#'   \item \strong{followers_count} Number of user's followers 
+#'   \item \strong{followers_count} Number of user's followers
 #'   \item \strong{common_count} Number of common friends with a current user
 #'   \item \strong{counters} Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
 #'   \itemize{
@@ -389,6 +390,7 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' random_ids <- sample(x=seq(1:10000000), size=10000, replace=FALSE)
 #' users <- getUsersExecute(random_ids, fields='sex,bdate,city')
 #' }
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
@@ -399,8 +401,8 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
     to <- ifelse(num_requests >= 2, 500, length(user_ids))
     for (i in 1:num_requests) {
       code <- paste0(code, 'users = users + API.users.get({
-                     "user_ids":"', paste0(user_ids[from:to], collapse = ','), '", 
-                     "fields":"', fields, '", 
+                     "user_ids":"', paste0(user_ids[from:to], collapse = ','), '",
+                     "fields":"', fields, '",
                      "name_case":"', name_case, '", "v":"', v, '"});')
       from <- to + 1
       to <- to + ifelse(length(user_ids) - (to + 500) >= 0, 500, length(user_ids) - to)
@@ -409,7 +411,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
     if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
     execute(code)
   }
-  
+
   if (missing(users_ids)) {
     code <- paste0('return API.users.get({"fields":"', fields, '", "name_case":"', name_case, '", "v":"', v, '"});')
     response <- execute(code)
@@ -417,56 +419,58 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
       response <- jsonlite::flatten(response)
     return(response)
   }
-  
+
   if ("vk.friends.ids" %in% class(users_ids))
     users_ids <- unique(unlist(users_ids))
   users_ids <- as.integer(users_ids)
-  
+
   all_users <- data.frame()
   from <- 1
   to <- 5000
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = length(users_ids), style = 3)
     setTxtProgressBar(pb, 0)
   }
-  
+
   repeat
   {
     if (to >= length(users_ids)) to <- length(users_ids)
-    
+
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
     all_users <- jsonlite::rbind.pages(list(all_users, users))
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, nrow(all_users))
-    
+
     if (to >= length(users_ids))
       break
-    
+
     from <- to + 1
     to <- to + 5000
   }
-  
+
   if (progress_bar)
     close(pb)
-  
+
+  # for R CMD check to pass
+  deactivated <- NULL
   if (isTRUE(drop) && "deactivated" %in% colnames(all_users)) {
     all_users <- subset(all_users, is.na(deactivated))
     all_users$deactivated <- NULL
     rownames(all_users) <- NULL
   }
-  
+
   if (isTRUE(flatten))
     all_users <- jsonlite::flatten(all_users)
-  
+
   class(all_users) <- c(class(all_users), "vk.users")
   all_users
 }
 
 
 #' Returns a list of IDs of followers of the user in question, sorted by date added, most recent first
-#' 
+#'
 #' @param user_id User ID
 #' @param offset Offset needed to return a specific subset of followers
 #' @param count Number of followers to return
@@ -476,6 +480,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
@@ -486,11 +491,11 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     while (num_requests != 25 && count != 0)
     {
       current_count <- ifelse((count - 1000) >= 0, 1000, count)
-      code <- paste0(code, 'followers = followers + API.users.getFollowers({"user_id":"', user_id, 
+      code <- paste0(code, 'followers = followers + API.users.getFollowers({"user_id":"', user_id,
                      '", "offset":"', offset,
                      '", "count":"', current_count,
-                     '", "fields":"', fields, 
-                     '", "name_case":"', name_case, 
+                     '", "fields":"', fields,
+                     '", "name_case":"', name_case,
                      '", "v":"', v, '"}).items;')
       offset <- offset + 1000
       num_requests <- num_requests + 1
@@ -499,39 +504,39 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     code <- paste0(code, 'return followers;')
     execute(code)
   }
-  
+
   if (isTRUE(drop) && fields == '')
     fields <- 'deactivated'
-  
+
   user_id <- as.integer(user_id)
-  code <- paste0('return API.users.getFollowers({"user_id":"', user_id, '", 
+  code <- paste0('return API.users.getFollowers({"user_id":"', user_id, '",
                  "offset":"', offset, '",
                  "count":"', 1, '",
                  "fields":"', fields, '",
                  "name_case":"', name_case, '",
                  "v":"', v, '"});')
-  
+
   response <- execute(code)
   followers <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
-  
+
   if (max_count == 0)
-    return(list(followers = response$items, 
+    return(list(followers = response$items,
                 count = response$count))
-  
+
   len <- ifelse(is.vector(followers), length, nrow)
-  
+
   offset_counter <- 0
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, len(followers))
   }
-  
+
   while (len(followers) < max_count) {
     followers3000 <- get_followers(user_id = user_id,
-                                  offset = (1 + offset + offset_counter * 3000), 
-                                  count = (max_count - len(followers)), 
+                                  offset = (1 + offset + offset_counter * 3000),
+                                  count = (max_count - len(followers)),
                                   fields = fields,
                                   name_case = name_case,
                                   v = v)
@@ -539,33 +544,34 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
       followers <- append(followers, followers3000)
     else
       followers <- jsonlite::rbind.pages(list(followers, followers3000))
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, len(followers))
-    
+
     offset_counter <- offset_counter + 1
   }
-  
+
   if (progress_bar)
     close(pb)
-  
+  # for R CMD check to pass
+  deactivated <- NULL
   if (isTRUE(drop) && "deactivated" %in% colnames(followers)) {
     followers <- subset(followers, is.na(deactivated))
     followers$deactivated <- NULL
     rownames(followers) <- NULL
   }
-  
+
   if (isTRUE(flatten) & !is.vector(followers))
     followers <- jsonlite::flatten(followers)
-  
-  list(followers = followers, 
+
+  list(followers = followers,
        count = response$count)
-  
+
 }
 
 
 #' Returns a list of IDs of users and communities followed by the user
-#' 
+#'
 #' @param user_id User ID
 #' @param offset Offset needed to return a specific subset of subscriptions
 #' @param count Number of users and communities to return
@@ -574,6 +580,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
 #' @param progress_bar Display progress bar
 #' @param v Version of API
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, fields='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
@@ -584,11 +591,11 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
     while (num_requests != 25 && count != 0)
     {
       current_count <- ifelse((count - 200) >= 0, 200, count)
-      code <- paste0(code, 'subscriptions = subscriptions + API.users.getSubscriptions({"user_id":"', user_id, 
+      code <- paste0(code, 'subscriptions = subscriptions + API.users.getSubscriptions({"user_id":"', user_id,
                      '", "offset":"', offset,
                      '", "count":"', current_count,
-                     '", "fields":"', fields, 
-                     '", "extended":"', extended, 
+                     '", "fields":"', fields,
+                     '", "extended":"', extended,
                      '", "v":"', v, '"}).items;')
       offset <- offset + 200
       num_requests <- num_requests + 1
@@ -597,67 +604,67 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
     code <- paste0(code, 'return subscriptions;')
     execute(code)
   }
-  
+
   user_id <- as.integer(user_id)
-  code <- paste0('return API.users.getSubscriptions({"user_id":"', user_id, '", 
+  code <- paste0('return API.users.getSubscriptions({"user_id":"', user_id, '",
                  "extended":"', 1, '",
                  "offset":"', offset, '",
                  "count":"', 1, '",
                  "fields":"', fields, '",
                  "v":"', v, '"});')
-  
+
   response <- execute(code)
   subscriptions <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
-  
+
   if (max_count == 0)
     return(list(subscriptions = subscriptions,
                 count = response$count))
-  
+
   offset_counter <- 0
-  
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(subscriptions))
   }
-  
+
   while (nrow(subscriptions) < max_count) {
     subscriptions600 <- get_subscriptions(user_id = user_id,
-                                          offset = (1 + offset + offset_counter * 600), 
-                                          count = (max_count - nrow(subscriptions)), 
+                                          offset = (1 + offset + offset_counter * 600),
+                                          count = (max_count - nrow(subscriptions)),
                                           fields = fields,
                                           extended = 1,
                                           v = v)
     subscriptions <- jsonlite::rbind.pages(list(subscriptions, subscriptions600))
-    
+
     if (progress_bar)
       setTxtProgressBar(pb, nrow(subscriptions))
-    
+
     offset_counter <- offset_counter + 1
   }
-  
+
   if (progress_bar)
     close(pb)
-  
+
   if (isTRUE(flatten))
     subscriptions <- jsonlite::flatten(subscriptions)
-  
+
   if (as.numeric(extended) == 0) {
     subscriptions_splt <- split(subscriptions, subscriptions$type == 'page')
     groups <- subscriptions_splt$`TRUE`
     users <- subscriptions_splt$`FALSE`
     return(list(groups = groups, users=users))
   }
-  
-  list(subscriptions = subscriptions, 
+
+  list(subscriptions = subscriptions,
        count = response$count)
 }
 
 
 #' Returns a list of users matching the search criteria
-#' 
+#'
 #' @param q Search query string (e.g., Vasya Babich)
-#' @param sort Sort order: 1 - by date registered; 0 - by rating 
+#' @param sort Sort order: 1 - by date registered; 0 - by rating
 #' @param offset Offset needed to return a specific subset of users
 #' @param count Number of users to return
 #' @param fields Profile fields to return
@@ -669,8 +676,8 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
 #' @param university_year Year of graduation from an institution of higher education
 #' @param university_faculty Faculty ID
 #' @param university_chair Chair ID
-#' @param sex 1 - female; 2 - male; 0 - any (default) 
-#' @param status Relationship status: 1 - Not married; 2 - In a relationship; 3 - Engaged; 4 - Married; 5 - It's complicated; 6 - Actively searching; 7 - In love 
+#' @param sex 1 - female; 2 - male; 0 - any (default)
+#' @param status Relationship status: 1 - Not married; 2 - In a relationship; 3 - Engaged; 4 - Married; 5 - It's complicated; 6 - Actively searching; 7 - In love
 #' @param age_from Minimum age
 #' @param age_to Maximum age
 #' @param birth_day Day of birth
@@ -690,10 +697,10 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
 #' @param group_id ID of a community to search in communities
 #' @param from_list List of comma-separated words
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
-#' @param v Version of API 
+#' @param v Version of API
 #' @export
-usersSearch <- function(q='', sort='', offset='', count='20', fields='', city='', country='', hometown='', 
-                        university_country='', university='', university_year='', university_faculty='', university_chair='', 
+usersSearch <- function(q='', sort='', offset='', count='20', fields='', city='', country='', hometown='',
+                        university_country='', university='', university_year='', university_faculty='', university_chair='',
                         sex='', status='', age_from='', age_to='', birth_day='', birth_month='', birth_year='',
                         online='', has_photo='', school_country='', school_city='', school_class='', school='', school_year='',
                         religion='', interests='', company='', position='', group_id='', from_list='', flatten=FALSE, v=getAPIVersion()) {
@@ -715,7 +722,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         status = status,
                         age_from = age_from,
                         age_to = age_to,
-                        birth_day = birth_day, 
+                        birth_day = birth_day,
                         birth_month = birth_month,
                         birth_year = birth_year,
                         online = online,
@@ -735,21 +742,21 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
   )
   request_delay()
   response <- jsonlite::fromJSON(query)
-  
+
   if (has_error(response))
     return(try_handle_error(response))
-  
+
   response <- response$response
-  
+
   if (isTRUE(flatten) && response$count > 0)
     response$items <- jsonlite::flatten(response$items)
-  
+
   response
 }
 
 
 #' Returns user id by tag
-#' 
+#'
 #' @param tag Tag
 #' @export
 tag2Id <- function(tag) {
@@ -758,8 +765,8 @@ tag2Id <- function(tag) {
 
 
 #' Returns current user ID
-#' 
-#' @export 
+#'
+#' @export
 me <- function()
 {
   if (.vkr$me == 0)

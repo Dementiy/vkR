@@ -7,7 +7,7 @@
 
 
 #' Predict age for the specified user
-#' 
+#'
 #' @param user_id User ID
 #' @export
 age_predict <- function(user_id='') {
@@ -15,20 +15,20 @@ age_predict <- function(user_id='') {
   friends$bdate <- as.Date.character(friends$bdate, format = "%d.%M.%Y")
   friends <- friends[!is.na(friends$bdate), ]
   friends$year_of_birth <- as.numeric(format(friends$bdate, "%Y"))
-  data.frame(uid = user_id, year_of_birth = stats::median(friends$year_of_birth), 
+  data.frame(uid = user_id, year_of_birth = stats::median(friends$year_of_birth),
              nfriends = length(friends$year_of_birth))
 }
 
 
 #' Extract URLs from messages
-#' 
+#'
 #' @param messages Array of messages
 #' @export
 getURLs <- function(messages, message_body=FALSE) {
   # http://stackoverflow.com/questions/26496538/extract-urls-with-regex-into-a-new-data-frame-column
   url_pattern <- "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
   match <- regexpr(url_pattern, messages)
-  
+
   if (message_body)
     as.character(messages[match != -1])
   else
@@ -37,9 +37,9 @@ getURLs <- function(messages, message_body=FALSE) {
 
 
 #' Apply a method over a vector of objects
-#' 
-#' Returns a data frame of the same number of rows as length of `objs`, each element of which is the 
-#' result of applying `method` to the corresponding element of `objs` 
+#'
+#' Returns a data frame of the same number of rows as length of `objs`, each element of which is the
+#' result of applying `method` to the corresponding element of `objs`
 #' @param objs A vector of objects
 #' @param method The function to be applied to each element of `objs`
 #' @examples
@@ -58,7 +58,7 @@ vkApply <- function(objs, method)
 
 
 #' Create post object
-#' 
+#'
 #' @param ... List of attributes
 #' @export
 vkPost <- function(...)
@@ -86,17 +86,18 @@ vkPost <- function(...)
 
 #' Get stop words list for russian language
 #' @param stop_words User defined stop words
+#' @importFrom utils read.table
 #' @export
 get_stop_words <- function(stop_words = c()) {
   tm_stop_words <- c()
   if (requireNamespace("tm", quietly = TRUE))
       tm_stop_words <- tm::stopwords('russian')
-  
+
   google_stop_words <- c()
   filename <- system.file("extdata", "stop_words_russian.txt", package = 'vkR')
   if (file.exists(filename))
     google_stop_words <- as.vector(read.table(filename)$V1)
-  
+
   stop_words <- unique(c(stop_words, google_stop_words, tm_stop_words))
   stop_words
 }
@@ -109,13 +110,13 @@ get_stop_words <- function(stop_words = c()) {
 clear_text <- function(lines, patterns = list()) {
   if (!requireNamespace("stringr", quietly = TRUE))
     stop("The package stringr was not installed")
-  
+
   lines <- stringr::str_replace_all(lines, "[\u0451]", "\u0435")
   lines <- stringr::str_replace_all(lines, "[[:punct:]]", " ")
   lines <- stringr::str_replace_all(lines, "[[:digit:]]", " ")
   lines <- stringr::str_replace_all(lines, "http\\S+\\s*", " ")
   lines <- stringr::str_replace_all(lines, "[a-zA-Z]", " ")
-  
+
   if (is.list(patterns) & length(patterns)) {
     for (pattern in patterns) {
       if (length(pattern) > 1)
@@ -124,7 +125,7 @@ clear_text <- function(lines, patterns = list()) {
         lines <- stringr::str_replace_all(lines, pattern, " ")
     }
   }
-  
+
   lines <- stringr::str_replace_all(lines, "\\s+", " ")
   lines <- tolower(lines)
   lines <- stringr::str_trim(lines, side = "both")
