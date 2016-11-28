@@ -6,6 +6,9 @@
 \usage{
 has_error(response)
 }
+\arguments{
+\item{response}{httr response object}
+}
 \description{
 Get error code from response
 }
