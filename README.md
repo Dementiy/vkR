@@ -42,19 +42,25 @@ layout <- layout.fruchterman.reingold(g)
 plot(g, layout = layout)
 ```
 
-Find paths between two users (aka small-world problem):
+Analyzing community activity:
+``` r
+domain <- 'nipponkoku'
+wall <- getWallExecute(domain = domain, count = 0, progress_bar = TRUE)
+metrics <- jsonlite::flatten(wall$posts[c("date", "likes", "comments", "reposts")])
+metrics$date <- as.POSIXct(metrics$date, origin="1970-01-01", tz='Europe/Moscow')
 
-```r
-source_id <- sample(seq(1:10000000), 1)
-target_id <- sample(seq(1:10000000), 1)
-paths <- getPaths(source_id, target_id)
+library(dplyr)
+df <- metrics %>% 
+  mutate(period = as.Date(cut(date, breaks='month'))) %>% 
+  group_by(period) %>%
+  summarise(likes = sum(likes.count), comments = sum(comments.count), reposts = sum(reposts.count), n = n())
 
-library("igraph")
-rows <- sample(nrow(paths), 5)
-edges <- getArbitraryNetwork(unique(c(source_id, target_id, unlist(as.list(t(paths[rows, ]))))), format = "edgelist")
-g <- graph_from_edgelist(as.matrix(edges), directed = FALSE)
-layout <- layout.fruchterman.reingold(g)
-plot(g, layout = layout)
+library(ggplot2)
+library(tidyr)
+ggplot(data=gather(df, 'type', 'count', 2:5), aes(period, count)) + geom_line(aes(colour=type)) +
+  labs(x='Date', y='Count')
 ```
+
+<center><img src="images/community_activity.png" alt="Coomunity activity" style="width: 640px;"/></center>
 
 You can find more examples in `examples` directory.

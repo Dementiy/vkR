@@ -9,7 +9,9 @@ likesGetListForObjects(objects, type = "post", filter = "likes",
   v = getAPIVersion())
 }
 \arguments{
-\item{type}{Object type (post or comment; objects must contain fields owner_id and id)}
+\item{objects}{List of objects (objects must contain fields owner_id and id)}
+
+\item{type}{Object type (post or comment)}
 
 \item{filter}{Filters to apply: likes - returns information about all users who liked the object (default); copies - returns information only about users who told their friends about the object}
 

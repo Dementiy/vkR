@@ -3,7 +3,7 @@
 #' @param offset Offset needed to return a specific subset of messages
 #' @param count Number of messages to return (maximum value 200)
 #' @param user_id ID of the user whose message history you want to return
-#' @param peer_id
+#' @param peer_id Destination ID (user ID, group ID or chat ID)
 #' @param start_message_id Starting message ID from which to return history
 #' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
 #' @param v Version of API
@@ -32,7 +32,7 @@ messagesGetHistory <- function(offset='', count='', user_id='', peer_id='', star
 #' @param offset Offset needed to return a specific subset of messages
 #' @param count Number of messages to return (0 for all history)
 #' @param user_id ID of the user whose message history you want to return
-#' @param peer_id
+#' @param peer_id Destination ID (user ID, group ID or chat ID)
 #' @param start_message_id Starting message ID from which to return history
 #' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
 #' @param progress_bar Display progress bar
@@ -119,7 +119,7 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
 #' Returns all message history for the specified user or group chat
 #'
 #' @param user_id ID of the user whose message history you want to return
-#' @param peer_id
+#' @param peer_id Destination ID (user ID, group ID or chat ID)
 #' @param rev Sort order: 1 - return messages in chronological order; 0 - return messages in reverse chronological order
 #' @param v Version of API
 #' @export
