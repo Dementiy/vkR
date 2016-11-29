@@ -41,6 +41,8 @@ try_handle_error <- function(response) {
       return(NULL)
 
   handle_captcha <- function(error) {
+    if (!interactive())
+      stop("Captcha needed.\nFor handle this error you must to interact with your console", call. = FALSE)
     if (!requireNamespace("jpeg", quietly = TRUE)) stop("The package jpeg was not installed")
     download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
     captcha_img <- jpeg::readJPEG("captcha.jpg", native = TRUE)
@@ -52,6 +54,8 @@ try_handle_error <- function(response) {
   }
 
   handle_validation <- function(error) {
+    if (!interactive())
+      stop("Required phone number.\nFor handle this error you must to interact with your console", call. = FALSE)
     response <- httr::GET(error$redirect_uri)
     authorize_form <- XML::htmlParse(rawToChar(response$content))
     action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
