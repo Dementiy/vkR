@@ -66,6 +66,7 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' Returns a list of community members
 #'
 #' @param group_id ID or screen name of the community
+#' @param sort Sort order. Available values: id_asc, id_desc, time_asc, time_desc. time_asc and time_desc are availavle only if the method is called by the group's moderator
 #' @param fields List of additional fields to be returned
 #' @param filter friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
@@ -73,12 +74,13 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
-getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+getGroupsMembersExecute <- function(group_id='', sort='', fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
-  getGroupsMembers20 <- function(group_id='', offset = 0, fields='', filter='', v=getAPIVersion())
+  getGroupsMembers20 <- function(group_id='', sort='', offset = 0, fields='', filter='', v=getAPIVersion())
   {
     code <- 'var groups_members = [];'
     code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
+                   '", "sort":"', sort,
                    '", "offset":"', offset,
                    '", "fields":"', fields,
                    '", "filter":"', filter,
@@ -87,6 +89,7 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
                    while (offset < 25000 && groups_members.length >= offset)
                    {
                    groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
+                   '", "sort":"', sort,
                    '", "fields":"', fields,
                    '", "filter":"', filter,
                    '", "v":"', v,
@@ -97,7 +100,7 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
     execute(code)
   }
 
-  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "fields":"', fields, '", "filter":"', filter, '", "v":"', v, '"});')
+  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "sort":"', sort, '", "fields":"', fields, '", "filter":"', filter, '", "v":"', v, '"});')
   response <- execute(code)
 
   members <- response$items
@@ -112,6 +115,7 @@ getGroupsMembersExecute <- function(group_id='', fields='', filter='', flatten=F
   while (len(members) < count)
   {
     members20 <- getGroupsMembers20(group_id = group_id,
+                                  sort = sort,
                                   offset = len(members),
                                   fields = fields,
                                   filter = filter,
