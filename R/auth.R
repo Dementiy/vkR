@@ -32,13 +32,14 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
                      '&redirect_uri=https://oauth.vk.com/blank.hmtl&scope=', scope,
                      '&response_type=token&display=page')
 
-  if ((missing(email) && missing(password)) || !requireNamespace('XML', quietly = TRUE)) {
+  if (missing(email) && missing(password) && interactive()) {
     browseURL(auth_url)
   } else {
     if (missing(email)) stop('argument "email" is missing, with no default')
     if (!is.character(email)) stop('argument "email" must be a string')
     if (missing(password)) stop('argument "password" is missing, with no default')
     if (!is.character(password)) stop('argument "password" must be a string')
+    if (!requireNamespace('XML', quietly = TRUE)) stop('The package XML was not installed')
 
     response <- httr::GET(auth_url)
 
