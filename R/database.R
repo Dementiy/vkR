@@ -1,5 +1,5 @@
 #' Returns a list of countries
-#' 
+#'
 #' @param need_all 1 - to return a full list of all countries; 0 - to return a list of countries near the current user's country
 #' @param code Country codes in ISO 3166-1 alpha-2 standard
 #' @param offset Offset needed to return a specific subset of countries
@@ -24,7 +24,7 @@ databaseGetCountries <- function(need_all='1', code='', offset='', count='100', 
 
 
 #' Returns a list of regions
-#' 
+#'
 #' @param country_id Country ID, received in database.getCountries method
 #' @param q Search query
 #' @param offset Offset needed to return specific subset of regions
@@ -49,7 +49,7 @@ databaseGetRegions <- function(country_id='', q='', offset='', count='100', v=ge
 
 
 #' Returns information about streets by their IDs
-#' 
+#'
 #' @param street_ids Street IDs
 #' @param v Version of API
 #' @examples
@@ -66,7 +66,7 @@ databaseGetStreetsById <- function(street_ids='', v=getAPIVersion()) {
 
 
 #' Returns information about countries by their IDs
-#' 
+#'
 #' @param country_ids Country IDs
 #' @param v Version of API
 #' @examples
@@ -83,7 +83,7 @@ databaseGetCountriesById <- function(country_ids, v=getAPIVersion()) {
 
 
 #' Returns a list of cities
-#' 
+#'
 #' @param country_id Country ID
 #' @param region_id Region ID
 #' @param q Search query
@@ -112,7 +112,7 @@ databaseGetCities <- function(country_id='', region_id='', q='', need_all='1', o
 
 
 #' Returns information about cities by their IDs
-#' 
+#'
 #' @param city_ids City IDs
 #' @param v Version of API
 #' @examples
@@ -129,7 +129,7 @@ databaseGetCitiesById <- function(city_ids='', v=getAPIVersion()) {
 
 
 #' Returns a list of higher education institutions
-#' 
+#'
 #' @param q Search query
 #' @param country_id Country ID
 #' @param city_id City ID
@@ -156,7 +156,7 @@ databaseGetUniversities <- function(q='', country_id='', city_id='', offset='', 
 
 
 #' Returns a list of schools
-#' 
+#'
 #' @param q Search query
 #' @param city_id City ID
 #' @param offset Offset needed to return a specific subset of schools
@@ -181,7 +181,7 @@ databaseGetSchools <- function(q='', city_id='', offset='', count='100', v=getAP
 
 
 #' Returns a list of available classes
-#' 
+#'
 #' @param country_id Country ID
 #' @param v Version of API
 #' @examples
@@ -198,7 +198,7 @@ databaseGetSchoolClasses <- function(country_id='', v=getAPIVersion()) {
 
 
 #' Returns a list of faculties (i.e., university departments)
-#' 
+#'
 #' @param university_id University ID
 #' @param offset Offset needed to return a specific subset of faculties
 #' @param count Number of faculties to return
@@ -221,9 +221,9 @@ databaseGetFaculties <- function(university_id='', offset='', count='100', v=get
 
 
 #' Returns list of chairs on a specified faculty
-#' 
-#' @param faculty_id ID of the faculty to get chairs from 
-#' @param offset Offset required to get a certain subset of chairs 
+#'
+#' @param faculty_id ID of the faculty to get chairs from
+#' @param offset Offset required to get a certain subset of chairs
 #' @param count Amount of chairs to get
 #' @param v Version of API
 #' @examples
@@ -244,7 +244,7 @@ databaseGetChairs <- function(faculty_id='', offset='', count='100', v=getAPIVer
 
 
 #' Get country ID and title by given city ID
-#'  
+#'
 #' @param city_id City ID
 #' @export
 getCountryByCityId <- function(city_id)
@@ -253,7 +253,7 @@ getCountryByCityId <- function(city_id)
   if (res$count == 0)
     stop("No users from this city")
   res <- res$items
-  if (length(res) == 0) # Бывает, что возвращается пустой ответ при count=1
+  if (length(res) == 0) # Sometimes response is empty when count=1
     res <- usersSearch(q = "", fields = "country", city = city_id, count = 2)$items
   res$country
 }
