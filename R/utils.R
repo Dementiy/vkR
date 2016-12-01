@@ -1,11 +1,3 @@
-# For more details see \url{http://stackoverflow.com/questions/6451152/how-to-catch-integer0}
-# @param x Integer value
-# @author Richie Cotton
-# is.integer0 <- function(x) {
-#   is.integer(x) && length(x) == 0L
-# }
-
-
 #' Predict age for the specified user
 #'
 #' @param user_id User ID
