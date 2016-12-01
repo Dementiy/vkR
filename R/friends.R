@@ -11,7 +11,7 @@
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' friends_list <- getFriends(user_id='1', order='name', fields='bdate')
+#' friends_list <- getFriends(user_id=1, order='name', fields='bdate')
 #' friends <- friends_list$items
 #' }
 #' @export
@@ -52,7 +52,7 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' mutual_friends <- getMutual(target_uid='1')
+#' mutual_friends <- getMutual(target_uid=1)
 #' }
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {

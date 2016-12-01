@@ -32,7 +32,7 @@ Returns a list of user IDs or detailed information about a user's friends
 }
 \examples{
 \dontrun{
-friends_list <- getFriends(user_id='1', order='name', fields='bdate')
+friends_list <- getFriends(user_id=1, order='name', fields='bdate')
 friends <- friends_list$items
 }
 }
