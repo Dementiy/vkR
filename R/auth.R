@@ -22,6 +22,25 @@
 #'   \item \strong{notifications} Access to notifications about answers to the user.
 #' }
 #' @importFrom utils browseURL
+#' @examples \dontrun{
+#' # an example of an authenticated request
+#' vkOAuth(client_id = 123456,
+#'         scope = "friends,groups,messages",
+#'         email = "your_email@example.com",
+#'         password = "your_secret_password")
+#'
+#' # save access token for future sessions
+#' at <- getAccessToken()
+#'
+#' # an example of request
+#' me()
+#'
+#' # an example of an authenticated request without specifying email and password
+#' vkOAuth(client_id = 123456, scope = "friends,groups,messages")
+#'
+#' # copy access token from browser address bar
+#' setAccessToken("your_secret_access_token")
+#' }
 #' @export
 vkOAuth <- function(client_id, scope='friends', email, password) {
   if (missing(client_id)) stop('argument "client_id" is missing, with no default')

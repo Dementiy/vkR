@@ -35,4 +35,25 @@ List of Available Settings of \href{https://vk.com/dev/permissions}{Access Permi
   \item \strong{notifications} Access to notifications about answers to the user.
 }
 }
+\examples{
+\dontrun{
+# an example of an authenticated request
+vkOAuth(client_id = 123456,
+        scope = "friends,groups,messages",
+        email = "your_email@example.com",
+        password = "your_secret_password")
+
+# save access token for future sessions
+at <- getAccessToken()
+
+# an example of request
+me()
+
+# an example of an authenticated request without specifying email and password
+vkOAuth(client_id = 123456, scope = "friends,groups,messages")
+
+# copy access token from browser address bar
+setAccessToken("your_secret_access_token")
+}
+}
 
