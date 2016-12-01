@@ -14,7 +14,7 @@ getGroupsForUsers(users, extended = "", filter = "", fields = "",
 
 \item{filter}{Types of communities to return: admin, editor, moder, groups, publics, events}
 
-\item{fields}{Profile fields to return}
+\item{fields}{List of additional fields to be returned}
 
 \item{progress_bar}{Display progress bar}
 

@@ -27,7 +27,7 @@ Returns a list of community members
 }
 \examples{
 \dontrun{
-groups <- getGroupsMembers('1', fields='sex,bdate,city')
+members <- getGroupsMembers(1, fields='sex,bdate,city')
 }
 }
 

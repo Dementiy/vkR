@@ -14,7 +14,7 @@ getGroups(user_id = "", extended = "", filter = "", fields = "",
 
 \item{filter}{Types of communities to return: admin, editor, moder, groups, publics, events}
 
-\item{fields}{Profile fields to return}
+\item{fields}{List of additional fields to be returned}
 
 \item{offset}{Offset needed to return a specific subset of communities}
 
@@ -27,7 +27,7 @@ Returns a list of the communities to which a user belongs
 }
 \examples{
 \dontrun{
-groups <- getGroups('1', fields='city')
+groups <- getGroups(me(), extended = 1, fields = 'city')
 }
 }
 

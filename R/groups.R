@@ -3,13 +3,13 @@
 #' @param user_id User ID
 #' @param extended 1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default)
 #' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
-#' @param fields Profile fields to return
+#' @param fields List of additional fields to be returned
 #' @param offset Offset needed to return a specific subset of communities
 #' @param count Number of communities to return (maximum value 1000)
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' groups <- getGroups('1', fields='city')
+#' groups <- getGroups(me(), extended = 1, fields = 'city')
 #' }
 #' @export
 getGroups <- function(user_id='', extended='', filter='', fields='', offset='', count='', v=getAPIVersion()) {
@@ -41,7 +41,7 @@ getGroups <- function(user_id='', extended='', filter='', fields='', offset='', 
 #' @param v Version of API
 #' @examples
 #' \dontrun{
-#' groups <- getGroupsMembers('1', fields='sex,bdate,city')
+#' members <- getGroupsMembers(1, fields='sex,bdate,city')
 #' }
 #' @export
 getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='', filter='', v=getAPIVersion()) {
@@ -73,6 +73,9 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' \dontrun{
+#' members <- getGroupsMembersExecute(1, fields='sex,bdate,city', progress_bar = TRUE)
+#' }
 #' @export
 getGroupsMembersExecute <- function(group_id='', sort='', fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
@@ -144,10 +147,13 @@ getGroupsMembersExecute <- function(group_id='', sort='', fields='', filter='', 
 #' @param users A list of users
 #' @param extended 1 - to return complete information about a user's communities; 0 - to return a list of community IDs without any additional fields (default)
 #' @param filter Types of communities to return: admin, editor, moder, groups, publics, events
-#' @param fields Profile fields to return
+#' @param fields List of additional fields to be returned
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' \dontrun{
+#' members <- getGroupsForUsers(c(me(), 123456), extended = 1, fields='city', progress_bar = TRUE)
+#' }
 #' @export
 getGroupsForUsers <- function(users, extended='', filter='', fields='', progress_bar = FALSE, v = getAPIVersion()) {
   get_groups_for_users <- function(users, extended='', filter='', fields='', offset='', v = getAPIVersion())
