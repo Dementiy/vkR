@@ -32,8 +32,7 @@ getWallExecute(owner_id = "", domain = "", offset = 0, count = 10,
 
 \item{progress_bar}{Display progress bar}
 
-\item{v}{Version of API
-getWallExecute()}
+\item{v}{Version of API}
 }
 \value{
 Returns a list of post objects.
@@ -46,5 +45,11 @@ If extended is set to 1, also returns the following:
 }
 \description{
 Returns a list of posts on a user wall or community wall
+}
+\examples{
+\dontrun{
+# get all posts from wall
+wall <- getWallExecute(domain='spbrug', count=0, progress_bar=TRUE)
+}
 }
 

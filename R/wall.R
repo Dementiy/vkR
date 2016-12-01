@@ -15,13 +15,15 @@
 #' @param extended 1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).
 #' @param fields List of comma-separated words
 #' @param v Version of API
-#' getWall()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
 #' \itemize{
 #' \item \strong{wall} - Contains a list of post objects.
 #' \item \strong{profiles} - Contains user objects with additional fields photo and online.
 #' \item \strong{groups} - Contains community objects.
+#' }
+#' @examples \dontrun{
+#' wall <- getWall(domain='spbrug', count=10, progress_bar=TRUE)
 #' }
 #' @export
 getWall <- function(owner_id='', domain='', offset='', count='', filter='owner', extended='', fields='', v=getAPIVersion()) {
@@ -63,7 +65,6 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @param fields List of comma-separated words
 #' @param progress_bar Display progress bar
 #' @param v Version of API
-#' getWallExecute()
 #' @return Returns a list of post objects.
 #' If extended is set to 1, also returns the following:
 #' \itemize{
@@ -72,6 +73,10 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' \item \strong{groups} - Contains community objects.
 #' }
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @examples \dontrun{
+#' # get all posts from wall
+#' wall <- getWallExecute(domain='spbrug', count=0, progress_bar=TRUE)
+#' }
 #' @export
 getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
 {

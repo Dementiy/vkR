@@ -29,8 +29,7 @@ getWall(owner_id = "", domain = "", offset = "", count = "",
 
 \item{fields}{List of comma-separated words}
 
-\item{v}{Version of API
-getWall()}
+\item{v}{Version of API}
 }
 \value{
 Returns a list of post objects.
@@ -43,5 +42,10 @@ If extended is set to 1, also returns the following:
 }
 \description{
 Returns a list of posts on a user wall or community wall
+}
+\examples{
+\dontrun{
+wall <- getWall(domain='spbrug', count=10, progress_bar=TRUE)
+}
 }
 
