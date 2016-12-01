@@ -5,7 +5,7 @@ Description: Provides an interface to the VK API <https://vk.com/dev/methods>.
       VK <https://vk.com/> is the largest European online social networking
       service, based in Russia.
 Version: 0.1
-Date: 2015-02-26
+Date: 2016-12-01
 Authors@R: c(
     person("Dmitriy", "Sorokin", role = c("aut", "cre"),
            email = "dementiy@yandex.ru"),
