@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/dementiy/vkr.svg?branch=master)](https://travis-ci.org/dementiy/vkr)
+[![Travis-CI Build Status](https://travis-ci.org/Dementiy/vkR.svg?branch=master)](https://travis-ci.org/Dementiy/vkR)
 
 `vkR` is an R package which provides access to the [VKontakte](https://vk.com/) (VK) API.
 
