@@ -1,7 +1,9 @@
 Package: vkR
 Type: Package
 Title: Access to VK API via R
-Description: Provides an interface to the VK API.
+Description: Provides an interface to the VK API <https://vk.com/dev/methods>.
+      VK <https://vk.com/> is the largest European online social networking
+      service, based in Russia.
 Version: 0.1
 Date: 2015-02-26
 Authors@R: c(
@@ -48,5 +50,6 @@ Collate:
     'search.R'
     'users.R'
     'utils.R'
-    'vkR.R'
     'wall.R'
+    'vkR.R'
+    'vkR-package.R'
