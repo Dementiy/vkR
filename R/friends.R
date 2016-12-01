@@ -97,13 +97,21 @@ areFriends <- function(source_id, target_id)
 
 #' Returns a list of friends IDs for the specified users
 #'
-#' @param user_ids User IDs
+#' @param user_ids User IDs (maximum 25)
 #' @param v Version of API
 #' @importFrom stats na.omit
+#' @examples \dontrun{
+#' my_friends <- getFriends()
+#' friends_of_friends <- getFriendsBy25(my_friends$items[1:25])
+#' }
 #' @export
 getFriendsBy25 <- function(user_ids, v=getAPIVersion()) {
   user_ids <- na.omit(user_ids)
   user_ids <- unique(user_ids)
+
+  if (length(user_ids) > 25)
+    stop("Number of user IDs must be less or equal to 25", call. = FALSE)
+
   code <- "var all_friends = {}; var request;"
   for (idx in 1:length(user_ids)) {
     code <- paste(code, "request=API.friends.get({\"user_id\":", user_ids[idx], ", \"v\":", v, "}).items; all_friends.user", user_ids[idx], "=request;", sep = "")

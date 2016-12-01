@@ -481,6 +481,9 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @examples \dontrun{
+#' my_followers <- usersGetFollowers(me())
+#' }
 #' @export
 usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_case='', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
@@ -581,6 +584,9 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @examples \dontrun{
+#' my_subscriptions <- usersGetSubscriptions(me())
+#' }
 #' @export
 usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, fields='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {

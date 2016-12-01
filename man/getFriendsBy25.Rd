@@ -7,11 +7,17 @@
 getFriendsBy25(user_ids, v = getAPIVersion())
 }
 \arguments{
-\item{user_ids}{User IDs}
+\item{user_ids}{User IDs (maximum 25)}
 
 \item{v}{Version of API}
 }
 \description{
 Returns a list of friends IDs for the specified users
+}
+\examples{
+\dontrun{
+my_friends <- getFriends()
+friends_of_friends <- getFriendsBy25(my_friends$items[1:25])
+}
 }
 

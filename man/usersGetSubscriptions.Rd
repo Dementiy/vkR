@@ -28,4 +28,9 @@ usersGetSubscriptions(user_id = "", extended = "1", offset = 0,
 \description{
 Returns a list of IDs of users and communities followed by the user
 }
+\examples{
+\dontrun{
+my_subscriptions <- usersGetSubscriptions(me())
+}
+}
 

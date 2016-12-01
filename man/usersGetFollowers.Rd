@@ -30,4 +30,9 @@ usersGetFollowers(user_id = "", offset = 0, count = 0, fields = "",
 \description{
 Returns a list of IDs of followers of the user in question, sorted by date added, most recent first
 }
+\examples{
+\dontrun{
+my_followers <- usersGetFollowers(me())
+}
+}
 
