@@ -73,7 +73,7 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#' \dontrun{
+#' @examples \dontrun{
 #' members <- getGroupsMembersExecute(1, fields='sex,bdate,city', progress_bar = TRUE)
 #' }
 #' @export
@@ -151,7 +151,7 @@ getGroupsMembersExecute <- function(group_id='', sort='', fields='', filter='', 
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#' \dontrun{
+#' @examples \dontrun{
 #' members <- getGroupsForUsers(c(me(), 123456), extended = 1, fields='city', progress_bar = TRUE)
 #' }
 #' @export

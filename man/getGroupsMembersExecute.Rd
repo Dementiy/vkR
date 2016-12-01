@@ -26,4 +26,9 @@ getGroupsMembersExecute(group_id = "", sort = "", fields = "",
 \description{
 Returns a list of community members
 }
+\examples{
+\dontrun{
+members <- getGroupsMembersExecute(1, fields='sex,bdate,city', progress_bar = TRUE)
+}
+}
 
