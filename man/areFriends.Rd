@@ -14,4 +14,9 @@ areFriends(source_id, target_id)
 \description{
 Checks the friendship status between two users
 }
+\examples{
+\dontrun{
+areFriends(me(), 123456)
+}
+}
 

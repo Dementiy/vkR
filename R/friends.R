@@ -82,6 +82,10 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
 #'
 #' @param source_id Source user ID
 #' @param target_id Target user ID
+#' @examples
+#' \dontrun{
+#' areFriends(me(), 123456)
+#' }
 #' @export
 areFriends <- function(source_id, target_id)
 {
