@@ -1,9 +1,16 @@
 [![Travis-CI Build Status](https://travis-ci.org/Dementiy/vkR.svg?branch=master)](https://travis-ci.org/Dementiy/vkR)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/vkR)](https://cran.rstudio.com/web/packages/vkR/)
 
 `vkR` is an R package which provides access to the [VKontakte](https://vk.com/) (VK) API.
 
 ## Installation
 
+To get the current released version from CRAN:
+```r
+install.packages("vkR")
+```
+
+To get the current development version from github:
 ``` r
 install.packages("devtools")
 devtools::install_github("Dementiy/vkR")
