@@ -182,7 +182,7 @@
 #' @export
 getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
   .Deprecated("getUsersExecute()")
-  body <- list(fields = fields, name_case = name_case)
+  body <- list(fields = profile_fields(fields), name_case = name_case)
   if (length(user_ids) > 1) {
     user_ids <- paste(user_ids, collapse = ",")
     body <- append(body, list(user_ids = user_ids))
@@ -412,6 +412,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
     execute(code)
   }
 
+  fields <- profile_fields(fields)
   if (missing(users_ids)) {
     code <- paste0('return API.users.get({"fields":"', fields, '", "name_case":"', name_case, '", "v":"', v, '"});')
     response <- execute(code)
@@ -508,6 +509,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     execute(code)
   }
 
+  fields <- profile_fields(fields)
   if (isTRUE(drop) && fields == '')
     fields <- 'deactivated'
 
@@ -556,6 +558,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
 
   if (progress_bar)
     close(pb)
+
   # for R CMD check to pass
   deactivated <- NULL
   if (isTRUE(drop) && "deactivated" %in% colnames(followers)) {
@@ -612,6 +615,7 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
   }
 
   user_id <- as.integer(user_id)
+  fields <- profile_fields(fields)
   code <- paste0('return API.users.getSubscriptions({"user_id":"', user_id, '",
                  "extended":"', 1, '",
                  "offset":"', offset, '",
@@ -715,7 +719,7 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
                         sort = sort,
                         offset = offset,
                         count = count,
-                        fields = fields,
+                        fields = profile_fields(fields),
                         city = city,
                         country = country,
                         hometown = hometown,
@@ -758,6 +762,57 @@ usersSearch <- function(q='', sort='', offset='', count='20', fields='', city=''
     response$items <- jsonlite::flatten(response$items)
 
   response
+}
+
+
+#' Helper function for working with profile fields
+#' @param fields Profile fields to return
+#' @examples \dontrun{
+#' # get list of all fields
+#' fields <- profile_fields('all')
+#'
+#' # get list of all fields except specified
+#' fields <- profile_fields('all - photo_50,photo_100,photo_200')
+#'
+#' # get only specified fields
+#' fields <- profile_fields('sex,bdate')
+#' }
+#' @export
+profile_fields <- function(fields = '') {
+  profile_fields <- 'photo_id, verified, sex, bdate, city, country, home_town,
+  has_photo, photo_50, photo_100, photo_200_orig, photo_200, photo_400_orig, photo_max,
+  photo_max_orig, online, lists, domain, has_mobile, contacts, site, education, universities,
+  schools, status, last_seen, followers_count, common_count, occupation, nickname, relatives,
+  relation, personal, connections, exports, wall_comments, activities, interests, music,
+  movies, tv, books, games, about, quotes, can_post, can_see_all_posts, can_see_audio,
+  can_write_private_message, can_send_friend_request, is_favorite, is_hidden_from_feed,
+  timezone, screen_name, maiden_name, crop_photo, is_friend, friend_status, career,
+  military, blacklisted, blacklisted_by_me'
+  trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+  profile_fields <- strsplit(profile_fields, ',')
+  profile_fields <- trim(profile_fields[[1]])
+
+  if (fields == 'all')
+    return(paste(profile_fields, collapse = ','))
+
+  selected_fields <- strsplit(fields, '-')
+  selected_fields <- trim(selected_fields[[1]])
+  if (length(selected_fields) > 1) {
+    selected_fields <- strsplit(selected_fields[-1], ',')[[1]]
+    incorrect_fields <- setdiff(selected_fields, profile_fields)
+    if (length(incorrect_fields) != 0)
+      warning("This fields are incorrect: ", paste(incorrect_fields, collapse = ','), call. = FALSE)
+    fields <- setdiff(profile_fields, selected_fields)
+    return(paste(fields, collapse = ','))
+  }
+
+  fields <- strsplit(fields, ',')[[1]]
+  fields <- trim(fields)
+  incorrect_fields <- fields[!fields %in% profile_fields]
+  fields <- setdiff(fields, incorrect_fields)
+  if (length(incorrect_fields) != 0)
+    warning("This fields are incorrect: ", paste(incorrect_fields, collapse = ','), call. = FALSE)
+  paste(fields, collapse = ',')
 }
 
 
