@@ -145,9 +145,7 @@ setAccessToken <- function(access_token = '') {
 #' Get access token
 #' @export
 getAccessToken <- function() {
-  if (!is.null(.vkr$access_token)) {
-    .vkr$access_token
-  } else {
-    stop("Could not find access token. For more details see ?vkOAuth or ?setAccessToken")
-  }
+  if (is.null(.vkr$access_token))
+    warning("Could not find access token. For more details see ?vkOAuth or ?setAccessToken", call. = FALSE)
+  .vkr$access_token
 }
