@@ -67,6 +67,8 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #'
 #' @param group_id ID or screen name of the community
 #' @param sort Sort order. Available values: id_asc, id_desc, time_asc, time_desc. time_asc and time_desc are availavle only if the method is called by the group's moderator
+#' @param offset Offset needed to return a specific subset of community members
+#' @param count Number of community members to  (0 - get all community members)
 #' @param fields List of additional fields to be returned
 #' @param filter friends - only friends in this community will be returned; unsure - only those who pressed 'I may attend' will be returned (if it's an event)
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
@@ -77,59 +79,91 @@ getGroupsMembers <- function(group_id='', sort='', offset='', count='', fields='
 #' members <- getGroupsMembersExecute(1, fields='sex,bdate,city', progress_bar = TRUE)
 #' }
 #' @export
-getGroupsMembersExecute <- function(group_id='', sort='', fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+getGroupsMembersExecute <- function(group_id='', sort='', offset=0, count=0, fields='', filter='', flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
-  getGroupsMembers20 <- function(group_id='', sort='', offset = 0, fields='', filter='', v=getAPIVersion())
+  getGroupsMembers20 <- function(group_id='', sort='', offset=0, count='', fields='', filter='', v=getAPIVersion())
   {
-    code <- 'var groups_members = [];'
-    code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
+    if (count > 20000)
+      count <- 20000
+    if (count <= 1000) {
+      execute(paste0('return API.groups.getMembers({"group_id":"', group_id, '",
+                     "sort":"', sort, '",
+                     "offset":"', offset, '",
+                     "count":"', count, '",
+                     "fields":"', fields, '",
+                     "filter":"', filter, '",
+                     "v":"', v, '"}).items;'))
+    } else {
+      code <- 'var groups_members = [];'
+      code <- paste0(code, 'groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
                    '", "sort":"', sort,
                    '", "offset":"', offset,
+                   '", "count":"', 1000,
                    '", "fields":"', fields,
                    '", "filter":"', filter,
                    '", "v":"', v, '"}).items;')
-    code <- paste0(code, 'var offset = 1000;
-                   while (offset < 25000 && groups_members.length >= offset)
+      code <- paste0(code, 'var offset = 1000 + ', offset, ';
+                   var count = 1000; var max_offset = offset + ', count, ';
+                   while (offset < max_offset && groups_members.length <= offset)
                    {
-                   groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
-                   '", "sort":"', sort,
-                   '", "fields":"', fields,
-                   '", "filter":"', filter,
-                   '", "v":"', v,
-                   '", "offset":(offset+',offset,')}).items;
-                   offset = offset + 1000;
+                     if (', count, ' - groups_members.length < 1000) {
+                        count = ', count, ' - groups_members.length;
+                     };
+                     groups_members = groups_members + API.groups.getMembers({"group_id":"', group_id,
+                     '", "sort":"', sort,
+                     '", "fields":"', fields,
+                     '", "filter":"', filter,
+                     '", "v":"', v,
+                     '", "count":count,
+                     "offset":offset}).items;
+                     offset = offset + 1000;
                    };
                    return groups_members;')
-    execute(code)
+      execute(code)
+    }
   }
 
-  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '", "sort":"', sort, '", "fields":"', fields, '", "filter":"', filter, '", "v":"', v, '"});')
+  code <- paste0('return API.groups.getMembers({"group_id":"', group_id, '",
+                 "sort":"', sort, '",
+                 "offset":"', offset, '",
+                 "count":"', 1, '",
+                 "fields":"', fields, '",
+                 "filter":"', filter, '",
+                 "v":"', v, '"});')
   response <- execute(code)
-
   members <- response$items
+
   len <- ifelse(is.vector(members), length, nrow)
-  count <- response$count
+  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
 
   if (progress_bar) {
-    pb <- txtProgressBar(min = 0, max = count, style = 3)
-    setTxtProgressBar(pb, ifelse(is.vector(members), len(members), nrow(members)))
+    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    setTxtProgressBar(pb, len(members))
   }
 
-  while (len(members) < count)
+  num_records <- ifelse(max_count - len(members) > 20000, 20000, max_count - len(members))
+  while (len(members) < max_count)
   {
-    members20 <- getGroupsMembers20(group_id = group_id,
+    tryCatch({members20 <- getGroupsMembers20(group_id = group_id,
                                   sort = sort,
-                                  offset = len(members),
+                                  offset = offset + len(members),
+                                  count = num_records,
                                   fields = fields,
                                   filter = filter,
                                   v = v)
-    if (is.vector(members))
-      members <- append(members, members20)
-    else
-      members <- jsonlite::rbind.pages(list(members, members20))
+      if (is.vector(members))
+        members <- append(members, members20)
+      else
+        members <- jsonlite::rbind.pages(list(members, members20))
+
+      num_records <- ifelse((max_count - len(members)) > num_records, num_records, max_count - len(members))},
+    error = function(e) {
+      num_records <<- as.integer(num_records / 2)
+      warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
+    })
 
     if (progress_bar)
-      setTxtProgressBar(pb, ifelse(is.vector(members), len(members), nrow(members)))
+      setTxtProgressBar(pb, len(members))
   }
 
   if (progress_bar)
@@ -176,7 +210,7 @@ getGroupsForUsers <- function(users, extended='', filter='', fields='', progress
                        "count":"', 1000, '",
                        "v":"', v, '"}).items;
                        groups_per_user.user', users[index], "=groups;", sep = "")
-    }
+      }
       code <- paste0(code, 'return groups_per_user;')
       groups <- append(groups, execute(code))
       from <- from + 25
@@ -222,4 +256,27 @@ getGroupsForUsers <- function(users, extended='', filter='', fields='', progress
 
   class(groups) <- c(class(groups), "vk.groups_per_user")
   groups
+}
+
+
+#' Returns information about communities by their IDs
+#'
+#' @param group_ids IDs or screen names of communities
+#' @param group_id ID or screen name of the community
+#' @param fields Group fields to return
+#' @param v Version of API
+#' @export
+getGroupsById <- function(group_ids='', group_id='', fields='', v=getAPIVersion()) {
+  query <- queryBuilder('groups.getById',
+                        group_ids = group_ids,
+                        group_id = group_id,
+                        fields = fields,
+                        v = v)
+  request_delay()
+  response <- jsonlite::fromJSON(query)
+
+  if (has_error(response))
+    return(try_handle_error(response))
+
+  response$response
 }

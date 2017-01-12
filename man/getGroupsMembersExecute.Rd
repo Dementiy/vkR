@@ -4,14 +4,18 @@
 \alias{getGroupsMembersExecute}
 \title{Returns a list of community members}
 \usage{
-getGroupsMembersExecute(group_id = "", sort = "", fields = "",
-  filter = "", flatten = FALSE, progress_bar = FALSE,
+getGroupsMembersExecute(group_id = "", sort = "", offset = 0, count = 0,
+  fields = "", filter = "", flatten = FALSE, progress_bar = FALSE,
   v = getAPIVersion())
 }
 \arguments{
 \item{group_id}{ID or screen name of the community}
 
 \item{sort}{Sort order. Available values: id_asc, id_desc, time_asc, time_desc. time_asc and time_desc are availavle only if the method is called by the group's moderator}
+
+\item{offset}{Offset needed to return a specific subset of community members}
+
+\item{count}{Number of community members to  (0 - get all community members)}
 
 \item{fields}{List of additional fields to be returned}
 

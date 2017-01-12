@@ -126,7 +126,12 @@ execute <- function(code, params = list()) {
   query <- "https://api.vk.com/method/execute"
   body = list('code' = code, 'access_token' = getAccessToken())
   post_res <- httr::POST(url = query, body = append(body, params))
-  response <- jsonlite::fromJSON(rawToChar(post_res$content))
+
+  content <- rawToChar(post_res$content)
+  if (startsWith(content, "ERROR"))
+    stop(sprintf("Response error '%s'. Status code: %s.", content, post_res$status_code))
+
+  response <- jsonlite::fromJSON(content)
 
   if (has_error(response))
     return(try_handle_error(response))
