@@ -427,7 +427,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
 
   all_users <- data.frame()
   from <- 1
-  to <- 5000
+  to <- 4000
 
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = length(users_ids), style = 3)
@@ -448,7 +448,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flat
       break
 
     from <- to + 1
-    to <- to + 5000
+    to <- to + 4000
   }
 
   if (progress_bar)
