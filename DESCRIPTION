@@ -24,7 +24,8 @@ Imports:
     jsonlite,
     stats,
     utils,
-    XML
+    XML,
+    fstrings
 Suggests:
     stringr,
     tm,

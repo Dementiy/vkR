@@ -85,50 +85,54 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
     if (max_count > 2500)
       max_count <- 2500
     if (max_count <= 100) {
-      execute(paste0('return API.wall.get({"owner_id":"', owner_id, '",
-                     "domain":"', domain, '",
-                     "offset":"', offset, '",
-                     "count":"', max_count, '",
-                     "filter":"', filter, '",
-                     "extended":"', extended, '",
-                     "v":"', v, '"}).items;'))
+      execute(fstrings::f('return API.wall.get({{',
+                '"owner_id":"{owner_id}",',
+                '"domain": "{domain}",',
+                '"offset": "{offset}",',
+                '"count": "{max_count}",',
+                '"filter": "{filter}",',
+                '"extended": "{extended}",',
+                '"v": "{v}"}}).items;'))
     } else {
-      code <- 'var wall_records = [];'
-      code <- paste0(code, 'wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '",
-                     "domain":"', domain, '",
-                     "offset":"', offset, '",
-                     "count":"', 100, '",
-                     "filter":"', filter, '",
-                     "extended":"', extended, '",
-                     "v":"', v, '"}).items;')
-      code <- paste0(code, 'var offset = 100 + ', offset, ';
-                     var count = 100; var max_offset = offset + ', max_count, ';
-                     while (offset < max_offset && wall_records.length <= offset && offset-', offset, '<', max_count, ') {
-                       if (', max_count, ' - wall_records.length < 100) {
-                        count = ', max_count, ' - wall_records.length;
-                       };
-                       wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '",
-                         "domain":"', domain, '",
-                         "offset":offset,
-                         "count":count,
-                         "filter":"', filter, '",
-                         "extended":"', extended, '",
-                         "v":"', v, '"}).items;
-                       offset = offset + 100;
-                     };
-                     return wall_records;')
-      execute(code)
+      execute(fstrings::f('var wall_records = [];
+                wall_records = wall_records + API.wall.get({{
+                  "owner_id":"{owner_id}",
+                  "domain": "{domain}",
+                  "offset": "{offset}",
+                  "count": "100",
+                  "filter": "{filter}",
+                  "extended": "{extended}",
+                  "v": "{v}"}}).items;
+                var offset = 100 + {offset};
+                var count = 100;
+                var max_offset = offset + {max_count};
+                while (offset < max_offset && wall_records.length <= offset && offset-{offset}<{max_count})
+                {{
+                  if ({max_count} - wall_records.length < 100) {{
+                    count = {max_count} - wall_records.length;
+                  }};
+                  wall_records = wall_records + API.wall.get({{
+                    "owner_id":"{owner_id}",
+                    "domain": "{domain}",
+                    "offset": offset,
+                    "count": count,
+                    "filter": "{filter}",
+                    "extended": "{extended}",
+                    "v": "{v}"}}).items;
+                  offset = offset + 100;
+                }};
+                return wall_records;'))
     }
   }
 
-  code <- paste0('return API.wall.get({"owner_id":"', owner_id, '",
-                 "domain":"', domain, '",
-                 "offset":"', offset, '",
-                 "count":"', 1, '",
-                 "filter":"', filter, '",
-                 "extended":"', extended, '",
-                 "v":"', v, '"});')
-  response <- execute(code)
+  response <- execute(fstrings::f('return API.wall.get({{',
+                      '"owner_id":"{owner_id}",',
+                      '"domain": "{domain}",',
+                      '"offset": "{offset}",',
+                      '"count": 1,',
+                      '"filter": "{filter}",',
+                      '"extended": "{extended}",',
+                      '"v": "{v}"}});'))
 
   posts <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
@@ -328,62 +332,65 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
     if (max_count > 2500)
       max_count <- 2500
     if (max_count <= 100) {
-      execute(paste0('return API.wall.getComments({
-                     "owner_id":"', owner_id, '",
-                     "post_id":"', post_id, '",
-                     "count":"', max_count, '",
-                     "offset":"', offset, '",
-                     "need_likes":"', need_likes, '",
-                     "start_comment_id":"', start_comment_id, '",
-                     "sort":"', sort, '",
-                     "preview_length":"', preview_length, '",
-                     "extended":"', extended, '", "v":"', v, '"}).items;'))
+      execute(fstrings::f('return API.wall.getComments({{',
+                          '"owner_id":"{owner_id}",',
+                          '"post_id": "{post_id}",',
+                          '"count": "{max_count}",',
+                          '"offset": "{offset}",',
+                          '"need_likes": "{need_likes}",',
+                          '"start_comment_id": "{start_comment_id}",',
+                          '"sort": "{sort}",',
+                          '"preview_length": "{preview_length}",',
+                          '"extended": "{extended}",',
+                          '"v": "{v}"}}).items;'))
     } else {
-      code <- 'var comments = [];'
-      code <- paste0(code, 'comments = comments + API.wall.getComments({
-                     "owner_id":"', owner_id, '",
-                     "post_id":"', post_id, '",
-                     "count":"', 100, '",
-                     "offset":"', offset, '",
-                     "need_likes":"', need_likes, '",
-                     "start_comment_id":"', start_comment_id, '",
-                     "sort":"', sort, '",
-                     "preview_length":"', preview_length, '",
-                     "extended":"', extended, '", "v":"', v, '"}).items;')
-      code <- paste0(code, 'var offset = 100 + ', offset, ';
-                     var count = 100; var max_offset = offset + ', max_count, ';
-                     while (offset < max_offset && comments.length <= offset && offset-', offset, '<', max_count, ') {
-                     if (', max_count, ' - comments.length < 100) {
-                     count = ', max_count, ' - comments.length;
-                     };
-                     comments = comments + API.wall.getComments({
-                     "owner_id":"', owner_id, '",
-                     "post_id":"', post_id, '",
-                     "offset":offset,
-                     "count":count,
-                     "need_likes":"', need_likes, '",
-                     "start_comment_id":"', start_comment_id, '",
-                     "sort":"', sort, '",
-                     "preview_length":"', preview_length, '",
-                     "extended":"', extended, '", "v":"', v, '"}).items;
-                     offset = offset + 100;
-                     };
-                     return comments;')
-      execute(code)
+      execute(fstrings::f('var comments = [];
+        comments = comments + API.wall.getComments({{
+          "owner_id":"{owner_id}",
+          "post_id": "{post_id}",
+          "count": 100,
+          "offset": "{offset}",
+          "need_likes": "{need_likes}",
+          "start_comment_id": "{start_comment_id}",
+          "sort": "{sort}",
+          "preview_length": "{preview_length}",
+          "extended": "{extended}",
+          "v": "{v}"}}).items;
+        var offset = 100 + {offset};
+        var count = 100;
+        var max_offset = offset + {max_count};
+        while (offset < max_offset && comments.length <= offset && offset-{offset}<{max_count}) {{
+          if ({max_count} - comments.length < 100) {{
+            count = {max_count} - comments.length;
+          }};
+          comments = comments + API.wall.getComments({{
+            "owner_id":"{owner_id}",
+            "post_id": "{post_id}",
+            "count": count,
+            "offset": offset,
+            "need_likes": "{need_likes}",
+            "start_comment_id": "{start_comment_id}",
+            "sort": "{sort}",
+            "preview_length": "{preview_length}",
+            "extended": "{extended}",
+            "v": "{v}"}}).items;
+          offset = offset + 100;
+        }};
+        return comments;'))
     }
   }
 
-  code <- paste0('return API.wall.getComments({
-                 "owner_id":"', owner_id, '",
-                 "post_id":"', post_id, '",
-                 "count":"', 1, '",
-                 "offset":"', offset, '",
-                 "need_likes":"', need_likes, '",
-                 "start_comment_id":"', start_comment_id, '",
-                 "sort":"', sort, '",
-                 "preview_length":"', preview_length, '",
-                 "extended":"', extended, '", "v":"', v, '"});')
-  response <- execute(code)
+  response <- execute(fstrings::f('return API.wall.getComments({{',
+                                  '"owner_id":"{owner_id}",',
+                                  '"post_id": "{post_id}",',
+                                  '"count": 1,',
+                                  '"offset": "{offset}",',
+                                  '"need_likes": "{need_likes}",',
+                                  '"start_comment_id": "{start_comment_id}",',
+                                  '"sort": "{sort}",',
+                                  '"preview_length": "{preview_length}",',
+                                  '"extended": "{extended}",',
+                                  '"v": "{v}"}});'))
   comments <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
 
@@ -443,17 +450,17 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
     to <- 25
     comments <- list()
     for (i in 1:num_requests) {
-      code <- 'var comments_per_post = {}; var comments;'
+      code <- fstrings::f('var comments_per_post = {{}}; var comments;')
       if (to > nrow(posts))
         to <- nrow(posts)
       for (index in from:to) {
-        code <- paste0(code, 'comments = API.wall.getComments({
-                       "owner_id":"', posts[index, ]$owner_id, '",
-                       "post_id":"', posts[index, ]$id, '",
-                       "need_likes":"', 1, '",
-                       "count":"', 100, '",
-                       "v":"', v, '"}).items;
-                       comments_per_post.post', posts[index, ]$id, "=comments;", sep = "")
+        code <- paste0(code, fstrings::f('comments = API.wall.getComments({{
+            "owner_id":"{posts[index, ]$owner_id}",
+            "post_id":"{posts[index, ]$id}",
+            "need_likes":"1",
+            "count":"100",
+            "v":"{v}"}}).items;
+          comments_per_post.post{posts[index, ]$id}=comments;'))
       }
       code <- paste0(code, 'return comments_per_post;')
       comments <- append(comments, execute(code))
