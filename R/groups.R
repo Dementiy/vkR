@@ -157,7 +157,7 @@ getGroupsMembersExecute <- function(group_id='', sort='', offset=0, count=0, fie
         members <- jsonlite::rbind.pages(list(members, members20))
 
       num_records <- ifelse((max_count - len(members)) > num_records, num_records, max_count - len(members))},
-    error = function(e) {
+    vk_error500 = function(e) {
       num_records <<- as.integer(num_records / 2)
       warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
     })
@@ -271,6 +271,49 @@ getGroupsById <- function(group_ids='', group_id='', fields='', v=getAPIVersion(
                         group_ids = group_ids,
                         group_id = group_id,
                         fields = fields,
+                        v = v)
+  request_delay()
+  response <- jsonlite::fromJSON(query)
+
+  if (has_error(response))
+    return(try_handle_error(response))
+
+  response$response
+}
+
+
+#' Returns a list of communities matching the search criteria
+#'
+#' @param q Search query string
+#' @param type Community type. Possible values: group, page, event
+#' @param country_id Country ID
+#' @param city_id City ID. If this parameter is transmitted, country_id is ignored
+#' @param future 1 — to return only upcoming events. Works with the type = event only
+#' @param market 1 — to return communities with enabled market only
+#' @param sort Sort order. Possible values:
+#' \itemize{
+#'   \item 0 — default sorting (similar the full version of the site);
+#'   \item 1 — by growth speed;
+#'   \item 2— by the "day attendance/members number" ratio;
+#'   \item 3 — by the "Likes number/members number" ratio;
+#'   \item 4 — by the "comments number/members number" ratio;
+#'   \item 5 — by the "boards entries number/members number" ratio.
+#' }
+#' @param offset Offset needed to return a specific subset of results
+#' @param count Number of communities to return (default 20, maximum value 1000)
+#' @param v Version of API
+#' @export
+groupsSearch <- function(q='', type='', country_id='', city_id='', future=0, market=0, sort=0, offset=0, count=20, v=getAPIVersion()) {
+  query <- queryBuilder('groups.search',
+                        q = q,
+                        type = type,
+                        country_id = country_id,
+                        city_id = city_id,
+                        future = future,
+                        market = market,
+                        sort = sort,
+                        offset = offset,
+                        count = count,
                         v = v)
   request_delay()
   response <- jsonlite::fromJSON(query)
