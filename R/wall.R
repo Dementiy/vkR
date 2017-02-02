@@ -154,7 +154,7 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                                v = v)
       posts <- jsonlite::rbind.pages(list(posts, posts2500))
       num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
-    warning = function(w) {
+    vk_error13 = function(e) {
       num_records <<- as.integer(num_records / 2)
       warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
     })

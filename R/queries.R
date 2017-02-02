@@ -32,63 +32,71 @@ repeat_last_query <- function(params = list(), n = 1) {
 }
 
 
-#' Check response for errors
-#' @param response httr response object
+#' Custom error
+#' @param message Error message
+#' @param call Call expression
+#' @param error_code Error code
+vk_stop <- function(message = "", call = sys.call(), error_code = "") {
+  cond <- structure(list(message = message, call = call),
+                    class = c(paste0("vk_error", error_code), "error", "condition"))
+  stop(cond)
+}
+
+
+#' Captcha error handler
+#' @param error Error object
 #' @importFrom graphics plot rasterImage
 #' @importFrom utils download.file
-try_handle_error <- function(response) {
-  if (!has_error(response))
-      return(NULL)
+handle_captcha <- function(error) {
+  if (!interactive())
+    stop("Captcha needed.\nFor handle this error you must to interact with your console", call. = FALSE)
+  if (!requireNamespace("jpeg", quietly = TRUE)) stop("The package jpeg was not installed")
+  download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
+  captcha_img <- jpeg::readJPEG("captcha.jpg", native = TRUE)
+  plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
+  rasterImage(captcha_img, 0, 0, 1, 1)
+  captcha_sid <- error$captcha_sid
+  captcha_key <- readline("Enter the key from captcha: ")
+  return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 3))
+}
 
-  handle_captcha <- function(error) {
-    if (!interactive())
-      stop("Captcha needed.\nFor handle this error you must to interact with your console", call. = FALSE)
-    if (!requireNamespace("jpeg", quietly = TRUE)) stop("The package jpeg was not installed")
-    download.file(url = error$captcha_img, destfile = 'captcha.jpg', mode = 'wb')
-    captcha_img <- jpeg::readJPEG("captcha.jpg", native = TRUE)
-    plot(0:1, 0:1, type = "n", ann = FALSE, axes = FALSE)
-    rasterImage(captcha_img, 0, 0, 1, 1)
-    captcha_sid <- error$captcha_sid
-    captcha_key <- readline("Enter the key from captcha: ")
-    return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 3))
-  }
 
-  handle_validation <- function(error) {
-    if (!interactive())
-      stop("Required phone number.\nFor handle this error you must to interact with your console", call. = FALSE)
-    response <- httr::GET(error$redirect_uri)
-    authorize_form <- XML::htmlParse(rawToChar(response$content))
-    action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
-    if (length(action) != 0 && grepl("security_check", action)) {
-      phone <- XML::xpathSApply(authorize_form, "//*/span", XML::xmlValue)
-      print(phone)
-      missing_numbers <- readline("Enter the missing numbers in the phone number: ")
-      response <- httr::GET(paste0("https://m.vk.com",action),
-                            query = list('code' = missing_numbers),
-                            httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
-      for (i in 1:length(response$all_headers)) {
-        location <- response$all_headers[[i]]$headers$location
-        if (!is.null(location) & grepl("access_token", location)) {
-          access_token <- gsub(".*?access_token=(.*?)&.*", "\\1", location)
-          setAccessToken(access_token)
-          return(repeat_last_query(n = 3))
-        }
+#' Validation error handler
+#' @param error Error object
+handle_validation <- function(error) {
+  if (!interactive())
+    stop("Required phone number.\nFor handle this error you must to interact with your console", call. = FALSE)
+  response <- httr::GET(error$redirect_uri)
+  authorize_form <- XML::htmlParse(rawToChar(response$content))
+  action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
+  if (length(action) != 0 && grepl("security_check", action)) {
+    phone <- XML::xpathSApply(authorize_form, "//*/span", XML::xmlValue)
+    print(phone)
+    missing_numbers <- readline("Enter the missing numbers in the phone number: ")
+    response <- httr::GET(paste0("https://m.vk.com",action),
+                          query = list('code' = missing_numbers),
+                          httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
+    for (i in 1:length(response$all_headers)) {
+      location <- response$all_headers[[i]]$headers$location
+      if (!is.null(location) & grepl("access_token", location)) {
+        access_token <- gsub(".*?access_token=(.*?)&.*", "\\1", location)
+        setAccessToken(access_token)
+        return(repeat_last_query(n = 3))
       }
     }
   }
+}
 
-  # Handle errors
-  if (has_error(response) == 14) {
-    return(handle_captcha(response$error))
-  } else if (has_error(response) == 17) {
-    return(handle_validation(response$error))
-  } else if (has_error(response) == 13) {
-    warning(response$error$error_msg)
-  } else {
-    stop(sprintf("VK API request failed\nVK error message [%s]: %s",
-                 response$error$error_code,
-                 response$error$error_msg), call. = FALSE)
-  }
+
+#' Check response for errors
+#' @param response httr response object
+try_handle_error <- function(response) {
+  tryCatch(
+    vk_stop(message = response$error$error_msg,
+            error_code = response$error$error_code),
+    vk_error14 = function(e) return(handle_captcha(response$error)),
+    vk_error17 = function(e) return(handle_validation(response$error))
+  )
 }
 
 
@@ -129,12 +137,14 @@ execute <- function(code, params = list()) {
 
   content <- rawToChar(post_res$content)
   if (startsWith(content, "ERROR"))
-    stop(sprintf("Response error '%s'. Status code: %s.", content, post_res$status_code))
+    vk_stop(message = sprintf("Response error '%s'", content),
+            error_code = post_res$status_code)
 
   response <- jsonlite::fromJSON(content)
 
-  if (has_error(response))
+  if (has_error(response)) {
     return(try_handle_error(response))
+  }
 
   response$response
 }
