@@ -26,9 +26,14 @@ has_error <- function(response) {
 repeat_last_query <- function(params = list(), n = 1) {
   parent_name <- deparse(sys.calls()[[sys.nframe()-n]])
   parent_args <- as.list(sys.frame(-n))
+
+  args <- list()
+  for (arg in names(as.list(match.call(def = sys.function(-n), call = sys.call(-n)))[-1]))
+    args[[arg]] <- parent_args[[arg]]
+
   for (arg in names(params))
-    parent_args[[arg]] <- params[[arg]]
-  do.call(what = gsub("\\(.*\\)", "", parent_name), args = parent_args)
+    args[[arg]] <- params[[arg]]
+  do.call(what = gsub("\\(.*\\)", "", parent_name), args = args)
 }
 
 
@@ -57,7 +62,7 @@ handle_captcha <- function(error) {
   rasterImage(captcha_img, 0, 0, 1, 1)
   captcha_sid <- error$captcha_sid
   captcha_key <- readline("Enter the key from captcha: ")
-  return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 3))
+  return(repeat_last_query(params = list('captcha_key' = captcha_key, 'captcha_sid' = captcha_sid), n = 7))
 }
 
 
@@ -81,7 +86,7 @@ handle_validation <- function(error) {
       if (!is.null(location) & grepl("access_token", location)) {
         access_token <- gsub(".*?access_token=(.*?)&.*", "\\1", location)
         setAccessToken(access_token)
-        return(repeat_last_query(n = 3))
+        return(repeat_last_query(n = 7))
       }
     }
   }
@@ -95,7 +100,12 @@ try_handle_error <- function(response) {
     vk_stop(message = response$error$error_msg,
             error_code = response$error$error_code),
     vk_error14 = function(e) return(handle_captcha(response$error)),
-    vk_error17 = function(e) return(handle_validation(response$error))
+    vk_error17 = function(e) return(handle_validation(response$error)),
+    vk_error6  = function(e) {
+      print(e)
+      request_delay()
+      return(repeat_last_query(n = 6))
+    }
   )
 }
 
