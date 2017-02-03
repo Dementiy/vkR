@@ -102,7 +102,6 @@ try_handle_error <- function(response) {
     vk_error14 = function(e) return(handle_captcha(response$error)),
     vk_error17 = function(e) return(handle_validation(response$error)),
     vk_error6  = function(e) {
-      print(e)
       request_delay()
       return(repeat_last_query(n = 6))
     }
