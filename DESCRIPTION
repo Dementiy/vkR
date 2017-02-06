@@ -38,6 +38,7 @@ Suggests:
 RoxygenNote: 5.0.1
 Collate:
     'auth.R'
+    'board.R'
     'database.R'
     'friends.R'
     'groups.R'
