@@ -521,7 +521,14 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
                  "name_case":"', name_case, '",
                  "v":"', v, '"});')
 
-  response <- execute(code)
+  result <- tryCatch(
+    response <- execute(code),
+    vk_error18 = function(e) list(followers = list(), count = 0)
+  )
+
+  if (result$count == 0)
+    return(result)
+
   followers <- response$items
   max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
 
