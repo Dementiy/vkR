@@ -6,9 +6,16 @@ getNetwork <- function(users_ids='') {
   n <- length(users_ids)
   adjacency_matrix <- data.frame(matrix(data = rep(0, n*n), nrow = n, ncol = n), row.names = users_ids)
   colnames(adjacency_matrix) <- users_ids
-
-  mutual_friends <- getMutual(target_uids = paste(users_ids, collapse=","))
-  for (friend_id in 1:length(users_ids)) {
+  mutual_friends <- data.frame()
+  offset <- 1
+  while (offset < n) {
+    mutual_friends <- rbind(
+      mutual_friends,
+      getMutual(target_uids = paste(users_ids[offset:(offset+100)], collapse = ","))
+    )
+    offset <- offset + 100
+  }
+  for (friend_id in 1:n) {
     friends <- mutual_friends$common_friends[[friend_id]]
     if (length(friends) > 0) {
       share_friends <- intersect(users_ids, friends)
