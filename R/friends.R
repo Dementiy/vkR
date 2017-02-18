@@ -45,7 +45,7 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #'
 #' @param source_id ID of the user whose friends will be checked against the friends of the user specified in target_uid
 #' @param target_uid ID of the user whose friends will be checked against the friends of the user specified in source_uid
-#' @param target_uids List of target uids
+#' @param target_uids List of target uids (list of comma-separated positive numbers, the maximum number of elements allowed is 100)
 #' @param order Sort order
 #' @param count Number of mutual friends to return
 #' @param offset Offset needed to return a specific subset of mutual friends
@@ -56,6 +56,7 @@ getFriends <- function(user_id='', order='', list_id='', count='', offset='', fi
 #' }
 #' @export
 getMutual <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {
+  .Deprecated("getMutualExecute()")
   body <- list(source_id = source_id,
                target_uid = target_uid,
                order = order,
@@ -75,6 +76,84 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
     return(try_handle_error(response))
 
   response$response
+}
+
+
+#' Returns a list of user IDs of the mutual friends of two users
+#'
+#' @param source_id ID of the user whose friends will be checked against the friends of the user specified in target_uid
+#' @param target_uid ID of the user whose friends will be checked against the friends of the user specified in source_uid
+#' @param target_uids List of target uids
+#' @param order Sort order
+#' @param count Number of mutual friends to return
+#' @param offset Offset needed to return a specific subset of mutual friends
+#' @param progress_bar Display progress bar
+#' @param v Version of API
+#' @examples
+#' \dontrun{
+#' mutual_friends <- getMutualExecute(target_uid=1)
+#' }
+#' @export
+getMutualExecute <- function(source_id='', target_uid='', target_uids='', order='', count='', offset='', progress_bar=FALSE, v=getAPIVersion()) {
+  get_mutual_friends <- function(source_id='', target_uids='', order='', count='', offset='', v=getAPIVersion()) {
+    code <- 'var mutual_friends = [];'
+    num_requests <- ifelse(length(target_uids) %% 100 == 0, (length(target_uids) %/% 100), (length(target_uids) %/% 100) + 1)
+    from <- 1
+    to <- ifelse(num_requests >= 2, 100, length(target_uids))
+    for (i in 1:num_requests) {
+      code <- paste0(code, 'mutual_friends = mutual_friends + API.friends.getMutual({
+                     "source_id":"', source_id, '",
+                     "target_uids":"', paste0(target_uids[from:to], collapse = ','), '",
+                     "order":"', order, '",
+                     "count":"', count, '",
+                     "offset":"', offset, '",
+                     "v":"', v, '"});')
+      from <- to + 1
+      to <- to + ifelse(length(target_uids) - (to + 100) >= 0, 100, length(target_uids) - to)
+    }
+    code <- paste0(code, 'return mutual_friends;')
+    if (nchar(code) > 65535) stop("The POST request is limited by 65535 bytes")
+    execute(code)
+  }
+
+  if (target_uid != '')
+    target_uids <- target_uid
+
+  mutual_friends <- data.frame()
+  from <- 1
+  to <- 2500
+
+  if (progress_bar) {
+    pb <- txtProgressBar(min = 0, max = length(target_uids), style = 3)
+    setTxtProgressBar(pb, 0)
+  }
+
+  repeat
+  {
+    if (to >= length(target_uids)) to <- length(target_uids)
+
+    friends <- get_mutual_friends(source_id = source_id,
+                                  target_uids[from:to],
+                                  order = order,
+                                  count = count,
+                                  offset = offset,
+                                  v = v)
+    mutual_friends <- jsonlite::rbind.pages(list(mutual_friends, friends))
+
+    if (progress_bar)
+      setTxtProgressBar(pb, nrow(mutual_friends))
+
+    if (to >= length(target_uids))
+      break
+
+    from <- to + 1
+    to <- to + 2500
+  }
+
+  if (progress_bar)
+    close(pb)
+
+  mutual_friends
 }
 
 
