@@ -12,7 +12,7 @@ getMutual(source_id = "", target_uid = "", target_uids = "", order = "",
 
 \item{target_uid}{ID of the user whose friends will be checked against the friends of the user specified in source_uid}
 
-\item{target_uids}{List of target uids}
+\item{target_uids}{List of target uids (list of comma-separated positive numbers, the maximum number of elements allowed is 100)}
 
 \item{order}{Sort order}
 
