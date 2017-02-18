@@ -2,20 +2,18 @@
 #'
 #' @param users_ids User IDs
 #' @export
-getNetwork <- function(users_ids='') {
+getEgoNetwork <- function(users_ids='') {
   n <- length(users_ids)
   adjacency_matrix <- data.frame(matrix(data = rep(0, n*n), nrow = n, ncol = n), row.names = users_ids)
   colnames(adjacency_matrix) <- users_ids
 
-  mutual_friends <- getMutual(target_uids = paste(users_ids, collapse=","))
+  mutual_friends <- getMutualExecute(target_uids = users_ids)
   for (friend_id in 1:length(users_ids)) {
     friends <- mutual_friends$common_friends[[friend_id]]
     if (length(friends) > 0) {
       share_friends <- intersect(users_ids, friends)
       if (length(share_friends) > 0) {
         for (shared_user_id in 1:length(share_friends)) {
-          #if (is.na(share_friends[shared_user_id])) break
-          #if (is.null(share_friends[shared_user_id])) break
           adjacency_matrix[as.character(share_friends[shared_user_id]), as.character(users_ids[friend_id])] <- 1
         }
       }
