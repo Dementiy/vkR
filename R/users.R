@@ -180,7 +180,7 @@
 #' }
 #' @importFrom utils URLencode
 #' @export
-getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getAPIVersion()) {
+getUsers <- function(user_ids='', fields='', name_case='nom', flatten=FALSE, v=getAPIVersion()) {
   .Deprecated("getUsersExecute()")
   body <- list(fields = profile_fields(fields), name_case = name_case)
   if (length(user_ids) > 1) {
@@ -392,9 +392,9 @@ getUsers <- function(user_ids='', fields='', name_case='', flatten=FALSE, v=getA
 #' }
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
-getUsersExecute <- function(users_ids, fields='', name_case='', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
 {
-  get_users <- function(user_ids='', fields='', name_case='', v=getAPIVersion()) {
+  get_users <- function(user_ids='', fields='', name_case='nom', v=getAPIVersion()) {
     code <- 'var users = [];'
     num_requests <- ifelse(length(user_ids) %% 500 == 0, (length(user_ids) %/% 500), (length(user_ids) %/% 500) + 1)
     from <- 1

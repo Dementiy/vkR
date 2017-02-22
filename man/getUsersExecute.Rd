@@ -4,7 +4,7 @@
 \alias{getUsersExecute}
 \title{Returns detailed information on arbitrary number of users}
 \usage{
-getUsersExecute(users_ids, fields = "", name_case = "", drop = FALSE,
+getUsersExecute(users_ids, fields = "", name_case = "nom", drop = FALSE,
   flatten = FALSE, progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{

@@ -4,7 +4,7 @@
 \alias{getUsers}
 \title{Returns detailed information on users}
 \usage{
-getUsers(user_ids = "", fields = "", name_case = "", flatten = FALSE,
+getUsers(user_ids = "", fields = "", name_case = "nom", flatten = FALSE,
   v = getAPIVersion())
 }
 \arguments{
