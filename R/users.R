@@ -424,6 +424,10 @@ getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, f
   if ("vk.friends.ids" %in% class(users_ids))
     users_ids <- unique(unlist(users_ids))
   users_ids <- as.integer(users_ids)
+  users_ids <- users_ids[!is.na(users_ids)]
+
+  if (length(users_ids) == 0)
+    stop('"users_ids" has no user IDs', call. = FALSE)
 
   all_users <- data.frame()
   from <- 1
