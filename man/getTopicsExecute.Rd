@@ -5,8 +5,8 @@
 \title{Returns a list of topics on a community's discussion board}
 \usage{
 getTopicsExecute(group_id = "", order = "", offset = 0, count = 40,
-  preview = 0, preview_length = 90, progress_bar = FALSE,
-  v = getAPIVersion())
+  preview = 0, preview_length = 90, use_db = FALSE, db_params = list(),
+  progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{group_id}{ID of the community that owns the discussion board.}
@@ -27,6 +27,10 @@ If no sort order is specified, topics are returned in the order specified by the
 \item{preview}{1 — to return the first comment in each topic; 2 — to return the last comment in each topic; 0 — to return no comments.}
 
 \item{preview_length}{Number of characters after which to truncate the previewed comment. To preview the full comment, specify 0.}
+
+\item{use_db}{Use database}
+
+\item{db_params}{Collection name and suffix}
 
 \item{progress_bar}{Display progress bar}
 

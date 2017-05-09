@@ -53,10 +53,12 @@ getTopics <- function(group_id='', topics_ids='', order='', offset=0, count=40, 
 #' @param count Number of topics to return (default 40, 0 - for all topics).
 #' @param preview 1 — to return the first comment in each topic; 2 — to return the last comment in each topic; 0 — to return no comments.
 #' @param preview_length Number of characters after which to truncate the previewed comment. To preview the full comment, specify 0.
+#' @param use_db Use database
+#' @param db_params Collection name and suffix
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @export
-getTopicsExecute <- function(group_id='', order='', offset=0, count=40, preview=0, preview_length=90, progress_bar=FALSE, v=getAPIVersion()) {
+getTopicsExecute <- function(group_id='', order='', offset=0, count=40, preview=0, preview_length=90, use_db=FALSE, db_params=list(), progress_bar=FALSE, v=getAPIVersion()) {
   get_topics2500 <- function(group_id='', order='', offset=0, max_count=0, preview=0, preview_length=90, v=getAPIVersion()) {
     if (max_count > 2500)
       max_count <- 2500
@@ -115,6 +117,17 @@ getTopicsExecute <- function(group_id='', order='', offset=0, count=40, preview=
                 topics = response$items,
                 count = response$count))
 
+  if (use_db) {
+    collection <- or(db_params[['collection']], group_id)
+    suffix <- or(db_params[['suffix']], 'board')
+    key <- or(db_params[['key']], 'id')
+
+    if (collection_exists(collection, suffix))
+      db_update(object = topics, key = key, collection = collection, suffix = suffix, upsert = TRUE)
+    else
+      db_save(object = topics, collection = collection, suffix = suffix)
+  }
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(topics))
@@ -129,6 +142,8 @@ getTopicsExecute <- function(group_id='', order='', offset=0, count=40, preview=
                                             max_count = num_records,
                                             offset = offset + nrow(topics),
                                             v = v)
+    if (use_db)
+      db_update(object = topics2500, key = key, collection = collection, suffix = suffix, upsert = TRUE)
     topics <- jsonlite::rbind.pages(list(topics, topics2500))
     num_records <- ifelse((max_count - nrow(topics)) > num_records, num_records, max_count - nrow(topics)) },
     vk_error13 = function(e) {
