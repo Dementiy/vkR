@@ -86,7 +86,10 @@ likesGetListForObjects <- function(objects, type = 'post', filter = 'likes', fri
       from <- from + 25
       to <- to + 25
     }
-    names(likes) <- objects$id
+
+    obj_ids <- unlist(strsplit(names(likes), "obj", fixed = T))
+    obj_ids <- as.integer(obj_ids[obj_ids != ""])
+    names(likes) <- obj_ids #objects$id
     likes
   }
 
