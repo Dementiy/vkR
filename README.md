@@ -76,8 +76,29 @@ You can specify the collection name:
         use_db=TRUE, db_params=list('collection'='dm', 'suffix'='posts'), progress_bar=TRUE)
 |======================...======================| 100%
 > show_collections()
-    db  collection   suffix count
-1 temp          dm    posts   232
+    db            collection       suffix count
+1 temp data_mining_in_action         wall   232
+2 temp           privivkanet         wall  3664
+3 temp                    dm        posts   232
+
+> friends <- getFriends()
+> users <- getUsersExecute(friends$items, use_db = TRUE, db_params=list('collection'='my_friends'), progress_bar = TRUE)
+> show_collections()
+    db            collection       suffix count
+1 temp data_mining_in_action         wall   232
+2 temp           privivkanet         wall  3664
+3 temp                    dm        posts   232
+4 temp            my_friends                141
+```
+
+For load collection into a namespace you can use `db_load_collection` function:
+```r
+> db_load_collection('data_mining_in_action', 'wall')
+ Imported 232 records. Simplifying into dataframe...
+> ls()
+[1] "temp.data_mining_in_action.wall"
+> nrow(temp.data_mining_in_action.wall)
+[1] 232
 ```
 
 Building a Friend Graph:
