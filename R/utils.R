@@ -124,3 +124,15 @@ clear_text <- function(lines, patterns = list()) {
   lines <- stringr::str_trim(lines, side = "both")
   lines
 }
+
+
+#' Logical or operator
+#' @param expr1 Expression 1
+#' @param expr2 Expression 2
+#' @export
+or <- function(expr1, expr2) {
+  r <- any(as.logical(expr1))
+  if ((!is.na(r) && r) || (is.character(expr1) && expr1 != ''))
+    return(expr1)
+  return(expr2)
+}

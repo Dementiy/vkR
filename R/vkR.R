@@ -29,11 +29,17 @@ NULL
 if (!exists(".vkr")) {
   .vkr <- new.env()
   .vkr$access_token <- NULL
-  .vkr$api_version <- '5.60'
+  .vkr$api_version <- '5.64'
   .vkr$me <- 0L
   .vkr$last_request_time <- 0
   .vkr$num_requests <- 0
   .vkr$max_requests <- 3
+
+  # Database variables
+  .vkr$db_name <- 'vkR_projects'
+  .vkr$db_active <- NULL
+  .vkr$db_meta_name <- 'meta_collection'
+  .vkr$db_metadata <- NULL
 }
 
 

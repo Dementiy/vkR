@@ -5,8 +5,8 @@
 \title{Returns a list of posts on a user wall or community wall}
 \usage{
 getWallExecute(owner_id = "", domain = "", offset = 0, count = 10,
-  filter = "owner", extended = "", fields = "", progress_bar = FALSE,
-  v = getAPIVersion())
+  filter = "owner", extended = "", fields = "", use_db = FALSE,
+  db_params = list(), progress_bar = FALSE, v = getAPIVersion())
 }
 \arguments{
 \item{owner_id}{ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.}
@@ -29,6 +29,10 @@ getWallExecute(owner_id = "", domain = "", offset = 0, count = 10,
 \item{extended}{1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).}
 
 \item{fields}{List of comma-separated words}
+
+\item{use_db}{Use database}
+
+\item{db_params}{Collection name and suffix}
 
 \item{progress_bar}{Display progress bar}
 

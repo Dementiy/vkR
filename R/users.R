@@ -214,6 +214,8 @@ getUsers <- function(user_ids='', fields='', name_case='nom', flatten=FALSE, v=g
 #' @param name_case Case for declension of user name and surname
 #' @param drop Drop deleted or banned users
 #' @param flatten Automatically flatten nested data frames into a single non-nested data frame
+#' @param use_db Use database
+#' @param db_params Collection name and suffix
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @details
@@ -392,7 +394,7 @@ getUsers <- function(user_ids='', fields='', name_case='nom', flatten=FALSE, v=g
 #' }
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
-getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, flatten=FALSE, progress_bar=FALSE, v=getAPIVersion())
+getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, flatten=FALSE, use_db=FALSE, db_params=list(), progress_bar=FALSE, v=getAPIVersion())
 {
   get_users <- function(user_ids='', fields='', name_case='nom', v=getAPIVersion()) {
     code <- 'var users = [];'
@@ -429,6 +431,13 @@ getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, f
   if (length(users_ids) == 0)
     stop('"users_ids" has no user IDs', call. = FALSE)
 
+  if (use_db) {
+    collection <- or(db_params[['collection']], 'users')
+    suffix <- or(db_params[['suffix']], '')
+    key <- or(db_params[['key']], 'id')
+    create_empty_collection(collection, suffix)
+  }
+
   all_users <- data.frame()
   from <- 1
   to <- 5000
@@ -443,6 +452,8 @@ getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, f
     if (to >= length(users_ids)) to <- length(users_ids)
 
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
+    if (use_db)
+      db_update(object = users, key = key, collection = collection, suffix = suffix, upsert = TRUE)
     all_users <- jsonlite::rbind.pages(list(all_users, users))
 
     if (progress_bar)

@@ -34,7 +34,8 @@ Suggests:
     jpeg,
     igraph,
     rgexf,
-    httpuv
+    httpuv,
+    mongolite
 RoxygenNote: 5.0.1
 Collate:
     'auth.R'
@@ -45,7 +46,9 @@ Collate:
     'igraph_gefx_exporter.R'
     'likes.R'
     'messages.R'
+    'mongo_connection.R'
     'network.R'
+    'newsfeed.R'
     'queries.R'
     'status.R'
     'search.R'

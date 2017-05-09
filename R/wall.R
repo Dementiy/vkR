@@ -63,6 +63,8 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' }
 #' @param extended 1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).
 #' @param fields List of comma-separated words
+#' @param use_db Use database
+#' @param db_params Collection name and suffix
 #' @param progress_bar Display progress bar
 #' @param v Version of API
 #' @return Returns a list of post objects.
@@ -78,7 +80,7 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' wall <- getWallExecute(domain='spbrug', count=0, progress_bar=TRUE)
 #' }
 #' @export
-getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', progress_bar=FALSE, v=getAPIVersion())
+getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', use_db=FALSE, db_params=list(), progress_bar=FALSE, v=getAPIVersion())
 {
   get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
   {
@@ -137,6 +139,17 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
     return(list(posts = response$items,
                 count = response$count))
 
+  if (use_db) {
+    collection <- or(db_params[['collection']], or(domain, owner_id))
+    suffix <- or(db_params[['suffix']], 'wall')
+    key <- or(db_params[['key']], 'id')
+
+    if (collection_exists(collection, suffix))
+      db_update(object = posts, key = key, collection = collection, suffix = suffix, upsert = TRUE)
+    else
+      db_save(object = posts, collection = collection, suffix = suffix)
+  }
+
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = max_count, style = 3)
     setTxtProgressBar(pb, nrow(posts))
@@ -152,6 +165,8 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                                max_count = num_records,
                                offset = offset + nrow(posts),
                                v = v)
+      if (use_db)
+        db_update(object = posts2500, key = key, collection = collection, suffix = suffix, upsert = TRUE)
       posts <- jsonlite::rbind.pages(list(posts, posts2500))
       num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
     vk_error13 = function(e) {
@@ -460,7 +475,10 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
       from <- from + 25
       to <- to + 25
     }
-    names(comments) <- posts$id
+
+    obj_ids <- unlist(strsplit(names(comments), "post", fixed = T))
+    obj_ids <- as.integer(obj_ids[obj_ids != ""])
+    names(comments) <- obj_ids #posts$id
     comments
   }
 
