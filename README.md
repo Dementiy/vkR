@@ -38,6 +38,48 @@ setAccessToken(access_token = 'YOUR ACCESS TOKEN')
 
 ## Example of use
 
+At your own risk you can use mongodb and [mongolite](https://github.com/jeroen/mongolite) package for storing data:
+
+```r
+> db_init()
+> wall <- getWallExecute(domain="data_mining_in_action", count=0, use_db=TRUE, progress_bar=TRUE)
+|======================...======================| 100%
+> show_collections()
+    db            collection       suffix count
+1 temp data_mining_in_action         wall   232
+```
+
+If connection was aborted by some reasons we don't lose our data:
+```r
+> wall <- getWallExecute(domain='privivkanet', count=0, use_db = T, progress_bar = T)
+|=================                              |  25%
+Show Traceback
+ 
+ Rerun with Debug
+ Error in curl::curl_fetch_memory(url, handle = handle) : 
+  Operation was aborted by an application callback ...
+> show_collections()
+    db            collection       suffix count
+1 temp data_mining_in_action         wall   232
+2 temp           privivkanet         wall   916
+> wall <- getWallExecute(domain='privivkanet', count=0, offset=916, use_db = T, progress_bar = T)
+|======================...======================| 100%
+> show_collections()
+    db            collection       suffix count
+1 temp data_mining_in_action         wall   232
+2 temp           privivkanet         wall  3664
+```
+
+You can specify the collection name:
+```r
+> wall <- getWallExecute(domain="data_mining_in_action", count=0, 
+        use_db=TRUE, db_params=list('collection'='dm', 'suffix'='posts'), progress_bar=TRUE)
+|======================...======================| 100%
+> show_collections()
+    db  collection   suffix count
+1 temp          dm    posts   232
+```
+
 Building a Friend Graph:
 
 ``` r
