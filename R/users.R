@@ -435,7 +435,8 @@ getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, f
     collection <- or(db_params[['collection']], 'users')
     suffix <- or(db_params[['suffix']], '')
     key <- or(db_params[['key']], 'id')
-    create_empty_collection(collection, suffix)
+    if (!collection_exists(collection, suffix))
+      create_empty_collection(collection, suffix)
   }
 
   all_users <- data.frame()
