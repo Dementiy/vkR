@@ -562,16 +562,16 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
   }
 
   while (len(followers) < max_count) {
-    followers3000 <- get_followers(user_id = user_id,
-                                  offset = (1 + offset + offset_counter * 3000),
+    followers25000 <- get_followers(user_id = user_id,
+                                  offset = (1 + offset + offset_counter * 25000),
                                   count = (max_count - len(followers)),
                                   fields = fields,
                                   name_case = name_case,
                                   v = v)
     if (is.vector(followers))
-      followers <- append(followers, followers3000)
+      followers <- append(followers, followers25000)
     else
-      followers <- jsonlite::rbind.pages(list(followers, followers3000))
+      followers <- jsonlite::rbind.pages(list(followers, followers25000))
 
     if (progress_bar)
       setTxtProgressBar(pb, len(followers))
