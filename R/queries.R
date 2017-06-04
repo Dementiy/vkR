@@ -148,7 +148,7 @@ execute <- function(code, params = list()) {
   body = list('code' = code, 'access_token' = getAccessToken())
   post_res <- httr::POST(url = query, body = append(body, params))
 
-  content <- rawToChar(post_res$content)
+  content <- httr::content(post_res, "text", encoding="UTF-8")
   if (startsWith(content, "ERROR"))
     vk_stop(message = sprintf("Response error '%s'", content),
             error_code = post_res$status_code)
