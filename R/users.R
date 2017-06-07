@@ -191,8 +191,8 @@ getUsers <- function(user_ids='', fields='', name_case='nom', flatten=FALSE, v=g
     query <- queryBuilder('users.get', user_ids = user_ids, v = v)
   }
   request_delay()
-  response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
-                                                      body = body)$content))
+  response <- jsonlite::fromJSON(httr::content(
+    httr::POST(URLencode(query), body = body), "text", encoding = "UTF-8"))
 
   if (has_error(response))
     return(try_handle_error(response))

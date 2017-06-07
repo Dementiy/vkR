@@ -72,7 +72,7 @@ handle_validation <- function(error) {
   if (!interactive())
     stop("Required phone number.\nFor handle this error you must to interact with your console", call. = FALSE)
   response <- httr::GET(error$redirect_uri)
-  authorize_form <- XML::htmlParse(rawToChar(response$content))
+  authorize_form <- XML::htmlParse(httr::content(response, "text", encoding = "UTF-8"))
   action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
   if (length(action) != 0 && grepl("security_check", action)) {
     phone <- XML::xpathSApply(authorize_form, "//*/span", XML::xmlValue)

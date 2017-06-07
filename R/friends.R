@@ -70,8 +70,8 @@ getMutual <- function(source_id='', target_uid='', target_uids='', order='', cou
     query <- queryBuilder('friends.getMutual', target_uids = target_uids, v = v)
   }
   request_delay()
-  response <- jsonlite::fromJSON(rawToChar(httr::POST(URLencode(query),
-                                                      body = body)$content))
+  response <- jsonlite::fromJSON(httr::content(
+    httr::POST(URLencode(query), body = body), "text", encoding="UTF-8"))
   if (has_error(response))
     return(try_handle_error(response))
 

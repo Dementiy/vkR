@@ -63,7 +63,7 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
     response <- httr::GET(auth_url)
 
     for (i in 1:2) {
-      authorize_form <- XML::htmlParse(rawToChar(response$content))
+      authorize_form <- XML::htmlParse(httr::content(response, "text", encoding = "UTF-8"))
       form_attrs <- XML::xpathSApply(authorize_form, "//form/input", XML::xmlGetAttr, "value")
       response <- httr::POST('https://login.vk.com/?act=login&soft=1&utf8=1',
                        body = list('_origin' = form_attrs[1],
@@ -83,7 +83,7 @@ vkOAuth <- function(client_id, scope='friends', email, password) {
                       httr::add_headers('Content-Type' = 'application/x-www-form-urlencoded'))
     }
 
-    authorize_form <- XML::htmlParse(rawToChar(response$content))
+    authorize_form <- XML::htmlParse(httr::content(response, "text", encoding = "UTF-8"))
     action <- XML::xpathSApply(authorize_form, "//form", XML::xmlGetAttr, "action")
 
     if (length(action))
