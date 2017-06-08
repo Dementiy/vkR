@@ -12,4 +12,3 @@ handle_captcha(error)
 \description{
 Captcha error handler
 }
-

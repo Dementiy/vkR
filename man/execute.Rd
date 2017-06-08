@@ -14,4 +14,3 @@ execute(code, params = list())
 \description{
 A universal method for calling a sequence of other methods while saving and filtering interim results
 }
-

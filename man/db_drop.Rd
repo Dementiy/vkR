@@ -12,4 +12,3 @@ db_drop(db_name)
 \description{
 Drop database
 }
-

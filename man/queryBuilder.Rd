@@ -14,4 +14,3 @@ queryBuilder(method_name, ...)
 \description{
 Returns a query string
 }
-

@@ -34,4 +34,3 @@ likesGetList(type = "", owner_id = "", item_id = "", page_url = "",
 \description{
 Returns a list of IDs of users who added the specified object to their Likes list
 }
-

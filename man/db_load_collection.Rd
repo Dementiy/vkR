@@ -17,4 +17,3 @@ db_load_collection(collection_name, collection_suffix = "",
 \description{
 Import collection from db to global env
 }
-

@@ -24,4 +24,3 @@ Returns a list of faculties (i.e., university departments)
 databaseGetFaculties(53)
 }
 }
-

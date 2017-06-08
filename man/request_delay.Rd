@@ -9,4 +9,3 @@ request_delay()
 \description{
 VK can accept maximum 3 requests to API methods per second from a client.
 }
-

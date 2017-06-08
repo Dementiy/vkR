@@ -12,4 +12,3 @@ setAccessToken(access_token = "")
 \description{
 Set access token
 }
-

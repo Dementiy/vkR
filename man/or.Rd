@@ -14,4 +14,3 @@ or(expr1, expr2)
 \description{
 Logical or operator
 }
-

@@ -40,4 +40,3 @@ groupsSearch(q = "", type = "", country_id = "", city_id = "",
 \description{
 Returns a list of communities matching the search criteria
 }
-

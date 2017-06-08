@@ -14,4 +14,3 @@ repeat_last_query(params = list(), n = 1)
 \description{
 Repeat last function call
 }
-

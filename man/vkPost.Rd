@@ -12,4 +12,3 @@ vkPost(...)
 \description{
 Create post object
 }
-

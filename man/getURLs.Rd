@@ -14,4 +14,3 @@ getURLs(messages, message_body = FALSE)
 \description{
 Extract URLs from messages
 }
-

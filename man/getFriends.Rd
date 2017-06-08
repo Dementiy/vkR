@@ -36,4 +36,3 @@ friends_list <- getFriends(user_id=1, order='name', fields='bdate')
 friends <- friends_list$items
 }
 }
-

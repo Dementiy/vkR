@@ -37,4 +37,3 @@ If no sort order is specified, topics are returned in the order specified by the
 \description{
 Returns a list of topics on a community's discussion board
 }
-

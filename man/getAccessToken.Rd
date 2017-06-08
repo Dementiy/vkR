@@ -9,4 +9,3 @@ getAccessToken()
 \description{
 Get access token
 }
-

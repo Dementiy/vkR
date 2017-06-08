@@ -35,4 +35,3 @@ Returns a list of IDs of followers of the user in question, sorted by date added
 my_followers <- usersGetFollowers(me())
 }
 }
-

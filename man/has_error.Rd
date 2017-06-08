@@ -12,4 +12,3 @@ has_error(response)
 \description{
 Get error code from response
 }
-

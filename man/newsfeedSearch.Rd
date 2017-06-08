@@ -32,4 +32,3 @@ newsfeedSearch(q = "", extended = "", count = "", latitude = "",
 \description{
 Returns search results by statuses
 }
-

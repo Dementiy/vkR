@@ -9,4 +9,3 @@ show_dbs()
 \description{
 Show databases
 }
-

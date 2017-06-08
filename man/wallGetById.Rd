@@ -31,4 +31,3 @@ If the post is a copy of another post, returns an additional array copy_history 
 \description{
 Returns a list of posts from user or community walls by their IDs
 }
-

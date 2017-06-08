@@ -12,4 +12,3 @@ try_handle_error(response)
 \description{
 Check response for errors
 }
-

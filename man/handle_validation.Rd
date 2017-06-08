@@ -12,4 +12,3 @@ handle_validation(error)
 \description{
 Validation error handler
 }
-

@@ -19,4 +19,3 @@ Checks the friendship status between two users
 areFriends(me(), 123456)
 }
 }
-

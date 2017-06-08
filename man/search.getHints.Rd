@@ -21,4 +21,3 @@ search.getHints(q = "", limit = "", filters = "", search_global = "",
 \description{
 Allows the programmer to do a quick search for any substring
 }
-

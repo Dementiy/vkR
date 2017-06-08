@@ -9,4 +9,3 @@ show_collections()
 \description{
 Show collections
 }
-

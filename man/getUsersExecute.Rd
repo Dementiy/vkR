@@ -206,4 +206,3 @@ random_ids <- sample(x=seq(1:10000000), size=10000, replace=FALSE)
 users <- getUsersExecute(random_ids, fields='sex,bdate,city')
 }
 }
-

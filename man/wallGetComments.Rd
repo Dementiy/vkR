@@ -32,4 +32,3 @@ wallGetComments(owner_id = "", post_id = "", need_likes = "",
 \description{
 Returns a list of comments on a post on a user wall or community wall
 }
-

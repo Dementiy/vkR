@@ -12,4 +12,3 @@ getEgoNetwork(users_ids = "")
 \description{
 Building a friend graph
 }
-

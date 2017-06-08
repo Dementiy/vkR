@@ -16,4 +16,3 @@ create_empty_collection(collection, suffix, db_name = db_getActive())
 \description{
 Create empty collection
 }
-

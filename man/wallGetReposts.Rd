@@ -29,4 +29,3 @@ Returns an object containing the following fields:
 \description{
 Returns information about reposts of a post on user wall or community wall
 }
-

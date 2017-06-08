@@ -19,4 +19,3 @@ Returns a list of available classes
 databaseGetSchoolClasses(1)
 }
 }
-

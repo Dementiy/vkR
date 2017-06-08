@@ -56,4 +56,3 @@ vkOAuth(client_id = 123456, scope = "friends,groups,messages")
 setAccessToken("your_secret_access_token")
 }
 }
-

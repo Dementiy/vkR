@@ -19,4 +19,3 @@ messagesGetHistoryAll(user_id = "", peer_id = "", rev = 0,
 \description{
 Returns all message history for the specified user or group chat
 }
-

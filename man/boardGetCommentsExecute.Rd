@@ -30,4 +30,3 @@ boardGetCommentsExecute(group_id = "", topic_id = "", need_likes = 0,
 \description{
 Returns a list of comments on a topic on a community's discussion board
 }
-

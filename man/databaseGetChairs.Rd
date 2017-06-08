@@ -24,4 +24,3 @@ Returns list of chairs on a specified faculty
 databaseGetChairs(206)
 }
 }
-

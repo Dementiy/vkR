@@ -30,4 +30,3 @@ Returns a list of cities
 databaseGetCities(country_id=1, need_all=0)
 }
 }
-

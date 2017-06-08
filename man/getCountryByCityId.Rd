@@ -12,4 +12,3 @@ getCountryByCityId(city_id)
 \description{
 Get country ID and title by given city ID
 }
-

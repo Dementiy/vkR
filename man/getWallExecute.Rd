@@ -56,4 +56,3 @@ Returns a list of posts on a user wall or community wall
 wall <- getWallExecute(domain='spbrug', count=0, progress_bar=TRUE)
 }
 }
-

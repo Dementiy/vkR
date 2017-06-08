@@ -16,4 +16,3 @@ boardGetCommentsList(topics, progress_bar = FALSE, v = getAPIVersion())
 \description{
 Returns a list of comments on a community's discussion board
 }
-

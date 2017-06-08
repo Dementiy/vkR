@@ -25,4 +25,3 @@ messagesGetHistory(offset = "", count = "", user_id = "", peer_id = "",
 \description{
 Returns message history for the specified user or group chat
 }
-

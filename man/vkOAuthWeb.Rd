@@ -16,4 +16,3 @@ vkOAuthWeb(app_name, client_id, client_secret)
 \description{
 Client authorization (for web application)
 }
-

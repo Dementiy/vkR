@@ -14,4 +14,3 @@ clear_text(lines, patterns = list())
 \description{
 Clear text
 }
-

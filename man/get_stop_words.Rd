@@ -12,4 +12,3 @@ get_stop_words(stop_words = c())
 \description{
 Get stop words list for russian language
 }
-

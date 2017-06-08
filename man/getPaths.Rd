@@ -18,4 +18,3 @@ getPaths(source_id, target_id, are_friends = FALSE, max_depth = 5)
 \description{
 Returns a list of paths between two users
 }
-

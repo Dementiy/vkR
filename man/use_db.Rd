@@ -12,4 +12,3 @@ use_db(db_name)
 \description{
 Switch database
 }
-

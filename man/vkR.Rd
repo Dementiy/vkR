@@ -18,9 +18,6 @@ VK allows users to message each other publicly or privately, to
 create groups, public pages and events, share and tag images,
 audio and video, and to play browser-based games [1].
 }
-\author{
-Dmitriy Sorokin \email{dementiy@yandex.ru}
-}
 \references{
 [1] \url{https://en.wikipedia.org/wiki/VK_(social_networking)}
 }
@@ -32,4 +29,6 @@ Dmitriy Sorokin \email{dementiy@yandex.ru}
 \code{\link{likesGetListForObjects}}, \code{\link{messagesGetHistoryExecute}},
 \code{\link{getArbitraryNetwork}}, \code{\link{getStatus}}
 }
-
+\author{
+Dmitriy Sorokin \email{dementiy@yandex.ru}
+}

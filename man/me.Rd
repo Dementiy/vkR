@@ -9,4 +9,3 @@ me()
 \description{
 Returns current user ID
 }
-

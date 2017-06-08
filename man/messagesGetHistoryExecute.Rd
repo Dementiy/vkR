@@ -28,4 +28,3 @@ messagesGetHistoryExecute(offset = 0, count = 0, user_id = "",
 \description{
 Returns message history for the specified user or group chat
 }
-

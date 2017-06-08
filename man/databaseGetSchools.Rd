@@ -26,4 +26,3 @@ Returns a list of schools
 databaseGetSchools(city_id = 2)
 }
 }
-

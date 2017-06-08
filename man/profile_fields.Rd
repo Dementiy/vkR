@@ -24,4 +24,3 @@ fields <- profile_fields('all - photo_50,photo_100,photo_200')
 fields <- profile_fields('sex,bdate')
 }
 }
-

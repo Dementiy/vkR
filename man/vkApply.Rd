@@ -21,4 +21,3 @@ result of applying `method` to the corresponding element of `objs`
  countries <- vkApply(c(2,5122182,1906578), getCountryByCityId)
 }
 }
-

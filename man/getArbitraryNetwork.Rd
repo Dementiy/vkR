@@ -14,4 +14,3 @@ getArbitraryNetwork(users_ids, format = "edgelist")
 \description{
 Building a friend graph for an arbitrary list of users
 }
-

@@ -88,4 +88,3 @@ usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
 \description{
 Returns a list of users matching the search criteria
 }
-

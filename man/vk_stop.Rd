@@ -16,4 +16,3 @@ vk_stop(message = "", call = sys.call(), error_code = "")
 \description{
 Custom error
 }
-

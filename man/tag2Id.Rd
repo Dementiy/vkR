@@ -12,4 +12,3 @@ tag2Id(tag)
 \description{
 Returns user id by tag
 }
-

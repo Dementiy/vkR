@@ -17,4 +17,3 @@ collection_exists(collection_name, collection_suffix = "",
 \description{
 Check if collection exists
 }
-

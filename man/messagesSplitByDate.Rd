@@ -14,4 +14,3 @@ messagesSplitByDate(messages, format = "\%y-\%m-\%d")
 \description{
 Split messages by days, weeks, months
 }
-

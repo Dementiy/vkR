@@ -20,4 +20,3 @@ my_friends <- getFriends()
 friends_of_friends <- getFriendsBy25(my_friends$items[1:25])
 }
 }
-

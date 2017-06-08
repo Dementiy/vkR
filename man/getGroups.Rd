@@ -30,4 +30,3 @@ Returns a list of the communities to which a user belongs
 groups <- getGroups(me(), extended = 1, fields = 'city')
 }
 }
-

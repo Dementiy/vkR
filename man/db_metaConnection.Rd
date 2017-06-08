@@ -9,4 +9,3 @@ db_metaConnection()
 \description{
 Get meta connection
 }
-

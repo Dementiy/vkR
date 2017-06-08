@@ -52,4 +52,3 @@ messagesSend(user_id, random_id = "", peer_id = "", domain = "",
 \description{
 Sends a message.
 }
-

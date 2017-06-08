@@ -28,4 +28,3 @@ status.friends_and_groups <- getStatus(users_ids = getFriends()$items,
  groups_ids = getGroups()$items, progress_bar = T)
 }
 }
-

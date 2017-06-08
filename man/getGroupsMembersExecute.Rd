@@ -35,4 +35,3 @@ Returns a list of community members
 members <- getGroupsMembersExecute(1, fields='sex,bdate,city', progress_bar = TRUE)
 }
 }
-

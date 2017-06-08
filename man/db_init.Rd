@@ -14,4 +14,3 @@ db_init(db_name = "temp", verbose = FALSE)
 \description{
 Initialize database
 }
-

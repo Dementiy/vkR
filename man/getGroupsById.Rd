@@ -19,4 +19,3 @@ getGroupsById(group_ids = "", group_id = "", fields = "",
 \description{
 Returns information about communities by their IDs
 }
-

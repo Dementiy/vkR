@@ -12,4 +12,3 @@ db_load(db_name = db_getActive())
 \description{
 Load all collections from db for specified data base
 }
-

@@ -17,4 +17,3 @@ db_drop_collection(collection_name, collection_suffix = "",
 \description{
 Drop collection
 }
-

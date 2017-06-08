@@ -23,4 +23,3 @@ db_update(object, key, collection, suffix = "", db_name = db_getActive(),
 \description{
 Update existing records
 }
-

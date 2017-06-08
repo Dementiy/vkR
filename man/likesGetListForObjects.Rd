@@ -36,4 +36,3 @@ post_likers_extended <- likesGetListForObjects(wall, type = 'post',
    extended = 1, progress_bar = TRUE)
 }
 }
-

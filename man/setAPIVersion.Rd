@@ -12,4 +12,3 @@ setAPIVersion(v)
 \description{
 Set API version
 }
-

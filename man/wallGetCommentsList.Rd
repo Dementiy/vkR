@@ -16,4 +16,3 @@ wallGetCommentsList(posts, progress_bar = FALSE, v = getAPIVersion())
 \description{
 Returns a list of comments on a user wall or community wall
 }
-

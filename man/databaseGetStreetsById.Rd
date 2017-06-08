@@ -19,4 +19,3 @@ Returns information about streets by their IDs
 databaseGetStreetsById(1)
 }
 }
-

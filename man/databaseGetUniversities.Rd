@@ -28,4 +28,3 @@ Returns a list of higher education institutions
 databaseGetUniversities(city_id = '2')
 }
 }
-

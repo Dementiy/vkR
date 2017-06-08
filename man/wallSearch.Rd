@@ -33,4 +33,3 @@ If executed successfully, returns a list of post objects.
 \description{
 Allows to search posts on user or community walls
 }
-

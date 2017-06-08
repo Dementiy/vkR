@@ -196,4 +196,3 @@ Returns detailed information on users
 user <- getUsers('1', fields='sex,bdate,city')
 }
 }
-

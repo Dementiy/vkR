@@ -19,4 +19,3 @@ Returns information about cities by their IDs
 databaseGetCitiesById('1,2')
 }
 }
-

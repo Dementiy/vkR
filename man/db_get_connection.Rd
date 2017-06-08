@@ -17,4 +17,3 @@ db_get_connection(collection_name, collection_suffix = "",
 \description{
 Get a mongo connection object
 }
-

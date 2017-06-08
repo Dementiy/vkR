@@ -9,4 +9,3 @@ db_getActive()
 \description{
 The current database name
 }
-

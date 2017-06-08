@@ -28,4 +28,3 @@ messagesGet(out = "", offset = "", count = "", time_offset = "",
 \description{
 Returns a list of the current user's incoming or outgoing private messages
 }
-

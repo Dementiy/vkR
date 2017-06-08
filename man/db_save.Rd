@@ -18,4 +18,3 @@ db_save(object, collection, suffix = "", db_name = db_getActive())
 \description{
 Save object to db
 }
-

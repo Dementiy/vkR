@@ -30,4 +30,3 @@ Returns a list of user IDs of the mutual friends of two users
 mutual_friends <- getMutual(target_uid=1)
 }
 }
-

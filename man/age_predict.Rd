@@ -12,4 +12,3 @@ age_predict(user_id = "")
 \description{
 Predict age for the specified user
 }
-

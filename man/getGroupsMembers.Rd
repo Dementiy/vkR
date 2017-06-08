@@ -30,4 +30,3 @@ Returns a list of community members
 members <- getGroupsMembers(1, fields='sex,bdate,city')
 }
 }
-

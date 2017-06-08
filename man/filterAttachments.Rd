@@ -27,4 +27,3 @@ filterAttachments(attachments, type)
 \description{
 Filtering attachments by type
 }
-

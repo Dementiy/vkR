@@ -33,4 +33,3 @@ Returns a list of IDs of users and communities followed by the user
 my_subscriptions <- usersGetSubscriptions(me())
 }
 }
-

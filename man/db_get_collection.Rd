@@ -17,4 +17,3 @@ db_get_collection(collection_name, collection_suffix = "",
 \description{
 Get collection
 }
-

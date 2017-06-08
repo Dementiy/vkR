@@ -18,4 +18,3 @@ db_insert(object, collection, suffix, db_name = db_getActive())
 \description{
 Insert object into existing collection
 }
-
