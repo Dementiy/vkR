@@ -570,8 +570,10 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
                                   v = v)
     if (is.vector(followers))
       followers <- append(followers, followers25000)
-    else
+    else {
       followers <- jsonlite::rbind.pages(list(followers, followers25000))
+      followers <- followers[!duplicated(followers$id), ]
+    }
 
     if (progress_bar)
       setTxtProgressBar(pb, len(followers))
