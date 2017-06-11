@@ -154,7 +154,7 @@ getGroupsMembersExecute <- function(group_id='', sort='', offset=0, count=0, fie
       if (is.vector(members))
         members <- append(members, members20)
       else
-        members <- jsonlite::rbind.pages(list(members, members20))
+        members <- jsonlite::rbind_pages(list(members, members20))
 
       num_records <- ifelse((max_count - len(members)) > num_records, num_records, max_count - len(members))},
     vk_error500 = function(e) {

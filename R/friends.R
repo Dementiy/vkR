@@ -138,7 +138,7 @@ getMutualExecute <- function(source_id='', target_uid='', target_uids='', order=
                                   count = count,
                                   offset = offset,
                                   v = v)
-    mutual_friends <- jsonlite::rbind.pages(list(mutual_friends, friends))
+    mutual_friends <- jsonlite::rbind_pages(list(mutual_friends, friends))
 
     if (progress_bar)
       setTxtProgressBar(pb, nrow(mutual_friends))

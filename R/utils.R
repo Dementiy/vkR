@@ -45,7 +45,7 @@ vkApply <- function(objs, method)
 {
   res <- data.frame()
   for (obj in objs)
-    res <- jsonlite::rbind.pages(list(res, method(obj)))
+    res <- jsonlite::rbind_pages(list(res, method(obj)))
   res
 }
 

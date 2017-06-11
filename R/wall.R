@@ -167,7 +167,7 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                                v = v)
       if (use_db)
         db_update(object = posts2500, key = key, collection = collection, suffix = suffix, upsert = TRUE)
-      posts <- jsonlite::rbind.pages(list(posts, posts2500))
+      posts <- jsonlite::rbind_pages(list(posts, posts2500))
       num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
     vk_error13 = function(e) {
       num_records <<- as.integer(num_records / 2)
@@ -425,7 +425,7 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                                      max_count = (max_count - nrow(comments)),
                                      offset = (1 + offset + offset_counter * 2500),
                                      v = v)
-      comments <- jsonlite::rbind.pages(list(comments, comments2500))
+      comments <- jsonlite::rbind_pages(list(comments, comments2500))
       offset_counter <- offset_counter + 1
       }, error = function(e) {
         warning(e)

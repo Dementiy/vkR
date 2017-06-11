@@ -455,7 +455,7 @@ getUsersExecute <- function(users_ids, fields='', name_case='nom', drop=FALSE, f
     users <- get_users(users_ids[from:to], fields = fields, name_case = name_case, v = v)
     if (use_db)
       db_update(object = users, key = key, collection = collection, suffix = suffix, upsert = TRUE)
-    all_users <- jsonlite::rbind.pages(list(all_users, users))
+    all_users <- jsonlite::rbind_pages(list(all_users, users))
 
     if (progress_bar)
       setTxtProgressBar(pb, nrow(all_users))
@@ -571,7 +571,7 @@ usersGetFollowers <- function(user_id='', offset=0, count=0, fields='', name_cas
     if (is.vector(followers))
       followers <- append(followers, followers25000)
     else {
-      followers <- jsonlite::rbind.pages(list(followers, followers25000))
+      followers <- jsonlite::rbind_pages(list(followers, followers25000))
       followers <- followers[!duplicated(followers$id), ]
     }
 
@@ -670,7 +670,7 @@ usersGetSubscriptions <- function(user_id='', extended='1', offset=0, count=0, f
                                           fields = fields,
                                           extended = 1,
                                           v = v)
-    subscriptions <- jsonlite::rbind.pages(list(subscriptions, subscriptions600))
+    subscriptions <- jsonlite::rbind_pages(list(subscriptions, subscriptions600))
 
     if (progress_bar)
       setTxtProgressBar(pb, nrow(subscriptions))

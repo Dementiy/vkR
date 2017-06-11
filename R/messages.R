@@ -96,7 +96,7 @@ messagesGetHistoryExecute <- function(offset=0, count=0, user_id='', peer_id='',
                                 count = (max_count - nrow(messages)),
                                 offset = (1 + offset + offset_counter * 600),
                                 v = v)
-    messages <- jsonlite::rbind.pages(list(messages, messages600))
+    messages <- jsonlite::rbind_pages(list(messages, messages600))
 
     if (progress_bar)
       setTxtProgressBar(pb, nrow(messages))

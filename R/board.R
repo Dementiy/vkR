@@ -144,7 +144,7 @@ getTopicsExecute <- function(group_id='', order='', offset=0, count=40, preview=
                                             v = v)
     if (use_db)
       db_update(object = topics2500, key = key, collection = collection, suffix = suffix, upsert = TRUE)
-    topics <- jsonlite::rbind.pages(list(topics, topics2500))
+    topics <- jsonlite::rbind_pages(list(topics, topics2500))
     num_records <- ifelse((max_count - nrow(topics)) > num_records, num_records, max_count - nrow(topics)) },
     vk_error13 = function(e) {
       num_records <<- as.integer(num_records / 2)
@@ -294,7 +294,7 @@ boardGetCommentsExecute <- function(group_id='', topic_id='', need_likes=0, star
                                        max_count = (max_count - nrow(comments)),
                                        offset = (1 + offset + offset_counter * 2500),
                                        v = v)
-      comments <- jsonlite::rbind.pages(list(comments, comments2500))
+      comments <- jsonlite::rbind_pages(list(comments, comments2500))
       offset_counter <- offset_counter + 1
     }, error = function(e) {
       warning(e)
