@@ -186,7 +186,7 @@ execute <- function(code, params = list()) {
   post_res <- post_res$result
 
   content <- httr::content(post_res, "text", encoding="UTF-8")
-  if (startsWith(content, "ERROR"))
+  if (startsWith(content, "ERROR") | post_res["status_code"] == 500 | post_res["status_code"] == 404)
     vk_stop(message = sprintf("Response error '%s'", content),
             error_code = post_res$status_code)
 

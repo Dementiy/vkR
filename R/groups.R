@@ -160,6 +160,10 @@ getGroupsMembersExecute <- function(group_id='', sort='', offset=0, count=0, fie
     vk_error500 = function(e) {
       num_records <<- as.integer(num_records / 2)
       warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
+    },
+    vk_error404 = function(e) {
+      num_records <<- as.integer(num_records / 2)
+      warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
     })
 
     if (progress_bar)
