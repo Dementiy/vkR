@@ -273,7 +273,7 @@ getGroupsById <- function(group_ids='', group_id='', fields='', v=getAPIVersion(
                         fields = fields,
                         v = v)
   request_delay()
-  response <- jsonlite::fromJSON(query)
+  response <- jsonlite::fromJSON(httr::content(httr::POST(query), "text", encoding = "UTF-8"))
 
   if (has_error(response))
     return(try_handle_error(response))
