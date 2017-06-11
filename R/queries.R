@@ -20,6 +20,23 @@ has_error <- function(response) {
 }
 
 
+#' Try to handle network error
+#' @param error Error
+try_handle_network_error <- function(error) {
+  warning(error$message, call. = FALSE, immediate. = TRUE)
+  if (.vkr$repeats_counter < .vkr$max_repeats) {
+    warning('Trying to repeat the last query...', call. = FALSE, immediate. = TRUE)
+    .vkr$repeats_counter <- .vkr$repeats_counter + 1
+    Sys.sleep(.vkr$timeout)
+    response <- repeat_last_query(n=2)
+    .vkr$repeats_counter <- 0
+    return(response)
+  }
+  .vkr$repeats_counter <- 0
+  stop(error$message, call. = FALSE)
+}
+
+
 #' Repeat last function call
 #' @param params Query params
 #' @param n The number of generations to go back
@@ -34,6 +51,21 @@ repeat_last_query <- function(params = list(), n = 1) {
   for (arg in names(params))
     args[[arg]] <- params[[arg]]
   do.call(what = gsub("\\(.*\\)", "", parent_name), args = args)
+}
+
+
+#' Set timeout
+#' @param secs Seconds
+#' @export
+setTimeout <- function(secs) {
+  .vkr$timeout <- secs
+}
+
+#' Set maximum number of repeats
+#' @param n Repeats number
+#' @export
+setRepeats <- function(n) {
+  .vkr$max_repeats <- n
 }
 
 
@@ -146,7 +178,12 @@ execute <- function(code, params = list()) {
   request_delay()
   query <- "https://api.vk.com/method/execute"
   body = list('code' = code, 'access_token' = getAccessToken())
-  post_res <- httr::POST(url = query, body = append(body, params))
+  safe_POST <- purrr::safely(httr::POST)
+  post_res <- safe_POST(url = query, body = append(body, params))
+
+  if (!is.null(post_res$error))
+    return(try_handle_network_error(post_res$error))
+  post_res <- post_res$result
 
   content <- httr::content(post_res, "text", encoding="UTF-8")
   if (startsWith(content, "ERROR"))

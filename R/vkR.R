@@ -40,6 +40,11 @@ if (!exists(".vkr")) {
   .vkr$db_active <- NULL
   .vkr$db_meta_name <- 'meta_collection'
   .vkr$db_metadata <- NULL
+
+  # Handling connection errors
+  .vkr$timeout <- 3
+  .vkr$max_repeats <- 3
+  .vkr$repeats_counter <- 0
 }
 
 

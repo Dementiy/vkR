@@ -21,6 +21,7 @@ Depends:
 Imports:
     graphics,
     httr,
+    purrr,
     jsonlite,
     stats,
     utils,
