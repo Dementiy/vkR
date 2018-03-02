@@ -177,7 +177,7 @@ queryBuilder <- function(method_name, ...) {
 execute <- function(code, params = list()) {
   request_delay()
   query <- "https://api.vk.com/method/execute"
-  body = list('code' = code, 'access_token' = getAccessToken())
+  body = list('code' = code, 'access_token' = getAccessToken(), 'v' = getAPIVersion())
   safe_POST <- purrr::safely(httr::POST)
   post_res <- safe_POST(url = query, body = append(body, params))
 
