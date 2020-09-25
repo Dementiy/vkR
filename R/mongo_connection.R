@@ -22,7 +22,9 @@ db_get_connection <- function(collection_name, collection_suffix = '', db_name =
 
   meta_conn <- db_metaConnection()
   dbs <- meta_conn$find()
-  dbs <- subset(dbs, db == db_name & collection == collection_name & suffix == collection_suffix)
+
+  s <- dbs$db == db_name & dbs$collection == collection_name & dbs$suffix == collection_suffix
+  dbs <- subset(dbs, s)
 
   if (nrow(dbs) == 0)
     stop("Collection doesn't exist", call. = FALSE)
@@ -78,7 +80,7 @@ collection_exists <- function(collection_name, collection_suffix = '', db_name =
 }
 
 
-#' Import collection from db to global env
+#' Load collection from db
 #' @param collection_name Collection name
 #' @param collection_suffix Collection suffix
 #' @param db_name Database name
@@ -86,8 +88,9 @@ collection_exists <- function(collection_name, collection_suffix = '', db_name =
 db_load_collection <- function(collection_name, collection_suffix = '', db_name = db_getActive()) {
   collection <- db_get_collection(collection_name, collection_suffix, db_name)
   if (is.null(collection)) stop("Collection doesn't exist", call. = FALSE)
-  assign(paste(db_name, collection_name, collection_suffix, sep = '.'),
-         collection, envir = .GlobalEnv)
+  # assign(paste(db_name, collection_name, collection_suffix, sep = '.'),
+  #        collection, envir = .GlobalEnv)
+  return(collection)
 }
 
 
@@ -101,7 +104,7 @@ db_save <- function(object, collection, suffix = '', db_name = db_getActive()) {
   if (missing(object)) stop('argument "object" is missing, with no default')
   if (missing(collection)) stop('argument "collection" is missing, with no default')
 
-  # If collectoin already exists
+  # If collection already exists
   conn <- mongolite::mongo(db = db_getName(),
                            collection = paste(db_name, collection, suffix, sep = '.'))
   if (conn$count() > 0) {
@@ -208,7 +211,8 @@ show_collections <- function() {
   meta_conn <- db_metaConnection()
   dbs_list <- meta_conn$find()
   if (nrow(dbs_list) != 0) {
-    dbs_list <- subset(dbs_list, db == db_getActive())
+    active <- dbs_list$db == db_getActive()
+    dbs_list <- subset(dbs_list, active)
     dbs_list$count <- rep(0, nrow(dbs_list))
   }
   for (i in 1:nrow(dbs_list)) {
@@ -228,15 +232,19 @@ show_collections <- function() {
 db_load <- function(db_name = db_getActive()) {
   meta_conn <- db_metaConnection()
   dbs <- meta_conn$find()
-  dbs <- subset(dbs, db == db_name)
+  s <- dbs$db == db_name
+  dbs <- subset(dbs, s)
   collections <- paste(dbs$db, dbs$collection, dbs$suffix, sep = '.')
+  collections_list <- list()
   for (collection_name in collections) {
     conn <- mongolite::mongo(db = db_getName(),
                              collection = collection_name)
-    assign(collection_name, conn$find(), envir = .GlobalEnv)
+    # assign(collection_name, conn$find(), envir = .GlobalEnv)
+    collections_list[[collection_name]] <- conn$find()
     rm(conn)
   }
   gc(verbose = FALSE)
+  return(collections_list)
 }
 
 
@@ -267,7 +275,8 @@ db_drop <- function(db_name) {
 
   meta_conn <- db_metaConnection()
   dbs <- meta_conn$find()
-  dbs <- subset(dbs, db == db_name)
+  s <- dbs$db == db_name
+  dbs <- subset(dbs, s)
 
   if (nrow(dbs) == 0)
     stop("Database doesn't exist", call. = FALSE)
