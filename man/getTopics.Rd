@@ -4,9 +4,17 @@
 \alias{getTopics}
 \title{Returns a list of topics on a community's discussion board}
 \usage{
-getTopics(group_id = "", topics_ids = "", order = "", offset = 0,
-  count = 40, extended = 0, preview = 0, preview_length = 90,
-  v = getAPIVersion())
+getTopics(
+  group_id = "",
+  topics_ids = "",
+  order = "",
+  offset = 0,
+  count = 40,
+  extended = 0,
+  preview = 0,
+  preview_length = 90,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{group_id}{ID of the community that owns the discussion board.}

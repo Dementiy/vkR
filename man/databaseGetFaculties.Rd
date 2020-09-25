@@ -4,8 +4,12 @@
 \alias{databaseGetFaculties}
 \title{Returns a list of faculties (i.e., university departments)}
 \usage{
-databaseGetFaculties(university_id = "", offset = "", count = "100",
-  v = getAPIVersion())
+databaseGetFaculties(
+  university_id = "",
+  offset = "",
+  count = "100",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{university_id}{University ID}

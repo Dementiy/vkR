@@ -4,8 +4,12 @@
 \alias{getStatus}
 \title{Returns data required to show the status of a users and/or communities}
 \usage{
-getStatus(users_ids = c(), groups_ids = c(), progress_bar = FALSE,
-  v = getAPIVersion())
+getStatus(
+  users_ids = c(),
+  groups_ids = c(),
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{users_ids}{User IDs}

@@ -4,8 +4,15 @@
 \alias{getMutual}
 \title{Returns a list of user IDs of the mutual friends of two users}
 \usage{
-getMutual(source_id = "", target_uid = "", target_uids = "", order = "",
-  count = "", offset = "", v = getAPIVersion())
+getMutual(
+  source_id = "",
+  target_uid = "",
+  target_uids = "",
+  order = "",
+  count = "",
+  offset = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{source_id}{ID of the user whose friends will be checked against the friends of the user specified in target_uid}

@@ -4,8 +4,11 @@
 \alias{db_get_connection}
 \title{Get a mongo connection object}
 \usage{
-db_get_connection(collection_name, collection_suffix = "",
-  db_name = db_getActive())
+db_get_connection(
+  collection_name,
+  collection_suffix = "",
+  db_name = db_getActive()
+)
 }
 \arguments{
 \item{collection_name}{Collection name}

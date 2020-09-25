@@ -4,8 +4,11 @@
 \alias{db_drop_collection}
 \title{Drop collection}
 \usage{
-db_drop_collection(collection_name, collection_suffix = "",
-  db_name = db_getActive())
+db_drop_collection(
+  collection_name,
+  collection_suffix = "",
+  db_name = db_getActive()
+)
 }
 \arguments{
 \item{collection_name}{Collection name}

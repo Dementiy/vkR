@@ -4,8 +4,13 @@
 \alias{wallGetById}
 \title{Returns a list of posts from user or community walls by their IDs}
 \usage{
-wallGetById(posts = "", extended = "", copy_history_depth = "",
-  fields = "", v = getAPIVersion())
+wallGetById(
+  posts = "",
+  extended = "",
+  copy_history_depth = "",
+  fields = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{posts}{User or community IDs and post IDs, separated by underscores. Use a negative value to designate a community ID.}

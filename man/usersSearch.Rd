@@ -4,15 +4,43 @@
 \alias{usersSearch}
 \title{Returns a list of users matching the search criteria}
 \usage{
-usersSearch(q = "", sort = "", offset = "", count = "20", fields = "",
-  city = "", country = "", hometown = "", university_country = "",
-  university = "", university_year = "", university_faculty = "",
-  university_chair = "", sex = "", status = "", age_from = "",
-  age_to = "", birth_day = "", birth_month = "", birth_year = "",
-  online = "", has_photo = "", school_country = "", school_city = "",
-  school_class = "", school = "", school_year = "", religion = "",
-  interests = "", company = "", position = "", group_id = "",
-  from_list = "", flatten = FALSE, v = getAPIVersion())
+usersSearch(
+  q = "",
+  sort = "",
+  offset = "",
+  count = "20",
+  fields = "",
+  city = "",
+  country = "",
+  hometown = "",
+  university_country = "",
+  university = "",
+  university_year = "",
+  university_faculty = "",
+  university_chair = "",
+  sex = "",
+  status = "",
+  age_from = "",
+  age_to = "",
+  birth_day = "",
+  birth_month = "",
+  birth_year = "",
+  online = "",
+  has_photo = "",
+  school_country = "",
+  school_city = "",
+  school_class = "",
+  school = "",
+  school_year = "",
+  religion = "",
+  interests = "",
+  company = "",
+  position = "",
+  group_id = "",
+  from_list = "",
+  flatten = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{q}{Search query string (e.g., Vasya Babich)}

@@ -4,8 +4,7 @@
 \alias{getGroupsById}
 \title{Returns information about communities by their IDs}
 \usage{
-getGroupsById(group_ids = "", group_id = "", fields = "",
-  v = getAPIVersion())
+getGroupsById(group_ids = "", group_id = "", fields = "", v = getAPIVersion())
 }
 \arguments{
 \item{group_ids}{IDs or screen names of communities}

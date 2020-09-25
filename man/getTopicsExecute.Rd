@@ -4,9 +4,18 @@
 \alias{getTopicsExecute}
 \title{Returns a list of topics on a community's discussion board}
 \usage{
-getTopicsExecute(group_id = "", order = "", offset = 0, count = 40,
-  preview = 0, preview_length = 90, use_db = FALSE, db_params = list(),
-  progress_bar = FALSE, v = getAPIVersion())
+getTopicsExecute(
+  group_id = "",
+  order = "",
+  offset = 0,
+  count = 40,
+  preview = 0,
+  preview_length = 90,
+  use_db = FALSE,
+  db_params = list(),
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{group_id}{ID of the community that owns the discussion board.}

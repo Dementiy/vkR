@@ -4,9 +4,19 @@
 \alias{getWallExecute}
 \title{Returns a list of posts on a user wall or community wall}
 \usage{
-getWallExecute(owner_id = "", domain = "", offset = 0, count = 10,
-  filter = "owner", extended = "", fields = "", use_db = FALSE,
-  db_params = list(), progress_bar = FALSE, v = getAPIVersion())
+getWallExecute(
+  owner_id = "",
+  domain = "",
+  offset = 0,
+  count = 10,
+  filter = "owner",
+  extended = "",
+  fields = "",
+  use_db = FALSE,
+  db_params = list(),
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{owner_id}{ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.}

@@ -4,8 +4,13 @@
 \alias{search.getHints}
 \title{Allows the programmer to do a quick search for any substring}
 \usage{
-search.getHints(q = "", limit = "", filters = "", search_global = "",
-  v = getAPIVersion())
+search.getHints(
+  q = "",
+  limit = "",
+  filters = "",
+  search_global = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{q}{Search query string}

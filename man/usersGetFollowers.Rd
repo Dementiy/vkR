@@ -4,9 +4,17 @@
 \alias{usersGetFollowers}
 \title{Returns a list of IDs of followers of the user in question, sorted by date added, most recent first}
 \usage{
-usersGetFollowers(user_id = "", offset = 0, count = 0, fields = "",
-  name_case = "", drop = FALSE, flatten = FALSE, progress_bar = FALSE,
-  v = getAPIVersion())
+usersGetFollowers(
+  user_id = "",
+  offset = 0,
+  count = 0,
+  fields = "",
+  name_case = "",
+  drop = FALSE,
+  flatten = FALSE,
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{user_id}{User ID}

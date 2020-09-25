@@ -4,9 +4,18 @@
 \alias{groupsSearch}
 \title{Returns a list of communities matching the search criteria}
 \usage{
-groupsSearch(q = "", type = "", country_id = "", city_id = "",
-  future = 0, market = 0, sort = 0, offset = 0, count = 20,
-  v = getAPIVersion())
+groupsSearch(
+  q = "",
+  type = "",
+  country_id = "",
+  city_id = "",
+  future = 0,
+  market = 0,
+  sort = 0,
+  offset = 0,
+  count = 20,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{q}{Search query string}

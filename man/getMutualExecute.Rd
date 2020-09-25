@@ -4,9 +4,16 @@
 \alias{getMutualExecute}
 \title{Returns a list of user IDs of the mutual friends of two users}
 \usage{
-getMutualExecute(source_id = "", target_uid = "", target_uids = "",
-  order = "", count = "", offset = "", progress_bar = FALSE,
-  v = getAPIVersion())
+getMutualExecute(
+  source_id = "",
+  target_uid = "",
+  target_uids = "",
+  order = "",
+  count = "",
+  offset = "",
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{source_id}{ID of the user whose friends will be checked against the friends of the user specified in target_uid}

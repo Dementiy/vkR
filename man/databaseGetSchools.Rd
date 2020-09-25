@@ -4,8 +4,13 @@
 \alias{databaseGetSchools}
 \title{Returns a list of schools}
 \usage{
-databaseGetSchools(q = "", city_id = "", offset = "", count = "100",
-  v = getAPIVersion())
+databaseGetSchools(
+  q = "",
+  city_id = "",
+  offset = "",
+  count = "100",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{q}{Search query}

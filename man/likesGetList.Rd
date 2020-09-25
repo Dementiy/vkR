@@ -4,9 +4,19 @@
 \alias{likesGetList}
 \title{Returns a list of IDs of users who added the specified object to their Likes list}
 \usage{
-likesGetList(type = "", owner_id = "", item_id = "", page_url = "",
-  filter = "", friends_only = "0", extended = "", offset = "",
-  count = "100", skip_own = 0, v = getAPIVersion())
+likesGetList(
+  type = "",
+  owner_id = "",
+  item_id = "",
+  page_url = "",
+  filter = "",
+  friends_only = "0",
+  extended = "",
+  offset = "",
+  count = "100",
+  skip_own = 0,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{type}{Object type}

@@ -4,8 +4,7 @@
 \alias{messagesGetHistoryAll}
 \title{Returns all message history for the specified user or group chat}
 \usage{
-messagesGetHistoryAll(user_id = "", peer_id = "", rev = 0,
-  v = getAPIVersion())
+messagesGetHistoryAll(user_id = "", peer_id = "", rev = 0, v = getAPIVersion())
 }
 \arguments{
 \item{user_id}{ID of the user whose message history you want to return}

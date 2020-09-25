@@ -4,9 +4,17 @@
 \alias{getGroupsMembersExecute}
 \title{Returns a list of community members}
 \usage{
-getGroupsMembersExecute(group_id = "", sort = "", offset = 0, count = 0,
-  fields = "", filter = "", flatten = FALSE, progress_bar = FALSE,
-  v = getAPIVersion())
+getGroupsMembersExecute(
+  group_id = "",
+  sort = "",
+  offset = 0,
+  count = 0,
+  fields = "",
+  filter = "",
+  flatten = FALSE,
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{group_id}{ID or screen name of the community}

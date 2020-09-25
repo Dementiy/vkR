@@ -4,9 +4,17 @@
 \alias{wallSearch}
 \title{Allows to search posts on user or community walls}
 \usage{
-wallSearch(owner_id = "", domain = "", query = "", owners_only = "",
-  count = "20", offset = "0", extended = "", fields = "",
-  v = getAPIVersion())
+wallSearch(
+  owner_id = "",
+  domain = "",
+  query = "",
+  owners_only = "",
+  count = "20",
+  offset = "0",
+  extended = "",
+  fields = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{owner_id}{User or community id. Remember that for a community owner_id must be negative.}

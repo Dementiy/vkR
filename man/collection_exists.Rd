@@ -4,8 +4,11 @@
 \alias{collection_exists}
 \title{Check if collection exists}
 \usage{
-collection_exists(collection_name, collection_suffix = "",
-  db_name = db_getActive())
+collection_exists(
+  collection_name,
+  collection_suffix = "",
+  db_name = db_getActive()
+)
 }
 \arguments{
 \item{collection_name}{Collection name}

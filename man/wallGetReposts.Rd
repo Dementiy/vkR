@@ -4,8 +4,13 @@
 \alias{wallGetReposts}
 \title{Returns information about reposts of a post on user wall or community wall}
 \usage{
-wallGetReposts(owner_id = "", post_id = "", offset = "", count = "20",
-  v = getAPIVersion())
+wallGetReposts(
+  owner_id = "",
+  post_id = "",
+  offset = "",
+  count = "20",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{owner_id}{User ID or community ID. By default, current user ID. Use a negative value to designate a community ID.}

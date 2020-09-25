@@ -4,8 +4,13 @@
 \alias{databaseGetCountries}
 \title{Returns a list of countries}
 \usage{
-databaseGetCountries(need_all = "1", code = "", offset = "",
-  count = "100", v = getAPIVersion())
+databaseGetCountries(
+  need_all = "1",
+  code = "",
+  offset = "",
+  count = "100",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{need_all}{1 - to return a full list of all countries; 0 - to return a list of countries near the current user's country}

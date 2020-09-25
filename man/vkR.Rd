@@ -3,7 +3,6 @@
 \docType{package}
 \name{vkR}
 \alias{vkR}
-\alias{vkR-package}
 \title{Access to VK API via R}
 \description{
 This package provides a series of functions that allow R users

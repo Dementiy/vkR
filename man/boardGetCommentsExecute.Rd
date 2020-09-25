@@ -4,9 +4,17 @@
 \alias{boardGetCommentsExecute}
 \title{Returns a list of comments on a topic on a community's discussion board}
 \usage{
-boardGetCommentsExecute(group_id = "", topic_id = "", need_likes = 0,
-  start_comment_id = "", offset = 0, count = 20, sort = "",
-  progress_bar = FALSE, v = getAPIVersion())
+boardGetCommentsExecute(
+  group_id = "",
+  topic_id = "",
+  need_likes = 0,
+  start_comment_id = "",
+  offset = 0,
+  count = 20,
+  sort = "",
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{group_id}{ID of the community that owns the discussion board.}

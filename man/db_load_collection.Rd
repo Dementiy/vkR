@@ -2,10 +2,13 @@
 % Please edit documentation in R/mongo_connection.R
 \name{db_load_collection}
 \alias{db_load_collection}
-\title{Import collection from db to global env}
+\title{Load collection from db}
 \usage{
-db_load_collection(collection_name, collection_suffix = "",
-  db_name = db_getActive())
+db_load_collection(
+  collection_name,
+  collection_suffix = "",
+  db_name = db_getActive()
+)
 }
 \arguments{
 \item{collection_name}{Collection name}
@@ -15,5 +18,5 @@ db_load_collection(collection_name, collection_suffix = "",
 \item{db_name}{Database name}
 }
 \description{
-Import collection from db to global env
+Load collection from db
 }

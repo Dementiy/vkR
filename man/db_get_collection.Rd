@@ -4,8 +4,11 @@
 \alias{db_get_collection}
 \title{Get collection}
 \usage{
-db_get_collection(collection_name, collection_suffix = "",
-  db_name = db_getActive())
+db_get_collection(
+  collection_name,
+  collection_suffix = "",
+  db_name = db_getActive()
+)
 }
 \arguments{
 \item{collection_name}{Collection name}

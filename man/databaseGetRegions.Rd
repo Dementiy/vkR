@@ -4,8 +4,13 @@
 \alias{databaseGetRegions}
 \title{Returns a list of regions}
 \usage{
-databaseGetRegions(country_id = "", q = "", offset = "", count = "100",
-  v = getAPIVersion())
+databaseGetRegions(
+  country_id = "",
+  q = "",
+  offset = "",
+  count = "100",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{country_id}{Country ID, received in database.getCountries method}

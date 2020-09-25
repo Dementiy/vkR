@@ -4,8 +4,12 @@
 \alias{databaseGetChairs}
 \title{Returns list of chairs on a specified faculty}
 \usage{
-databaseGetChairs(faculty_id = "", offset = "", count = "100",
-  v = getAPIVersion())
+databaseGetChairs(
+  faculty_id = "",
+  offset = "",
+  count = "100",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{faculty_id}{ID of the faculty to get chairs from}

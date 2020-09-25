@@ -4,8 +4,14 @@
 \alias{getGroupsForUsers}
 \title{Returns a list of the communities for the specified users}
 \usage{
-getGroupsForUsers(users, extended = "", filter = "", fields = "",
-  progress_bar = FALSE, v = getAPIVersion())
+getGroupsForUsers(
+  users,
+  extended = "",
+  filter = "",
+  fields = "",
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{users}{A list of users}

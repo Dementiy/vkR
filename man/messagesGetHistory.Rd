@@ -4,8 +4,15 @@
 \alias{messagesGetHistory}
 \title{Returns message history for the specified user or group chat}
 \usage{
-messagesGetHistory(offset = "", count = "", user_id = "", peer_id = "",
-  start_message_id = "", rev = "", v = getAPIVersion())
+messagesGetHistory(
+  offset = "",
+  count = "",
+  user_id = "",
+  peer_id = "",
+  start_message_id = "",
+  rev = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{offset}{Offset needed to return a specific subset of messages}

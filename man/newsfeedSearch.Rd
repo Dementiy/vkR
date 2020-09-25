@@ -4,9 +4,18 @@
 \alias{newsfeedSearch}
 \title{Returns search results by statuses}
 \usage{
-newsfeedSearch(q = "", extended = "", count = "", latitude = "",
-  longitude = "", start_time = "", end_time = "", start_from = "",
-  fields = "", v = getAPIVersion())
+newsfeedSearch(
+  q = "",
+  extended = "",
+  count = "",
+  latitude = "",
+  longitude = "",
+  start_time = "",
+  end_time = "",
+  start_from = "",
+  fields = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{q}{Search query string (e.g., New Year).}

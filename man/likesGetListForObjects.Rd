@@ -4,9 +4,16 @@
 \alias{likesGetListForObjects}
 \title{Returns a list of IDs of users who added the specified objects to their Likes list}
 \usage{
-likesGetListForObjects(objects, type = "post", filter = "likes",
-  friends_only = 0, extended = 0, skip_own = 0, progress_bar = FALSE,
-  v = getAPIVersion())
+likesGetListForObjects(
+  objects,
+  type = "post",
+  filter = "likes",
+  friends_only = 0,
+  extended = 0,
+  skip_own = 0,
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{objects}{List of objects (objects must contain fields owner_id and id)}

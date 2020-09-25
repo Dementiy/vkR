@@ -4,8 +4,14 @@
 \alias{db_update}
 \title{Update existing records}
 \usage{
-db_update(object, key, collection, suffix = "", db_name = db_getActive(),
-  upsert = FALSE)
+db_update(
+  object,
+  key,
+  collection,
+  suffix = "",
+  db_name = db_getActive(),
+  upsert = FALSE
+)
 }
 \arguments{
 \item{object}{Object to insert}

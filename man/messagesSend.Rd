@@ -4,10 +4,21 @@
 \alias{messagesSend}
 \title{Sends a message.}
 \usage{
-messagesSend(user_id, random_id = "", peer_id = "", domain = "",
-  chat_id = "", user_ids = "", message = "", lat = "", long = "",
-  attachment = "", forward_messages = "", sticker_id = "",
-  v = getAPIVersion())
+messagesSend(
+  user_id,
+  random_id = "",
+  peer_id = "",
+  domain = "",
+  chat_id = "",
+  user_ids = "",
+  message = "",
+  lat = "",
+  long = "",
+  attachment = "",
+  forward_messages = "",
+  sticker_id = "",
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{user_id}{User ID (by default — current user).}

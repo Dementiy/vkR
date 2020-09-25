@@ -4,9 +4,16 @@
 \alias{usersGetSubscriptions}
 \title{Returns a list of IDs of users and communities followed by the user}
 \usage{
-usersGetSubscriptions(user_id = "", extended = "1", offset = 0,
-  count = 0, fields = "", flatten = FALSE, progress_bar = FALSE,
-  v = getAPIVersion())
+usersGetSubscriptions(
+  user_id = "",
+  extended = "1",
+  offset = 0,
+  count = 0,
+  fields = "",
+  flatten = FALSE,
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
 }
 \arguments{
 \item{user_id}{User ID}
