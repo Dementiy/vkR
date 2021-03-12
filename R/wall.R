@@ -82,15 +82,15 @@ getWall <- function(owner_id='', domain='', offset='', count='', filter='owner',
 #' @export
 getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='owner', extended='', fields='', use_db=FALSE, db_params=list(), progress_bar=FALSE, v=getAPIVersion())
 {
-  get_posts2500 <- function(owner_id='', domain='', offset=0, max_count='', filter='owner', extended='', fields='', v=getAPIVersion())
+  get_posts2500 <- function(owner_id='', domain='', offset=0, count='', filter='owner', extended='', fields='', v=getAPIVersion())
   {
-    if (max_count > 2500)
-      max_count <- 2500
-    if (max_count <= 100) {
+    if (count > 2500)
+      count <- 2500
+    if (count <= 100) {
       execute(paste0('return API.wall.get({"owner_id":"', owner_id, '",
                      "domain":"', domain, '",
                      "offset":"', offset, '",
-                     "count":"', max_count, '",
+                     "count":"', count, '",
                      "filter":"', filter, '",
                      "extended":"', extended, '",
                      "v":"', v, '"}).items;'))
@@ -104,10 +104,10 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
                      "extended":"', extended, '",
                      "v":"', v, '"}).items;')
       code <- paste0(code, 'var offset = 100 + ', offset, ';
-                     var count = 100; var max_offset = offset + ', max_count, ';
-                     while (offset < max_offset && wall_records.length <= offset && offset-', offset, '<', max_count, ') {
-                       if (', max_count, ' - wall_records.length < 100) {
-                        count = ', max_count, ' - wall_records.length;
+                     var count = 100; var max_offset = offset + ', count, ';
+                     while (offset < max_offset && wall_records.length <= offset && offset-', offset, '<', count, ') {
+                       if (', count, ' - wall_records.length < 100) {
+                        count = ', count, ' - wall_records.length;
                        };
                        wall_records = wall_records + API.wall.get({"owner_id":"', owner_id, '",
                          "domain":"', domain, '",
@@ -133,9 +133,9 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
   response <- execute(code)
 
   posts <- response$items
-  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
 
-  if (max_count == 0)
+  if (count == 0)
     return(list(posts = response$items,
                 count = response$count))
 
@@ -151,24 +151,24 @@ getWallExecute <- function(owner_id='', domain='', offset=0, count=10, filter='o
   }
 
   if (progress_bar) {
-    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    pb <- txtProgressBar(min = 0, max = count, style = 3)
     setTxtProgressBar(pb, nrow(posts))
   }
 
-  num_records <- max_count - nrow(posts)
-  while (nrow(posts) < max_count) {
+  num_records <- count - nrow(posts)
+  while (nrow(posts) < count) {
     tryCatch({ posts2500 <- get_posts2500(owner_id = owner_id,
                                domain = domain,
                                filter = filter,
                                extended = extended,
                                fields = fields,
-                               max_count = num_records,
+                               count = num_records,
                                offset = offset + nrow(posts),
                                v = v)
       if (use_db)
         db_update(object = posts2500, key = key, collection = collection, suffix = suffix, upsert = TRUE)
       posts <- jsonlite::rbind_pages(list(posts, posts2500))
-      num_records <- ifelse((max_count - nrow(posts)) > num_records, num_records, max_count - nrow(posts)) },
+      num_records <- ifelse((count - nrow(posts)) > num_records, num_records, count - nrow(posts)) },
     vk_error13 = function(e) {
       num_records <<- as.integer(num_records / 2)
       warning(simpleWarning(paste0('Parameter "count" was tuned: ', num_records, ' per request.')))
@@ -338,15 +338,15 @@ wallGetComments <- function(owner_id='', post_id='', need_likes='', start_commen
 #' @param v Version of API
 #' @export
 postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, count=10, sort='', preview_length=0, extended='', progress_bar = FALSE, v=getAPIVersion()) {
-  get_comments2500 <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, max_count='', sort='', preview_length=0, extended='', v=getAPIVersion())
+  get_comments2500 <- function(owner_id='', post_id='', need_likes=1, start_comment_id='', offset=0, count='', sort='', preview_length=0, extended='', v=getAPIVersion())
   {
-    if (max_count > 2500)
-      max_count <- 2500
-    if (max_count <= 100) {
+    if (count > 2500)
+      count <- 2500
+    if (count <= 100) {
       execute(paste0('return API.wall.getComments({
                      "owner_id":"', owner_id, '",
                      "post_id":"', post_id, '",
-                     "count":"', max_count, '",
+                     "count":"', count, '",
                      "offset":"', offset, '",
                      "need_likes":"', need_likes, '",
                      "start_comment_id":"', start_comment_id, '",
@@ -366,10 +366,10 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                      "preview_length":"', preview_length, '",
                      "extended":"', extended, '", "v":"', v, '"}).items;')
       code <- paste0(code, 'var offset = 100 + ', offset, ';
-                     var count = 100; var max_offset = offset + ', max_count, ';
-                     while (offset < max_offset && comments.length <= offset && offset-', offset, '<', max_count, ') {
-                     if (', max_count, ' - comments.length < 100) {
-                     count = ', max_count, ' - comments.length;
+                     var count = 100; var max_offset = offset + ', count, ';
+                     while (offset < max_offset && comments.length <= offset && offset-', offset, '<', count, ') {
+                     if (', count, ' - comments.length < 100) {
+                     count = ', count, ' - comments.length;
                      };
                      comments = comments + API.wall.getComments({
                      "owner_id":"', owner_id, '",
@@ -400,20 +400,20 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                  "extended":"', extended, '", "v":"', v, '"});')
   response <- execute(code)
   comments <- response$items
-  max_count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
+  count <- ifelse((response$count - offset) > count & count != 0, count, response$count - offset)
 
-  if (max_count == 0)
+  if (count == 0)
     return(list(comments = response$items,
                 count = response$count))
 
   offset_counter <- 0
 
   if (progress_bar) {
-    pb <- txtProgressBar(min = 0, max = max_count, style = 3)
+    pb <- txtProgressBar(min = 0, max = count, style = 3)
     setTxtProgressBar(pb, nrow(comments))
   }
 
-  while (nrow(comments) < max_count) {
+  while (nrow(comments) < count) {
     tryCatch({
       comments2500 <- get_comments2500(owner_id = owner_id,
                                      post_id = post_id,
@@ -422,7 +422,7 @@ postGetComments <- function(owner_id='', post_id='', need_likes=1, start_comment
                                      sort = sort,
                                      preview_length = preview_length,
                                      start_comment_id = start_comment_id,
-                                     max_count = (max_count - nrow(comments)),
+                                     count = (count - nrow(comments)),
                                      offset = (1 + offset + offset_counter * 2500),
                                      v = v)
       comments <- jsonlite::rbind_pages(list(comments, comments2500))
@@ -491,8 +491,8 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
 
   comments <- list()
   from <- 1
-  max_count <- nrow(posts_le100)
-  to <- ifelse(max_count >= 75, 75, max_count)
+  count <- nrow(posts_le100)
+  to <- ifelse(count >= 75, 75, count)
 
   if (progress_bar) {
     pb <- txtProgressBar(min = 0, max = nrow(posts), style = 3)
@@ -506,11 +506,11 @@ wallGetCommentsList <- function(posts, progress_bar = FALSE, v = getAPIVersion()
     if (progress_bar)
       setTxtProgressBar(pb, length(comments))
 
-    if (to >= max_count)
+    if (to >= count)
       break
 
     from <- to + 1
-    to <- ifelse(to + 75 >= max_count, max_count, to + 75)
+    to <- ifelse(to + 75 >= count, count, to + 75)
   }
 
 
